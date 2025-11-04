@@ -1,0 +1,2 @@
+ALTER TABLE files ADD COLUMN file_path VARCHAR(255) NOT NULL AFTER file_name;
+ALTER TABLE files ADD COLUMN file_name VARCHAR(255) NOT NULL AFTER user_id;

@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="/output.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    .difuminado-bg {
+      background: linear-gradient(135deg, #ef4444 0%, #10b981 100%);
+      background-size: cover;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(24px);
+      border-radius: 2rem;
+      border: 1.5px solid rgba(239,68,68,0.15);
+      box-shadow: 0 12px 40px rgba(239,68,68,0.10), 0 2px 8px rgba(16,185,129,0.08);
+      padding: 3rem 2.5rem;
+      max-width: 480px;
+    }
+    .input-effect {
+      font-size: 1.25rem;
+      padding: 1.1rem 1rem;
+      border-radius: 1.2rem;
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 2px 12px rgba(239,68,68,0.07);
+      transition: box-shadow 0.2s, border-color 0.2s;
+      background: rgba(255,255,255,0.92);
+    }
+    .input-effect:focus {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 4px rgba(239,68,68,0.13);
+    }
+    .big-btn {
+      font-size: 1.3rem;
+      padding: 1.2rem 0;
+      border-radius: 1.2rem;
+      box-shadow: 0 4px 24px rgba(239,68,68,0.13);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .big-btn:hover {
+      box-shadow: 0 8px 32px rgba(16,185,129,0.13);
+      transform: translateY(-2px) scale(1.03);
+    }
+  </style>
+</head>
+<body class="difuminado-bg flex items-center justify-center min-h-screen p-6">
+  <div class="w-full max-w-2xl glass-card p-12 rounded-3xl">
+    <div class="text-center mb-12">
+      <h2 class="text-6xl font-extrabold text-brandRed mb-6 tracking-tight">Crear cuenta</h2>
+      <p class="text-2xl text-gray-600 font-medium">Introduce tus datos para registrarte</p>
+    </div>
+    <form id="registerForm" class="space-y-8 max-w-xl mx-auto">
+      <div>
+        <input name="username" placeholder="Nombre de usuario" 
+               class="w-full input-effect" required />
+      </div>
+      <div>
+        <input name="email" type="email" placeholder="Email" 
+               class="w-full input-effect" required />
+      </div>
+      <div>
+        <input name="password" type="password" placeholder="Contraseña" 
+               class="w-full input-effect" required />
+      </div>
+      <button class="w-full big-btn bg-gradient-to-r from-brandRed to-red-400 text-white">
+        Crear cuenta
+      </button>
+    </form>
+    <p class="text-center mt-10 text-xl text-gray-600">
+      ¿Ya tienes una cuenta? 
+      <a href="/login.html" class="text-brandGreen hover:text-emerald-600 font-semibold transition-colors duration-200">Inicia sesión aquí</a>
+    </p>
+  </div>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const body = Object.fromEntries(fd.entries());
+      const res = await fetch('/api/auth/register', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+      });
+      const json = await res.json();
+      alert(json.message || 'OK');
+      if (res.ok) window.location.href = '/login.html';
+    });
+  </script>
+</body>
+</html>
