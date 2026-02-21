@@ -1,0 +1,467 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel de Administración - Trabajadores</title>
+  <link href="/output.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ef4444 0%, #10b981 100%);
+      min-height: 100vh;
+    }
+    .admin-card {
+      background: rgba(255,255,255,0.97);
+      border-radius: 2rem;
+      box-shadow: 0 12px 40px rgba(16,185,129,0.10), 0 2px 8px rgba(239,68,68,0.08);
+      padding: 3rem 2.5rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.9);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(16,185,129,0.08);
+    }
+    .user-row {
+      background: #f9f9f9;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .user-row:hover {
+      background: #e5f5ff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .file-item-admin {
+      background: #fff;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #10b981;
+    }
+    /* Botón de WhatsApp flotante */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ef4444;
+      color: white;
+      border-radius: 50px;
+      padding: 15px 20px;
+      box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+      font-weight: bold;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      font-size: 16px;
+    }
+    .whatsapp-btn:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(239, 68, 68, 0.6);
+      color: white;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body class="gradient-bg p-6 min-h-screen">
+  <div class="admin-card">
+    <!-- Header -->
+    <div class="mb-8 flex justify-between items-center">
+      <h1 class="text-4xl font-extrabold text-brandRed text-center flex-1">Panel de Administración - Trabajadores</h1>
+      <div class="flex gap-4">
+        <button id="backToDashboard" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <span>🏠</span> Dashboard
+        </button>
+        <button id="logout" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <span>👋</span> Cerrar sesión
+        </button>
+      </div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="stat-card">
+        <h3 class="text-xl font-bold text-brandGreen mb-2">Usuarios Registrados</h3>
+        <div class="text-4xl font-extrabold text-brandRed" id="totalUsers">0</div>
+      </div>
+      <div class="stat-card">
+        <h3 class="text-xl font-bold text-brandGreen mb-2">Total de Archivos Publicados Actualmente</h3>
+        <div class="text-4xl font-extrabold text-brandRed" id="totalFiles">0</div>
+      </div>
+      <div class="stat-card">
+        <h3 class="text-xl font-bold text-red-600 mb-2">Archivos Eliminados</h3>
+        <div class="text-4xl font-extrabold text-red-500" id="totalDeleted">0</div>
+      </div>
+    </div>
+
+    <!-- Pestañas -->
+    <div class="mb-6 flex justify-center">
+      <div class="flex bg-gray-200 rounded-full p-1 shadow-lg">
+        <button id="usersTab" class="px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold transition-all duration-300 shadow-lg flex items-center gap-2">
+          <span>👥</span> Usuarios
+        </button>
+        <button id="filesTab" class="px-6 py-3 rounded-full bg-transparent text-gray-600 font-bold hover:bg-gray-300 transition-all duration-300 flex items-center gap-2">
+          <span>📁</span> Archivos Activos
+        </button>
+        <button id="deletedTab" class="px-6 py-3 rounded-full bg-transparent text-gray-600 font-bold hover:bg-gray-300 transition-all duration-300 flex items-center gap-2">
+          <span>🗑️</span> Archivos Eliminados
+        </button>
+      </div>
+    </div>
+
+    <!-- Contenido de Usuarios -->
+    <div id="usersContent">
+      <h2 class="text-2xl font-bold text-brandGreen mb-4">Lista de Usuarios</h2>
+      <div id="usersList"></div>
+    </div>
+
+    <!-- Contenido de Archivos -->
+    <div id="filesContent" class="hidden">
+      <h2 class="text-2xl font-bold text-brandGreen mb-4">Archivos Activos</h2>
+      <div id="allFilesList"></div>
+    </div>
+
+    <!-- Contenido de Archivos Eliminados -->
+    <div id="deletedContent" class="hidden">
+      <h2 class="text-2xl font-bold text-red-600 mb-4">Archivos Eliminados</h2>
+      <div id="deletedFilesList"></div>
+    </div>
+  </div>
+
+  <!-- Modal para archivos de usuario -->
+  <div id="userFilesModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-4xl max-h-[80vh] overflow-auto">
+      <h2 class="text-2xl font-bold text-blue-600 mb-4 text-center" id="modalTitle">Archivos del Usuario</h2>
+      <div id="userFilesList"></div>
+      <button id="closeUserFilesModal" class="mt-6 px-4 py-2 rounded-full bg-gray-300 text-gray-800 font-bold hover:bg-gray-400 transition w-full">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- Modal para cambiar contraseña -->
+  <div id="passwordModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg">
+      <h2 class="text-2xl font-bold text-red-600 mb-4 text-center">Cambiar Contraseña</h2>
+      <form id="passwordForm">
+        <div class="mb-4">
+          <label class="block text-gray-700 font-bold mb-2">Nueva Contraseña:</label>
+          <input type="password" id="newPassword" class="w-full px-4 py-3 rounded-xl border-2 border-red-400 focus:border-red-600 transition" required>
+        </div>
+        <div class="flex gap-4">
+          <button type="submit" class="flex-1 px-4 py-3 rounded-full bg-red-500 text-white font-bold hover:bg-red-700 transition">Cambiar</button>
+          <button type="button" id="cancelPassword" class="flex-1 px-4 py-3 rounded-full bg-gray-300 text-gray-800 font-bold hover:bg-gray-400 transition">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/login.html';
+
+    // Verificar si es admin
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      if (payload.role !== 'admin') {
+        alert('Acceso denegado: Se requieren permisos de administrador');
+        window.location.href = '/dashboard.html';
+      }
+    } catch {
+      window.location.href = '/login.html';
+    }
+
+    // Botones de navegación
+    document.getElementById('backToDashboard').onclick = () => window.location.href = '/dashboard.html';
+    document.getElementById('logout').onclick = () => {
+      localStorage.removeItem('token');
+      window.location.href = '/login.html';
+    };
+
+    // Pestañas
+    document.getElementById('usersTab').onclick = () => showTab('users');
+    document.getElementById('filesTab').onclick = () => showTab('files');
+    document.getElementById('deletedTab').onclick = () => showTab('deleted');
+
+    function showTab(tab) {
+      // Ocultar todos los contenidos
+      document.getElementById('usersContent').classList.add('hidden');
+      document.getElementById('filesContent').classList.add('hidden');
+      document.getElementById('deletedContent').classList.add('hidden');
+      
+      // Resetear estilos de pestañas
+      const inactiveClass = 'px-6 py-3 rounded-full bg-transparent text-gray-600 font-bold hover:bg-gray-300 transition-all duration-300 flex items-center gap-2';
+      const activeClass = 'px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold transition-all duration-300 shadow-lg flex items-center gap-2';
+      
+      document.getElementById('usersTab').className = inactiveClass;
+      document.getElementById('filesTab').className = inactiveClass;
+      document.getElementById('deletedTab').className = inactiveClass;
+      
+      // Mostrar contenido activo
+      if (tab === 'users') {
+        document.getElementById('usersContent').classList.remove('hidden');
+        document.getElementById('usersTab').className = activeClass;
+      } else if (tab === 'files') {
+        document.getElementById('filesContent').classList.remove('hidden');
+        document.getElementById('filesTab').className = activeClass;
+        loadAllFiles();
+      } else if (tab === 'deleted') {
+        document.getElementById('deletedContent').classList.remove('hidden');
+        document.getElementById('deletedTab').className = activeClass;
+        loadDeletedFiles();
+      }
+    }
+
+    // Cargar estadísticas
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/admin/stats', { headers: { Authorization: 'Bearer ' + token } });
+        console.log('Stats response status:', res.status);
+        
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
+        const stats = await res.json();
+        console.log('Stats loaded:', stats);
+        
+        document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
+        document.getElementById('totalFiles').textContent = stats.totalFiles || 0;
+        document.getElementById('totalDeleted').textContent = stats.totalDeleted || 0;
+      } catch (error) {
+        console.error('Error loading stats:', error);
+        document.getElementById('totalUsers').textContent = 'Error';
+        document.getElementById('totalFiles').textContent = 'Error';
+        document.getElementById('totalDeleted').textContent = 'Error';
+      }
+    }
+
+    // Cargar usuarios
+    async function loadUsers() {
+      try {
+        const res = await fetch('/api/admin/users', { headers: { Authorization: 'Bearer ' + token } });
+        console.log('Response status:', res.status);
+        
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
+        const users = await res.json();
+        console.log('Users loaded:', users);
+        
+        const container = document.getElementById('usersList');
+        container.innerHTML = '';
+        
+        if (!users || users.length === 0) {
+          container.innerHTML = '<p class="text-center text-gray-500">No se encontraron usuarios.</p>';
+          return;
+        }
+        
+        users.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.className = 'user-row';
+        userDiv.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="font-bold text-lg">${user.nombre} ${user.apellido} (${user.username})</h3>
+              <p class="text-gray-600">${user.email}</p>
+              <p class="text-sm text-gray-500">Área: ${user.area_trabajo} | Teléfono: ${user.telefono || 'No especificado'}</p>
+              <p class="text-sm text-gray-500">Nacimiento: ${user.fecha_nacimiento ? new Date(user.fecha_nacimiento).toLocaleDateString() : 'No especificado'}</p>
+              <p class="text-sm text-gray-500">Rol: ${user.role} | Registro: ${new Date(user.created_at).toLocaleDateString()}</p>
+            </div>
+            <div class="flex gap-3">
+              <button onclick="viewUserFiles(${user.id}, '${user.username}')" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+                <span>📁</span> Ver Archivos
+              </button>
+              <button onclick="changePassword(${user.id}, '${user.username}')" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+                <span>🔑</span> Cambiar Contraseña
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(userDiv);
+        });
+      } catch (error) {
+        console.error('Error loading users:', error);
+        const container = document.getElementById('usersList');
+        container.innerHTML = '<p class="text-center text-red-500">Error cargando usuarios: ' + error.message + '</p>';
+      }
+    }    // Cargar todos los archivos
+    async function loadAllFiles() {
+      const res = await fetch('/api/admin/files', { headers: { Authorization: 'Bearer ' + token } });
+      const files = await res.json();
+      const container = document.getElementById('allFilesList');
+      container.innerHTML = '';
+      
+      files.forEach(file => {
+        const fileDiv = document.createElement('div');
+        fileDiv.className = 'file-item-admin';
+        fileDiv.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <img src="/uploads/${file.file_path}" class="w-16 h-16 object-cover rounded-lg" alt="${file.file_name}">
+              <div>
+                <h4 class="font-bold text-lg">${file.file_name}</h4>
+                <p class="text-gray-600">${file.comment || 'Sin comentario'}</p>
+                <p class="text-sm text-gray-500">Por: ${file.username} (${file.email})</p>
+                <p class="text-sm text-gray-500">${new Date(file.created_at).toLocaleString()}</p>
+              </div>
+            </div>
+            <button onclick="downloadFile('${file.file_path}')" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+              <span>⬇️</span> Descargar
+            </button>
+          </div>
+        `;
+        container.appendChild(fileDiv);
+      });
+    }
+
+    // Cargar todos los archivos eliminados
+    async function loadDeletedFiles() {
+      try {
+        const res = await fetch('/api/admin/deleted-files', { headers: { Authorization: 'Bearer ' + token } });
+        console.log('Deleted files response status:', res.status);
+        
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
+        const files = await res.json();
+        console.log('Deleted files loaded:', files);
+        
+        const container = document.getElementById('deletedFilesList');
+        container.innerHTML = '';
+        
+        if (!files || files.length === 0) {
+          container.innerHTML = '<p class="text-center text-gray-500">No hay archivos eliminados.</p>';
+          return;
+        }
+        
+        files.forEach(file => {
+          const fileDiv = document.createElement('div');
+          fileDiv.className = 'file-item-admin bg-red-50 border-red-200';
+          fileDiv.innerHTML = `
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-red-100 rounded-lg flex items-center justify-center text-red-500 font-bold text-2xl">
+                  🗑️
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg text-red-700">${file.file_name}</h4>
+                  <p class="text-gray-600">Archivo eliminado del sistema</p>
+                  <p class="text-sm text-gray-500">Eliminado por: ${file.username} (${file.email})</p>
+                  <p class="text-sm text-red-500">Fecha eliminación: ${new Date(file.deleted_at).toLocaleString()}</p>
+                </div>
+              </div>
+              <div class="px-4 py-2 rounded-lg bg-red-200 text-red-700 font-bold">
+                Archivo Eliminado
+              </div>
+            </div>
+          `;
+          container.appendChild(fileDiv);
+        });
+      } catch (error) {
+        console.error('Error loading deleted files:', error);
+        const container = document.getElementById('deletedFilesList');
+        container.innerHTML = '<p class="text-center text-red-500">Error cargando archivos eliminados: ' + error.message + '</p>';
+      }
+    }
+
+    // Ver archivos de un usuario
+    async function viewUserFiles(userId, username) {
+      const res = await fetch(`/api/admin/files/${userId}`, { headers: { Authorization: 'Bearer ' + token } });
+      const files = await res.json();
+      
+      document.getElementById('modalTitle').textContent = `Archivos de ${username}`;
+      const container = document.getElementById('userFilesList');
+      container.innerHTML = '';
+      
+      if (files.length === 0) {
+        container.innerHTML = '<p class="text-center text-gray-500">Este usuario no ha subido archivos.</p>';
+      } else {
+        files.forEach(file => {
+          const fileDiv = document.createElement('div');
+          fileDiv.className = 'file-item-admin mb-4';
+          fileDiv.innerHTML = `
+            <div class="flex items-center gap-4">
+              <img src="/uploads/${file.file_path}" class="w-16 h-16 object-cover rounded-lg" alt="${file.file_name}">
+              <div class="flex-1">
+                <h4 class="font-bold">${file.file_name}</h4>
+                <p class="text-gray-600">${file.comment || 'Sin comentario'}</p>
+                <p class="text-sm text-gray-500">${new Date(file.created_at).toLocaleString()}</p>
+              </div>
+            </div>
+          `;
+          container.appendChild(fileDiv);
+        });
+      }
+      
+      document.getElementById('userFilesModal').classList.remove('hidden');
+    }
+
+    // Cambiar contraseña
+    function changePassword(userId, username) {
+      document.getElementById('passwordForm').dataset.userId = userId;
+      document.getElementById('passwordModal').classList.remove('hidden');
+    }
+
+    // Descargar archivo
+    function downloadFile(filePath) {
+      window.open(`/uploads/${filePath}`, '_blank');
+    }
+
+    // Eventos de modales
+    document.getElementById('closeUserFilesModal').onclick = () => {
+      document.getElementById('userFilesModal').classList.add('hidden');
+    };
+
+    document.getElementById('cancelPassword').onclick = () => {
+      document.getElementById('passwordModal').classList.add('hidden');
+    };
+
+    document.getElementById('passwordForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const userId = e.target.dataset.userId;
+      const newPassword = document.getElementById('newPassword').value;
+      
+      const res = await fetch(`/api/admin/users/${userId}/password`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token 
+        },
+        body: JSON.stringify({ newPassword })
+      });
+      
+      const json = await res.json();
+      alert(json.message);
+      if (res.ok) {
+        document.getElementById('passwordModal').classList.add('hidden');
+        document.getElementById('newPassword').value = '';
+      }
+    };
+
+    // Cargar datos iniciales
+    loadStats();
+    loadUsers();
+  </script>
+
+  <!-- Botón de WhatsApp flotante -->
+  <a href="https://wa.me/595983159658?text=Hola,%20soy%20administrador%20y%20necesito%20soporte%20técnico." 
+     class="whatsapp-btn" 
+     target="_blank" 
+     title="Contactar soporte por WhatsApp">
+    <span>❓</span>
+    <span>¿Necesitas Ayuda?</span>
+  </a>
+</body>
+</html>

@@ -1,3 +1,23 @@
+export async function updateFile(req: Request, res: Response) {
+  try {
+    // @ts-ignore
+    const userId = req.user.id;
+    const fileId = req.params.id;
+    const { file_name, comment } = req.body;
+    
+    // Verificar que el archivo pertenece al usuario
+    const [rows]: any = await pool.query('SELECT id FROM files WHERE id = ? AND user_id = ?', [fileId, userId]);
+    if (!rows.length) return res.status(404).json({ message: 'Archivo no encontrado' });
+    
+    // Actualizar nombre y comentario
+    await pool.query('UPDATE files SET file_name = ?, comment = ? WHERE id = ? AND user_id = ?', [file_name, comment, fileId, userId]);
+    res.json({ message: 'Archivo actualizado' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
+}
+
 export async function listDeletedFiles(req: Request, res: Response) {
   try {
     // @ts-ignore
@@ -64,7 +84,7 @@ export async function listFiles(req: Request, res: Response) {
   try {
     // @ts-ignore
     const userId = req.user.id;
-  const [rows] = await pool.query('SELECT id, file_name, file_path, created_at FROM files WHERE user_id = ?', [userId]);
+  const [rows] = await pool.query('SELECT id, file_name, file_path, comment, created_at FROM files WHERE user_id = ?', [userId]);
     res.json(rows);
   } catch (err) {
     console.error(err);

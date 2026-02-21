@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { uploadFile, listFiles, deleteFile, listDeletedFiles } from '../controllers/file.controller';
+import { uploadFile, listFiles, deleteFile, listDeletedFiles, updateFile } from '../controllers/file.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
 import { uploadMiddleware } from '../middleware/upload.middleware';
 
@@ -9,5 +9,6 @@ router.post('/upload', authMiddleware, uploadMiddleware.single('file'), uploadFi
 router.get('/', authMiddleware, listFiles);
 router.delete('/:id', authMiddleware, deleteFile);
 router.get('/deleted', authMiddleware, listDeletedFiles);
+router.put('/:id', authMiddleware, updateFile);
 
 export default router;

@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const file_controller_1 = require("../controllers/file.controller");
+const auth_middleware_1 = require("../middleware/auth.middleware");
+const upload_middleware_1 = require("../middleware/upload.middleware");
+const router = (0, express_1.Router)();
+router.post('/upload', auth_middleware_1.authMiddleware, upload_middleware_1.uploadMiddleware.single('file'), file_controller_1.uploadFile);
+router.get('/', auth_middleware_1.authMiddleware, file_controller_1.listFiles);
+router.delete('/:id', auth_middleware_1.authMiddleware, file_controller_1.deleteFile);
+router.get('/deleted', auth_middleware_1.authMiddleware, file_controller_1.listDeletedFiles);
+router.put('/:id', auth_middleware_1.authMiddleware, file_controller_1.updateFile);
+exports.default = router;

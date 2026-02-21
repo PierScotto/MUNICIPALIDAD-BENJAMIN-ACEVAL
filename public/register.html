@@ -51,13 +51,39 @@
       box-shadow: 0 8px 32px rgba(16,185,129,0.13);
       transform: translateY(-2px) scale(1.03);
     }
+    /* Botón de WhatsApp flotante */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ef4444;
+      color: white;
+      border-radius: 50px;
+      padding: 15px 20px;
+      box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+      font-weight: bold;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      font-size: 16px;
+    }
+    .whatsapp-btn:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(239, 68, 68, 0.6);
+      color: white;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body class="difuminado-bg flex items-center justify-center min-h-screen p-6">
   <div class="w-full max-w-2xl glass-card p-12 rounded-3xl">
     <div class="text-center mb-12">
-      <h2 class="text-6xl font-extrabold text-brandRed mb-6 tracking-tight">Crear cuenta</h2>
-      <p class="text-2xl text-gray-600 font-medium">Introduce tus datos para registrarte</p>
+      <h2 class="text-6xl font-extrabold text-brandRed mb-6 tracking-tight">Crear Cuenta</h2>
+      <p class="text-2xl text-gray-600 font-medium">Introduce tus Datos para Registrarte</p>
     </div>
     <form id="registerForm" class="space-y-8 max-w-xl mx-auto">
       <div>
@@ -71,6 +97,26 @@
       <div>
         <input name="password" type="password" placeholder="Contraseña" 
                class="w-full input-effect" required />
+      </div>
+      <div>
+        <input name="nombre" placeholder="Nombre" 
+               class="w-full input-effect" required />
+      </div>
+      <div>
+        <input name="apellido" placeholder="Apellido" 
+               class="w-full input-effect" required />
+      </div>
+      <div>
+        <input name="fecha_nacimiento" type="date" placeholder="Fecha de nacimiento" 
+               class="w-full input-effect" required />
+      </div>
+      <div>
+        <input name="area_trabajo" placeholder="Área de trabajo" 
+               class="w-full input-effect" required />
+      </div>
+      <div>
+        <input name="telefono" type="tel" placeholder="Número de teléfono" 
+               class="w-full input-effect" required pattern="^\+?[0-9\s\-().]{7,20}$" title="Ingresa un teléfono válido (7-20 dígitos, puede incluir +, espacios, guiones o paréntesis)" />
       </div>
       <button class="w-full big-btn bg-gradient-to-r from-brandRed to-red-400 text-white">
         Crear cuenta
@@ -86,6 +132,14 @@
     const form = document.getElementById('registerForm');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      // Client-side phone validation (extra UX) to avoid roundtrip on obvious mistakes
+      const telefono = form.querySelector('input[name="telefono"]').value.trim();
+      const phoneRegex = /^\+?[0-9\s\-().]{7,20}$/;
+      if (!phoneRegex.test(telefono)) {
+        alert('Número de teléfono inválido. Asegúrate de usar sólo dígitos y opcionalmente +, espacios, guiones o paréntesis (7-20 caracteres).');
+        return;
+      }
+
       const fd = new FormData(form);
       const body = Object.fromEntries(fd.entries());
       const res = await fetch('/api/auth/register', {
@@ -96,5 +150,14 @@
       if (res.ok) window.location.href = '/login.html';
     });
   </script>
+
+  <!-- Botón de WhatsApp flotante -->
+  <a href="https://wa.me/595983159658?text=Hola,%20necesito%20ayuda%20para%20crear%20mi%20cuenta" 
+     class="whatsapp-btn" 
+     target="_blank" 
+     title="Contactar soporte por WhatsApp">
+    <span>❓</span>
+    <span>¿Necesitas Ayuda?</span>
+  </a>
 </body>
 </html>
