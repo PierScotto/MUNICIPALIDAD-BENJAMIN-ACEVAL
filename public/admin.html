@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Panel de Administración - Trabajadores</title>
   <link href="/output.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -45,6 +46,47 @@
       padding: 1.5rem;
       margin-bottom: 1rem;
       border-left: 4px solid #10b981;
+      overflow: hidden; /* Previene que el contenido se salga */
+    }
+    
+    /* Contenedor de imagen para archivos activos */
+    .admin-file-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 2px solid #e5e7eb;
+      flex-shrink: 0; /* No se encoge */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f9fafb;
+    }
+    
+    .admin-file-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.2s ease;
+    }
+    
+    .admin-file-image:hover img {
+      transform: scale(1.05);
+    }
+    
+    /* Asegurar que el contenido de texto no se desborde */
+    .admin-file-content {
+      flex: 1;
+      min-width: 0; /* Permite que flexbox funcione con overflow */
+      padding-right: 1rem;
+    }
+    
+    .admin-file-content h4,
+    .admin-file-content p {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
     }
     /* Botón de WhatsApp flotante */
     .whatsapp-btn {
@@ -117,41 +159,223 @@
         <button id="deletedTab" class="px-6 py-3 rounded-full bg-transparent text-gray-600 font-bold hover:bg-gray-300 transition-all duration-300 flex items-center gap-2">
           <span>🗑️</span> Archivos Eliminados
         </button>
+        <button id="reportsTab" class="px-6 py-3 rounded-full bg-transparent text-gray-600 font-bold hover:bg-gray-300 transition-all duration-300 flex items-center gap-2">
+          <span>📊</span> Reportes & Analytics
+        </button>
       </div>
     </div>
 
     <!-- Contenido de Usuarios -->
     <div id="usersContent">
-      <h2 class="text-2xl font-bold text-brandGreen mb-4">Lista de Usuarios</h2>
-      <div id="usersList"></div>
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-brandGreen">Lista de Usuarios</h2>
+        <div class="flex gap-3">
+          <button id="showBtn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold hover:from-purple-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <span>👁️</span> Mostrar Lista
+          </button>
+          <button id="hideBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <span></span> Cerrar Lista
+          </button>
+          <button id="refreshBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <span>🔄</span> Actualizar
+          </button>
+        </div>
+      </div>
+      <div id="usersList" style="display: none;"></div>
+      <div id="usersPlaceholder" class="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+        <div class="text-gray-400 text-6xl mb-4">👥</div>
+        <p class="text-gray-500 text-lg font-medium">Haz clic en "Mostrar Lista" para ver los usuarios registrados</p>
+      </div>
     </div>
 
     <!-- Contenido de Archivos -->
     <div id="filesContent" class="hidden">
-      <h2 class="text-2xl font-bold text-brandGreen mb-4">Archivos Activos</h2>
-      <div id="allFilesList"></div>
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-brandGreen">Archivos Activos</h2>
+        <div class="flex gap-3">
+          <button id="showFilesBtn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <span>📁</span> Mostrar Archivos
+          </button>
+          <button id="hideFilesBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <span></span> Cerrar Archivos
+          </button>
+          <button id="refreshFilesBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <span>🔄</span> Actualizar
+          </button>
+        </div>
+      </div>
+      <div id="allFilesList" style="display: none;"></div>
+      <div id="filesPlaceholder" class="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+        <div class="text-gray-400 text-6xl mb-4">📁</div>
+        <p class="text-gray-500 text-lg font-medium">Haz clic en "Mostrar Archivos" para ver los archivos activos</p>
+      </div>
     </div>
 
     <!-- Contenido de Archivos Eliminados -->
     <div id="deletedContent" class="hidden">
-      <h2 class="text-2xl font-bold text-red-600 mb-4">Archivos Eliminados</h2>
-      <div id="deletedFilesList"></div>
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-red-600">Archivos Eliminados</h2>
+        <div class="flex gap-3">
+          <button id="showDeletedBtn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <span>🗑️</span> Mostrar Eliminados
+          </button>
+          <button id="hideDeletedBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <span></span> Cerrar Eliminados
+          </button>
+          <button id="refreshDeletedBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <span>🔄</span> Actualizar
+          </button>
+        </div>
+      </div>
+      <div id="deletedFilesList" style="display: none;"></div>
+      <div id="deletedPlaceholder" class="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+        <div class="text-gray-400 text-6xl mb-4">🗑️</div>
+        <p class="text-gray-500 text-lg font-medium">Haz clic en "Mostrar Eliminados" para ver los archivos eliminados</p>
+      </div>
     </div>
-  </div>
 
-  <!-- Modal para archivos de usuario -->
-  <div id="userFilesModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-4xl max-h-[80vh] overflow-auto">
-      <h2 class="text-2xl font-bold text-blue-600 mb-4 text-center" id="modalTitle">Archivos del Usuario</h2>
-      <div id="userFilesList"></div>
-      <button id="closeUserFilesModal" class="mt-6 px-4 py-2 rounded-full bg-gray-300 text-gray-800 font-bold hover:bg-gray-400 transition w-full">Cerrar</button>
+    <!-- 📊 Contenido de Reportes y Analytics -->
+    <div id="reportsContent" class="hidden">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-purple-600 flex items-center gap-2">
+          <span>📊</span> Reportes & Analytics
+        </h2>
+        <div class="flex gap-3">
+          <button id="showReportsBtn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold hover:from-purple-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <span>📊</span> Mostrar Reportes
+          </button>
+          <button id="hideReportsBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <span></span> Cerrar Reportes
+          </button>
+          <button id="refreshReportsBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <span>🔄</span> Actualizar
+          </button>
+        </div>
+      </div>
+      
+      <div id="reportsData" style="display: none;">
+        <!-- Filtros de Reportes -->
+        <div class="bg-gray-50 rounded-2xl p-6 mb-8 border-2 border-purple-200">
+          <h3 class="text-xl font-bold text-gray-700 mb-4 flex items-center gap-2">
+            <span>🔍</span> Generar Reporte Personalizado
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-bold text-gray-600 mb-1">Fecha Inicio:</label>
+              <input type="date" id="startDate" class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-600 mb-1">Fecha Fin:</label>
+              <input type="date" id="endDate" class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-600 mb-1">Área:</label>
+              <select id="areaFilter" class="w-full px-3 py-2 border rounded-lg">
+                <option value="all">Todas las áreas</option>
+              </select>
+            </div>
+            <div class="flex items-end">
+              <button id="generateReport" class="w-full px-4 py-2 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition">
+                Generar Reporte
+              </button>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button id="exportPDF" class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition flex items-center gap-2">
+              <span>📄</span> Exportar PDF
+            </button>
+            <button id="exportExcel" class="px-4 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition flex items-center gap-2">
+              <span>📊</span> Exportar Excel
+            </button>
+          </div>
+        </div>
+
+        <!-- Dashboard de Analytics -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <!-- Gráfico: Usuarios por Área -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-blue-200">
+            <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
+              <span>👥</span> Usuarios por Área de Trabajo
+            </h3>
+            <canvas id="usersByAreaChart" width="400" height="200"></canvas>
+          </div>
+
+          <!-- Gráfico: Archivos por Mes -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-green-200">
+            <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
+              <span>📈</span> Archivos Subidos por Mes
+            </h3>
+            <canvas id="filesByMonthChart" width="400" height="200"></canvas>
+          </div>
+
+          <!-- Gráfico: Actividad por Día -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200">
+            <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
+              <span>📅</span> Actividad por Día de la Semana
+            </h3>
+            <canvas id="activityByDayChart" width="400" height="200"></canvas>
+          </div>
+
+          <!-- Top 5 Usuarios -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-purple-200">
+            <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
+              <span>🏆</span> Top 5 Usuarios Más Activos
+            </h3>
+            <div id="topUsersList" class="space-y-3">
+              <!-- Se llenará dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparativo de Eliminaciones -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-red-200 mb-8">
+          <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
+            <span>📉</span> Archivos Eliminados vs Archivos Activos por Mes
+          </h3>
+          <canvas id="deletedVsActiveChart" width="400" height="200"></canvas>
+        </div>
+
+        <!-- Reporte Detallado -->
+        <div id="detailedReportSection" class="bg-white rounded-2xl p-6 shadow-lg border-2 border-indigo-200 hidden">
+          <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
+            <span>📋</span> Reporte Detallado
+          </h3>
+          <div id="reportSummary" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <!-- Resumen estadístico -->
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full bg-white border border-gray-300 rounded-lg">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="px-4 py-2 border">Usuario</th>
+                  <th class="px-4 py-2 border">Área</th>
+                  <th class="px-4 py-2 border">Archivo</th>
+                  <th class="px-4 py-2 border">Fecha</th>
+                  <th class="px-4 py-2 border">Estado</th>
+                </tr>
+              </thead>
+              <tbody id="detailedReportTable">
+                <!-- Se llenará dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <div id="reportsPlaceholder" class="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+        <div class="text-gray-400 text-6xl mb-4">📊</div>
+        <p class="text-gray-500 text-lg font-medium">Haz clic en "Mostrar Reportes" para ver los reportes y analytics</p>
+      </div>
     </div>
   </div>
 
   <!-- Modal para cambiar contraseña -->
   <div id="passwordModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
     <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg">
-      <h2 class="text-2xl font-bold text-red-600 mb-4 text-center">Cambiar Contraseña</h2>
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-red-600 text-center flex-1">Cambiar Contraseña</h2>
+        <button id="closePasswordModalX" class="text-gray-500 hover:text-gray-700 text-2xl font-bold leading-none" title="Cerrar">×</button>
+      </div>
       <form id="passwordForm">
         <div class="mb-4">
           <label class="block text-gray-700 font-bold mb-2">Nueva Contraseña:</label>
@@ -191,12 +415,183 @@
     document.getElementById('usersTab').onclick = () => showTab('users');
     document.getElementById('filesTab').onclick = () => showTab('files');
     document.getElementById('deletedTab').onclick = () => showTab('deleted');
+    document.getElementById('reportsTab').onclick = () => showTab('reports');
+    
+    // Botones de usuarios - Solución simple
+    setTimeout(() => {
+      // Botones para USUARIOS
+      document.getElementById('showBtn').onclick = function() {
+        console.log('MOSTRAR LISTA CLICKED');
+        document.getElementById('usersList').style.display = 'block';
+        document.getElementById('usersPlaceholder').style.display = 'none';
+        document.getElementById('showBtn').style.display = 'none';
+        document.getElementById('hideBtn').style.display = 'flex';
+        document.getElementById('refreshBtn').style.display = 'flex';
+        if (document.getElementById('usersList').innerHTML === '') {
+          loadUsers();
+        }
+      };
+      
+      document.getElementById('hideBtn').onclick = function() {
+        console.log('CERRAR LISTA CLICKED');
+        document.getElementById('usersList').style.display = 'none';
+        document.getElementById('usersPlaceholder').style.display = 'block';
+        document.getElementById('showBtn').style.display = 'flex';
+        document.getElementById('hideBtn').style.display = 'none';
+        document.getElementById('refreshBtn').style.display = 'none';
+      };
+      
+      document.getElementById('refreshBtn').onclick = function() {
+        console.log('REFRESH CLICKED');
+        loadUsers();
+      };
+      
+      // Botones para ARCHIVOS ACTIVOS
+      document.getElementById('showFilesBtn').onclick = function() {
+        console.log('MOSTRAR ARCHIVOS CLICKED');
+        document.getElementById('allFilesList').style.display = 'block';
+        document.getElementById('filesPlaceholder').style.display = 'none';
+        document.getElementById('showFilesBtn').style.display = 'none';
+        document.getElementById('hideFilesBtn').style.display = 'flex';
+        document.getElementById('refreshFilesBtn').style.display = 'flex';
+        if (document.getElementById('allFilesList').innerHTML === '') {
+          loadAllFiles();
+        }
+      };
+      
+      document.getElementById('hideFilesBtn').onclick = function() {
+        console.log('CERRAR ARCHIVOS CLICKED');
+        document.getElementById('allFilesList').style.display = 'none';
+        document.getElementById('filesPlaceholder').style.display = 'block';
+        document.getElementById('showFilesBtn').style.display = 'flex';
+        document.getElementById('hideFilesBtn').style.display = 'none';
+        document.getElementById('refreshFilesBtn').style.display = 'none';
+      };
+      
+      document.getElementById('refreshFilesBtn').onclick = function() {
+        console.log('REFRESH ARCHIVOS CLICKED');
+        loadAllFiles();
+      };
+      
+      // Botones para ARCHIVOS ELIMINADOS
+      document.getElementById('showDeletedBtn').onclick = function() {
+        console.log('MOSTRAR ELIMINADOS CLICKED');
+        document.getElementById('deletedFilesList').style.display = 'block';
+        document.getElementById('deletedPlaceholder').style.display = 'none';
+        document.getElementById('showDeletedBtn').style.display = 'none';
+        document.getElementById('hideDeletedBtn').style.display = 'flex';
+        document.getElementById('refreshDeletedBtn').style.display = 'flex';
+        if (document.getElementById('deletedFilesList').innerHTML === '') {
+          loadDeletedFiles();
+        }
+      };
+      
+      document.getElementById('hideDeletedBtn').onclick = function() {
+        console.log('CERRAR ELIMINADOS CLICKED');
+        document.getElementById('deletedFilesList').style.display = 'none';
+        document.getElementById('deletedPlaceholder').style.display = 'block';
+        document.getElementById('showDeletedBtn').style.display = 'flex';
+        document.getElementById('hideDeletedBtn').style.display = 'none';
+        document.getElementById('refreshDeletedBtn').style.display = 'none';
+      };
+      
+      document.getElementById('refreshDeletedBtn').onclick = function() {
+        console.log('REFRESH ELIMINADOS CLICKED');
+        loadDeletedFiles();
+      };
+      
+      // Botones para REPORTES Y ANALYTICS
+      document.getElementById('showReportsBtn').onclick = function() {
+        console.log('MOSTRAR REPORTES CLICKED');
+        document.getElementById('reportsData').style.display = 'block';
+        document.getElementById('reportsPlaceholder').style.display = 'none';
+        document.getElementById('showReportsBtn').style.display = 'none';
+        document.getElementById('hideReportsBtn').style.display = 'flex';
+        document.getElementById('refreshReportsBtn').style.display = 'flex';
+        // Cargar datos de reportes
+        loadReportsData();
+      };
+      
+      document.getElementById('hideReportsBtn').onclick = function() {
+        console.log('CERRAR REPORTES CLICKED');
+        document.getElementById('reportsData').style.display = 'none';
+        document.getElementById('reportsPlaceholder').style.display = 'block';
+        document.getElementById('showReportsBtn').style.display = 'flex';
+        document.getElementById('hideReportsBtn').style.display = 'none';
+        document.getElementById('refreshReportsBtn').style.display = 'none';
+      };
+      
+      document.getElementById('refreshReportsBtn').onclick = function() {
+        console.log('REFRESH REPORTES CLICKED');
+        loadReportsData();
+      };
+    }, 100);
+
+    // Funciones para mostrar/ocultar archivos de usuario
+    async function showUserFiles(userId, username, buttonElement) {
+      console.log('MOSTRAR ARCHIVOS USUARIO:', userId);
+      const filesContainer = document.getElementById(`userFiles_${userId}`);
+      const filesList = document.getElementById(`filesList_${userId}`);
+      const showBtn = document.getElementById(`showBtn_${userId}`);
+      const hideBtn = document.getElementById(`hideBtn_${userId}`);
+      
+      // Mostrar contenedor
+      filesContainer.style.display = 'block';
+      showBtn.style.display = 'none';
+      hideBtn.style.display = 'flex';
+      
+      // Cargar archivos si están vacíos
+      if (filesList.innerHTML === '') {
+        const res = await fetch(`/api/admin/files/${userId}`, { headers: { Authorization: 'Bearer ' + token } });
+        const files = await res.json();
+        
+        if (files.length === 0) {
+          filesList.innerHTML = '<p class="text-center text-gray-500 py-4">Este usuario no ha subido archivos.</p>';
+        } else {
+          files.forEach(file => {
+            const fileDiv = document.createElement('div');
+            fileDiv.className = 'file-item-admin mb-3';
+            fileDiv.innerHTML = `
+              <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4 flex-1 min-w-0">
+                  <div class="admin-file-image">
+                    <img src="/uploads/${file.file_path}" alt="${file.file_name}" loading="lazy">
+                  </div>
+                  <div class="admin-file-content">
+                    <h4 class="font-bold text-lg mb-1">${file.file_name}</h4>
+                    <p class="text-gray-600 mb-1">${file.comment || 'Sin comentario'}</p>
+                    <p class="text-sm text-gray-500">${new Date(file.created_at).toLocaleString()}</p>
+                  </div>
+                </div>
+                <button onclick="downloadFile('${file.file_path}')" class="px-4 py-2 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2 flex-shrink-0">
+                  <span>⬇️</span> Descargar
+                </button>
+              </div>
+            `;
+            filesList.appendChild(fileDiv);
+          });
+        }
+      }
+    }
+    
+    function hideUserFiles(userId) {
+      console.log('OCULTAR ARCHIVOS USUARIO:', userId);
+      const filesContainer = document.getElementById(`userFiles_${userId}`);
+      const showBtn = document.getElementById(`showBtn_${userId}`);
+      const hideBtn = document.getElementById(`hideBtn_${userId}`);
+      
+      // Ocultar contenedor
+      filesContainer.style.display = 'none';
+      showBtn.style.display = 'flex';
+      hideBtn.style.display = 'none';
+    }
 
     function showTab(tab) {
       // Ocultar todos los contenidos
       document.getElementById('usersContent').classList.add('hidden');
       document.getElementById('filesContent').classList.add('hidden');
       document.getElementById('deletedContent').classList.add('hidden');
+      document.getElementById('reportsContent').classList.add('hidden');
       
       // Resetear estilos de pestañas
       const inactiveClass = 'px-6 py-3 rounded-full bg-transparent text-gray-600 font-bold hover:bg-gray-300 transition-all duration-300 flex items-center gap-2';
@@ -205,6 +600,7 @@
       document.getElementById('usersTab').className = inactiveClass;
       document.getElementById('filesTab').className = inactiveClass;
       document.getElementById('deletedTab').className = inactiveClass;
+      document.getElementById('reportsTab').className = inactiveClass;
       
       // Mostrar contenido activo
       if (tab === 'users') {
@@ -213,11 +609,15 @@
       } else if (tab === 'files') {
         document.getElementById('filesContent').classList.remove('hidden');
         document.getElementById('filesTab').className = activeClass;
-        loadAllFiles();
+        // No cargar automáticamente, esperar a que hagan clic en mostrar
       } else if (tab === 'deleted') {
         document.getElementById('deletedContent').classList.remove('hidden');
         document.getElementById('deletedTab').className = activeClass;
-        loadDeletedFiles();
+        // No cargar automáticamente, esperar a que hagan clic en mostrar
+      } else if (tab === 'reports') {
+        document.getElementById('reportsContent').classList.remove('hidden');
+        document.getElementById('reportsTab').className = activeClass;
+        // No cargar automáticamente, esperar a que hagan clic en mostrar
       }
     }
 
@@ -279,13 +679,20 @@
               <p class="text-sm text-gray-500">Rol: ${user.role} | Registro: ${new Date(user.created_at).toLocaleDateString()}</p>
             </div>
             <div class="flex gap-3">
-              <button onclick="viewUserFiles(${user.id}, '${user.username}')" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+              <button onclick="showUserFiles(${user.id}, '${user.username}', this)" id="showBtn_${user.id}" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
                 <span>📁</span> Ver Archivos
+              </button>
+              <button onclick="hideUserFiles(${user.id})" id="hideBtn_${user.id}" style="display: none;" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+                <span>🙈</span> Ocultar Archivos
               </button>
               <button onclick="changePassword(${user.id}, '${user.username}')" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
                 <span>🔑</span> Cambiar Contraseña
               </button>
             </div>
+          </div>
+          <div id="userFiles_${user.id}" style="display: none;" class="mt-4 bg-gray-50 rounded-xl p-4">
+            <h4 class="text-lg font-bold text-blue-600 mb-3">Archivos de ${user.username}</h4>
+            <div id="filesList_${user.id}"></div>
           </div>
         `;
         container.appendChild(userDiv);
@@ -306,17 +713,19 @@
         const fileDiv = document.createElement('div');
         fileDiv.className = 'file-item-admin';
         fileDiv.innerHTML = `
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-4">
-              <img src="/uploads/${file.file_path}" class="w-16 h-16 object-cover rounded-lg" alt="${file.file_name}">
-              <div>
-                <h4 class="font-bold text-lg">${file.file_name}</h4>
-                <p class="text-gray-600">${file.comment || 'Sin comentario'}</p>
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4 flex-1 min-w-0">
+              <div class="admin-file-image">
+                <img src="/uploads/${file.file_path}" alt="${file.file_name}" loading="lazy">
+              </div>
+              <div class="admin-file-content">
+                <h4 class="font-bold text-lg mb-1">${file.file_name}</h4>
+                <p class="text-gray-600 mb-1">${file.comment || 'Sin comentario'}</p>
                 <p class="text-sm text-gray-500">Por: ${file.username} (${file.email})</p>
                 <p class="text-sm text-gray-500">${new Date(file.created_at).toLocaleString()}</p>
               </div>
             </div>
-            <button onclick="downloadFile('${file.file_path}')" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+            <button onclick="downloadFile('${file.file_path}')" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2 flex-shrink-0">
               <span>⬇️</span> Descargar
             </button>
           </div>
@@ -376,38 +785,6 @@
       }
     }
 
-    // Ver archivos de un usuario
-    async function viewUserFiles(userId, username) {
-      const res = await fetch(`/api/admin/files/${userId}`, { headers: { Authorization: 'Bearer ' + token } });
-      const files = await res.json();
-      
-      document.getElementById('modalTitle').textContent = `Archivos de ${username}`;
-      const container = document.getElementById('userFilesList');
-      container.innerHTML = '';
-      
-      if (files.length === 0) {
-        container.innerHTML = '<p class="text-center text-gray-500">Este usuario no ha subido archivos.</p>';
-      } else {
-        files.forEach(file => {
-          const fileDiv = document.createElement('div');
-          fileDiv.className = 'file-item-admin mb-4';
-          fileDiv.innerHTML = `
-            <div class="flex items-center gap-4">
-              <img src="/uploads/${file.file_path}" class="w-16 h-16 object-cover rounded-lg" alt="${file.file_name}">
-              <div class="flex-1">
-                <h4 class="font-bold">${file.file_name}</h4>
-                <p class="text-gray-600">${file.comment || 'Sin comentario'}</p>
-                <p class="text-sm text-gray-500">${new Date(file.created_at).toLocaleString()}</p>
-              </div>
-            </div>
-          `;
-          container.appendChild(fileDiv);
-        });
-      }
-      
-      document.getElementById('userFilesModal').classList.remove('hidden');
-    }
-
     // Cambiar contraseña
     function changePassword(userId, username) {
       document.getElementById('passwordForm').dataset.userId = userId;
@@ -419,13 +796,19 @@
       window.open(`/uploads/${filePath}`, '_blank');
     }
 
-    // Eventos de modales
-    document.getElementById('closeUserFilesModal').onclick = () => {
-      document.getElementById('userFilesModal').classList.add('hidden');
-    };
-
     document.getElementById('cancelPassword').onclick = () => {
       document.getElementById('passwordModal').classList.add('hidden');
+    };
+
+    document.getElementById('closePasswordModalX').onclick = () => {
+      document.getElementById('passwordModal').classList.add('hidden');
+    };
+
+    // Cerrar modal de contraseña al hacer click fuera
+    document.getElementById('passwordModal').onclick = (e) => {
+      if (e.target === document.getElementById('passwordModal')) {
+        document.getElementById('passwordModal').classList.add('hidden');
+      }
     };
 
     document.getElementById('passwordForm').onsubmit = async (e) => {
@@ -452,7 +835,327 @@
 
     // Cargar datos iniciales
     loadStats();
-    loadUsers();
+    // loadUsers(); // Comentado para no cargar automáticamente
+
+    // 📊 SISTEMA DE REPORTES Y ANALYTICS
+    let chartInstances = {}; // Para manejar múltiples gráficos
+
+    // Cargar datos de reportes y analytics
+    async function loadReportsData() {
+      try {
+        await Promise.all([
+          loadAnalyticsData(),
+          loadAreaFilter()
+        ]);
+      } catch (err) {
+        console.error('Error cargando reportes:', err);
+        alert('Error cargando datos de reportes');
+      }
+    }
+
+    // Cargar datos de analytics desde el servidor
+    async function loadAnalyticsData() {
+      try {
+        const res = await fetch('/api/admin/analytics', { 
+          headers: { Authorization: 'Bearer ' + token } 
+        });
+        
+        if (!res.ok) throw new Error('Error cargando analytics');
+        
+        const data = await res.json();
+        
+        // Crear todos los gráficos
+        createUsersByAreaChart(data.usersByArea);
+        createFilesByMonthChart(data.filesByMonth);
+        createActivityByDayChart(data.activityByDay);
+        createDeletedVsActiveChart(data.filesByMonth, data.deletedByMonth);
+        displayTopUsers(data.topUsers);
+        
+        console.log('Analytics loaded successfully');
+      } catch (err) {
+        console.error('Error:', err);
+      }
+    }
+
+    // Cargar filtro de áreas
+    async function loadAreaFilter() {
+      try {
+        const res = await fetch('/api/admin/users', { 
+          headers: { Authorization: 'Bearer ' + token } 
+        });
+        const users = await res.json();
+        
+        const areas = [...new Set(users.map(u => u.area_trabajo).filter(a => a))];
+        const select = document.getElementById('areaFilter');
+        
+        areas.forEach(area => {
+          const option = document.createElement('option');
+          option.value = area;
+          option.textContent = area;
+          select.appendChild(option);
+        });
+      } catch (err) {
+        console.error('Error cargando áreas:', err);
+      }
+    }
+
+    // Gráfico: Usuarios por Área
+    function createUsersByAreaChart(data) {
+      const ctx = document.getElementById('usersByAreaChart').getContext('2d');
+      
+      // Destruir gráfico anterior si existe
+      if (chartInstances.usersByArea) {
+        chartInstances.usersByArea.destroy();
+      }
+      
+      chartInstances.usersByArea = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: data.map(d => d.area_trabajo),
+          datasets: [{
+            data: data.map(d => d.total),
+            backgroundColor: [
+              '#ef4444', '#10b981', '#3b82f6', '#f59e0b', 
+              '#8b5cf6', '#06b6d4', '#f97316', '#84cc16'
+            ],
+            borderWidth: 2,
+            borderColor: '#fff'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    }
+
+    // Gráfico: Archivos por Mes
+    function createFilesByMonthChart(data) {
+      const ctx = document.getElementById('filesByMonthChart').getContext('2d');
+      
+      if (chartInstances.filesByMonth) {
+        chartInstances.filesByMonth.destroy();
+      }
+      
+      chartInstances.filesByMonth = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: data.map(d => d.mes),
+          datasets: [{
+            label: 'Archivos Subidos',
+            data: data.map(d => d.total),
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Gráfico: Actividad por Día
+    function createActivityByDayChart(data) {
+      const ctx = document.getElementById('activityByDayChart').getContext('2d');
+      
+      if (chartInstances.activityByDay) {
+        chartInstances.activityByDay.destroy();
+      }
+      
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const dayData = days.map(day => {
+        const found = data.find(d => d.dia === day);
+        return found ? found.total : 0;
+      });
+      
+      chartInstances.activityByDay = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+          datasets: [{
+            label: 'Archivos',
+            data: dayData,
+            backgroundColor: '#f59e0b',
+            borderColor: '#d97706',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Gráfico: Eliminados vs Activos
+    function createDeletedVsActiveChart(activeData, deletedData) {
+      const ctx = document.getElementById('deletedVsActiveChart').getContext('2d');
+      
+      if (chartInstances.deletedVsActive) {
+        chartInstances.deletedVsActive.destroy();
+      }
+      
+      // Combinar datos por mes
+      const months = [...new Set([...activeData.map(d => d.mes), ...deletedData.map(d => d.mes)])].sort();
+      
+      const activeByMonth = months.map(month => {
+        const found = activeData.find(d => d.mes === month);
+        return found ? found.total : 0;
+      });
+      
+      const deletedByMonth = months.map(month => {
+        const found = deletedData.find(d => d.mes === month);
+        return found ? found.total : 0;
+      });
+      
+      chartInstances.deletedVsActive = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: months,
+          datasets: [
+            {
+              label: 'Archivos Activos',
+              data: activeByMonth,
+              backgroundColor: '#10b981',
+              borderColor: '#059669',
+              borderWidth: 1
+            },
+            {
+              label: 'Archivos Eliminados',
+              data: deletedByMonth,
+              backgroundColor: '#ef4444',
+              borderColor: '#dc2626',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Mostrar Top 5 usuarios
+    function displayTopUsers(users) {
+      const container = document.getElementById('topUsersList');
+      container.innerHTML = '';
+      
+      users.forEach((user, index) => {
+        const div = document.createElement('div');
+        div.className = 'flex justify-between items-center p-3 bg-gray-50 rounded-lg';
+        div.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">${index + 1}</span>
+            <div>
+              <div class="font-bold">${user.nombre} ${user.apellido}</div>
+              <div class="text-sm text-gray-600">${user.area_trabajo}</div>
+            </div>
+          </div>
+          <div class="font-bold text-purple-600">${user.total_archivos} archivos</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Generar reporte personalizado
+    document.getElementById('generateReport').onclick = async () => {
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      const area = document.getElementById('areaFilter').value;
+      
+      if (!startDate || !endDate) {
+        alert('Por favor selecciona un rango de fechas');
+        return;
+      }
+      
+      try {
+        const params = new URLSearchParams({ startDate, endDate, area });
+        const res = await fetch(`/api/admin/reports/detailed?${params}`, {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        
+        if (!res.ok) throw new Error('Error generando reporte');
+        
+        const data = await res.json();
+        displayDetailedReport(data);
+        
+      } catch (err) {
+        console.error('Error:', err);
+        alert('Error generando reporte');
+      }
+    };
+
+    // Mostrar reporte detallado
+    function displayDetailedReport(reportData) {
+      const section = document.getElementById('detailedReportSection');
+      const summary = document.getElementById('reportSummary');
+      const table = document.getElementById('detailedReportTable');
+      
+      // Mostrar resumen
+      summary.innerHTML = `
+        <div class="stat-card">
+          <h4 class="font-bold text-gray-600">Usuarios Involucrados</h4>
+          <div class="text-2xl font-bold text-blue-600">${reportData.summary.usuarios_involucrados || 0}</div>
+        </div>
+        <div class="stat-card">
+          <h4 class="font-bold text-gray-600">Total Archivos</h4>
+          <div class="text-2xl font-bold text-green-600">${reportData.summary.total_archivos || 0}</div>
+        </div>
+        <div class="stat-card">
+          <h4 class="font-bold text-gray-600">Promedio por Usuario</h4>
+          <div class="text-2xl font-bold text-purple-600">${Math.round(reportData.summary.promedio_archivos_usuario || 0)}</div>
+        </div>
+      `;
+      
+      // Mostrar tabla
+      table.innerHTML = '';
+      reportData.data.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="px-4 py-2 border">${item.nombre} ${item.apellido}</td>
+          <td class="px-4 py-2 border">${item.area_trabajo}</td>
+          <td class="px-4 py-2 border">${item.file_name || 'N/A'}</td>
+          <td class="px-4 py-2 border">${item.created_at ? new Date(item.created_at).toLocaleDateString() : 'N/A'}</td>
+          <td class="px-4 py-2 border">
+            <span class="px-2 py-1 rounded text-sm ${item.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${item.estado}</span>
+          </td>
+        `;
+        table.appendChild(row);
+      });
+      
+      section.classList.remove('hidden');
+    }
+
+    // Funciones de exportación (básicas)
+    document.getElementById('exportPDF').onclick = () => {
+      alert('Función de exportación PDF - En desarrollo');
+      // Aquí puedes implementar jsPDF o similar
+    };
+
+    document.getElementById('exportExcel').onclick = () => {
+      alert('Función de exportación Excel - En desarrollo');
+      // Aquí puedes implementar SheetJS o similar
+    };
   </script>
 
   <!-- Botón de WhatsApp flotante -->

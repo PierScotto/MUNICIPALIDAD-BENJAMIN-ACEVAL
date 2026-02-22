@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { pool } from '../config/db';
 import { sendVerificationEmail } from '../utils/mailer';
+// @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 

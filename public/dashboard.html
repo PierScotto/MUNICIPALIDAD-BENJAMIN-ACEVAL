@@ -56,6 +56,26 @@
     }
     .file-meta {
       flex: 1;
+      min-width: 0; /* Permite que flex funcione correctamente con overflow */
+      max-width: calc(100% - 200px); /* Reserva espacio para botones */
+    }
+    .file-name {
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      line-height: 1.2;
+    }
+    .file-comment {
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      line-height: 1.3;
+      /* Opción alternativa: truncar con puntos suspensivos */
+      /* overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap; */
     }
     .file-date {
       color: #6b7280;
@@ -183,13 +203,15 @@
     <template id="fileTemplate">
       <div class="file-item flex items-center gap-6 p-6 bg-white rounded-xl shadow-md mb-6">
         <img src="" class="file-thumb" alt="Foto" />
-        <div class="file-meta flex flex-col">
+        <div class="file-meta flex flex-col min-w-0 flex-1">
           <div class="font-extrabold file-name text-2xl mb-2"></div>
           <div class="file-comment text-gray-500 text-lg mb-1"></div>
           <div class="file-date text-gray-600 text-lg"></div>
         </div>
-        <button class="edit-btn ml-auto px-4 py-2 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-700 transition mr-2" title="Editar archivo">✏️</button>
-        <button class="delete-btn px-4 py-2 rounded-lg bg-red-500 text-white font-bold hover:bg-red-700 transition" title="Eliminar archivo">🗑️</button>
+        <div class="flex flex-shrink-0 gap-2">
+          <button class="edit-btn px-4 py-2 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-700 transition" title="Editar archivo">✏️</button>
+          <button class="delete-btn px-4 py-2 rounded-lg bg-red-500 text-white font-bold hover:bg-red-700 transition" title="Eliminar archivo">🗑️</button>
+        </div>
       </div>
     </template>
 
@@ -283,9 +305,6 @@
           });
         }
         modal.classList.remove('hidden');
-      };
-      document.getElementById('closeDeletedModal').onclick = () => {
-        document.getElementById('deletedModal').classList.add('hidden');
       };
     }
 

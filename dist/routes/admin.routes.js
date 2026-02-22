@@ -11,4 +11,7 @@ router.get('/files/:userId', auth_middleware_1.authMiddleware, admin_controller_
 router.get('/deleted-files', auth_middleware_1.authMiddleware, admin_controller_1.adminMiddleware, admin_controller_1.getDeletedFiles);
 router.put('/users/:userId/password', auth_middleware_1.authMiddleware, admin_controller_1.adminMiddleware, admin_controller_1.changeUserPassword);
 router.get('/stats', auth_middleware_1.authMiddleware, admin_controller_1.adminMiddleware, admin_controller_1.getStats);
+// 📊 Nuevas rutas para Reportes y Analytics
+router.get('/analytics', auth_middleware_1.authMiddleware, admin_controller_1.adminMiddleware, admin_controller_1.getAnalytics);
+router.get('/reports/detailed', auth_middleware_1.authMiddleware, admin_controller_1.adminMiddleware, admin_controller_1.getDetailedReport);
 exports.default = router;

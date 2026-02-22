@@ -99,6 +99,144 @@ export async function getStats(req: Request, res: Response) {
   }
 }
 
+// Reportes y Analytics Avanzados
+export async function getAnalytics(req: Request, res: Response) {
+  try {
+    // Usuarios por área de trabajo
+    const [usersByArea] = await pool.query(`
+      SELECT area_trabajo, COUNT(*) as total 
+      FROM users 
+      WHERE area_trabajo != '' 
+      GROUP BY area_trabajo 
+      ORDER BY total DESC
+    `);
+
+    // Archivos por mes (últimos 12 meses)
+    const [filesByMonth] = await pool.query(`
+      SELECT 
+        DATE_FORMAT(created_at, '%Y-%m') as mes,
+        COUNT(*) as total
+      FROM files 
+      WHERE created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+      GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+      ORDER BY mes ASC
+    `);
+
+    // Actividad por día de la semana
+    const [activityByDay] = await pool.query(`
+      SELECT 
+        DAYNAME(created_at) as dia,
+        COUNT(*) as total
+      FROM files 
+      GROUP BY DAYOFWEEK(created_at), DAYNAME(created_at)
+      ORDER BY DAYOFWEEK(created_at)
+    `);
+
+    // Top 5 usuarios más activos
+    const [topUsers] = await pool.query(`
+      SELECT 
+        u.nombre, u.apellido, u.area_trabajo,
+        COUNT(f.id) as total_archivos
+      FROM users u
+      LEFT JOIN files f ON u.id = f.user_id
+      GROUP BY u.id
+      ORDER BY total_archivos DESC
+      LIMIT 5
+    `);
+
+    // Archivos eliminados por mes
+    const [deletedByMonth] = await pool.query(`
+      SELECT 
+        DATE_FORMAT(deleted_at, '%Y-%m') as mes,
+        COUNT(*) as total
+      FROM deleted_files 
+      WHERE deleted_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+      GROUP BY DATE_FORMAT(deleted_at, '%Y-%m')
+      ORDER BY mes ASC
+    `);
+
+    // Resumen de registros recientes (última semana)
+    const [recentActivity] = await pool.query(`
+      SELECT 
+        DATE(created_at) as fecha,
+        COUNT(*) as nuevos_usuarios
+      FROM users 
+      WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+      GROUP BY DATE(created_at)
+      ORDER BY fecha DESC
+    `);
+
+    res.json({
+      usersByArea,
+      filesByMonth,
+      activityByDay,
+      topUsers,
+      deletedByMonth,
+      recentActivity
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
+}
+
+// Reporte detallado por rango de fechas
+export async function getDetailedReport(req: Request, res: Response) {
+  try {
+    const { startDate, endDate, area } = req.query;
+    
+    let whereClause = 'WHERE 1=1';
+    let params: any[] = [];
+    
+    if (startDate && endDate) {
+      whereClause += ' AND f.created_at BETWEEN ? AND ?';
+      params.push(startDate, endDate);
+    }
+    
+    if (area && area !== 'all') {
+      whereClause += ' AND u.area_trabajo = ?';
+      params.push(area);
+    }
+    
+    const [detailedData] = await pool.query(`
+      SELECT 
+        u.nombre, u.apellido, u.area_trabajo,
+        f.file_name, f.created_at,
+        CASE 
+          WHEN f.id IS NOT NULL THEN 'Activo'
+          ELSE 'N/A'
+        END as estado
+      FROM users u
+      LEFT JOIN files f ON u.id = f.user_id
+      ${whereClause}
+      ORDER BY f.created_at DESC
+    `, params);
+
+    // Estadísticas del reporte
+    const [summary] = await pool.query(`
+      SELECT 
+        COUNT(DISTINCT u.id) as usuarios_involucrados,
+        COUNT(f.id) as total_archivos,
+        AVG(
+          SELECT COUNT(*) FROM files f2 WHERE f2.user_id = u.id
+        ) as promedio_archivos_usuario
+      FROM users u
+      LEFT JOIN files f ON u.id = f.user_id
+      ${whereClause}
+    `, params);
+
+    res.json({
+      data: detailedData,
+      // @ts-ignore
+      summary: summary[0],
+      filters: { startDate, endDate, area }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
+}
+
 // Obtener todos los archivos eliminados para el admin
 export async function getDeletedFiles(req: Request, res: Response) {
   try {

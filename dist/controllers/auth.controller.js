@@ -17,12 +17,18 @@ async function register(req, res) {
         if (!username || !email || !password || !nombre || !apellido || !fecha_nacimiento || !area_trabajo || !telefono) {
             return res.status(400).json({ message: 'Todos los campos son obligatorios' });
         }
+        // Normalizar y validar teléfono
+        const phone = (telefono || '').toString().trim();
+        const phoneRegex = /^\+?[0-9\s\-().]{7,20}$/;
+        if (!phoneRegex.test(phone)) {
+            return res.status(400).json({ message: 'Número de teléfono inválido' });
+        }
         const [rows] = await db_1.pool.query('SELECT id FROM users WHERE email = ?', [email]);
         // @ts-ignore
         if (rows.length)
             return res.status(400).json({ message: 'Email ya registrado' });
         const hash = await bcrypt_1.default.hash(password, SALT_ROUNDS);
-        const [result] = await db_1.pool.query('INSERT INTO users (username, email, password, nombre, apellido, fecha_nacimiento, area_trabajo, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [username, email, hash, nombre, apellido, fecha_nacimiento, area_trabajo, telefono]);
+        const [result] = await db_1.pool.query('INSERT INTO users (username, email, password, nombre, apellido, fecha_nacimiento, area_trabajo, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [username, email, hash, nombre, apellido, fecha_nacimiento, area_trabajo, phone]);
         res.json({ message: 'Cuenta creada exitosamente. Ya puedes iniciar sesión.' });
     }
     catch (err) {
