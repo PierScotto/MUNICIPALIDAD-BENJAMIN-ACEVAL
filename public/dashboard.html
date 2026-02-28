@@ -121,6 +121,100 @@
       background: #fee2e2;
       color: #b91c1c;
     }
+    
+    /* Estilos para el modal de registro de trabajo */
+    .work-modal-overlay {
+      backdrop-filter: blur(4px);
+    }
+    
+    .zone-tag {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+      transition: all 0.2s ease;
+    }
+    
+    .zone-tag:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .zone-preset {
+      transition: all 0.2s ease;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .zone-preset:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
+    }
+    
+    .work-form-section {
+      background: #f8fafc;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .status-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    
+    .status-option:hover {
+      background: #eff6ff;
+    }
+    
+    /* Animación para el modal */
+    @keyframes modalShow {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .work-modal-content {
+      animation: modalShow 0.2s ease-out;
+    }
+    
+    /* Estilos para marcación de asistencia */
+    .estado-activo {
+      background: linear-gradient(135deg, #10b981, #34d399);
+      color: white;
+    }
+    
+    .estado-inactivo {
+      background: linear-gradient(135deg, #ef4444, #f87171);
+      color: white;
+    }
+    
+    .btn-marcar {
+      transition: all 0.3s ease;
+    }
+    
+    .btn-marcar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .marcacion-card {
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
   </style>
 </head>
 <body class="gradient-bg p-6 min-h-screen">
@@ -129,6 +223,47 @@
       <div class="bg-white/90 rounded-2xl shadow-lg px-8 py-6 flex flex-col items-center w-full max-w-md border border-gray-200">
         <h1 class="text-4xl font-extrabold text-brandRed mb-2 border-b-2 border-brandRed pb-2 w-full text-center" id="username">Usuario</h1>
         <p class="text-gray-700 text-lg font-medium mb-2 w-full text-center" id="userEmail"></p>
+      </div>
+    </div>
+    
+    <!-- Sección de Marcación de Asistencia -->
+    <div class="mb-8">
+      <div class="bg-white/95 rounded-2xl shadow-lg p-6 max-w-md mx-auto border border-gray-200 marcacion-card">
+        <h2 class="text-2xl font-bold text-center mb-4" id="estadoTitulo">🕐 Control de Asistencia</h2>
+        
+        <!-- Estado Actual -->
+        <div class="text-center mb-4">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold" id="estadoActual">
+            <span id="estadoIcon">🔴</span>
+            <span id="estadoTexto">Inactivo</span>
+          </div>
+        </div>
+        
+        <!-- Información de última marcación -->
+        <div class="text-center mb-4 text-sm text-gray-600" id="infoMarcacion">
+          <div id="ultimaEntrada" style="display: none;">
+            <strong>Última entrada:</strong> <span id="horaEntrada"></span>
+          </div>
+          <div id="ultimaSalida" style="display: none;">
+            <strong>Última salida:</strong> <span id="horaSalida"></span>
+          </div>
+        </div>
+        
+        <!-- Botón de marcación -->
+        <button id="btnMarcar" class="w-full py-3 px-6 rounded-xl text-white font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+          <span id="btnTexto">Marcar Entrada</span>
+        </button>
+        
+        <!-- Botón para ver historial -->
+        <button id="btnHistorial" class="w-full mt-3 py-2 px-4 rounded-xl bg-gray-500 text-white font-medium text-sm hover:bg-gray-600 transition-all">
+          Ver Historial de Hoy
+        </button>
+        
+        <!-- Lista de marcaciones del día -->
+        <div id="historialHoy" class="mt-4 space-y-2" style="display: none;">
+          <h3 class="font-semibold text-gray-700 text-sm">Marcaciones de Hoy:</h3>
+          <div id="listaMarcaciones"></div>
+        </div>
       </div>
     </div>
     <div style="height: 2.5rem;"></div>
@@ -143,6 +278,107 @@
       </button>
     </form>
     </form>
+    
+    <!-- Sección de Registro de Trabajo -->
+    <div class="mb-10">
+      <button id="registerWorkBtn" class="big-btn w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xl font-bold shadow-lg hover:shadow-blue-200/50 transform hover:-translate-y-1 transition-all duration-200">
+        <span class="inline-block align-middle mr-2">🏗️</span> Registrar Trabajo
+      </button>
+    </div>
+
+    <!-- Modal para Registrar Trabajo -->
+    <div id="workModal" class="fixed inset-0 bg-black/40 work-modal-overlay flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto work-modal-content">
+        <h2 class="text-3xl font-bold text-blue-600 mb-6 text-center">📋 Registrar Nuevo Trabajo</h2>
+        <form id="workForm" class="space-y-6">
+          <!-- Tipo de Trabajo -->
+          <div>
+            <label class="block text-gray-700 font-bold mb-2">Tipo de Trabajo:</label>
+            <select id="workType" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition bg-white" required>
+              <option value="">Selecciona una opción</option>
+              <option value="opcion1">Opción A Seleccionar 1</option>
+              <option value="opcion2">Opción A Seleccionar 2</option>
+              <option value="opcion3">Opción A Seleccionar 3</option>
+              <option value="opcion4">Opción A Seleccionar 4</option>
+              <option value="opcion5">Opción A Seleccionar 5</option>
+            </select>
+          </div>
+
+          <!-- Rango de Fechas -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Fecha de Inicio:</label>
+              <input type="date" id="startDate" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Fecha de Fin:</label>
+              <input type="date" id="endDate" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
+            </div>
+          </div>
+
+          <!-- Horarios -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Hora de Inicio:</label>
+              <input type="time" id="startTime" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Hora de Fin:</label>
+              <input type="time" id="endTime" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
+            </div>
+          </div>
+
+          <!-- Zona Trabajada -->
+          <div>
+            <label class="block text-gray-700 font-bold mb-2">Zona Trabajada:</label>
+            <div class="mb-3">
+              <div class="flex gap-2 mb-2">
+                <input type="text" id="zoneInput" placeholder="Escribir zona personalizada..." class="flex-1 px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition">
+                <button type="button" id="addZoneBtn" class="px-4 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 font-bold">Agregar</button>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Norte">Zona Norte</button>
+                <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Sur">Zona Sur</button>
+                <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Este">Zona Este</button>
+                <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Oeste">Zona Oeste</button>
+                <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Centro">Centro</button>
+              </div>
+            </div>
+            <div id="selectedZones" class="flex flex-wrap gap-2"></div>
+            <input type="hidden" id="zonesHidden" name="zones">
+          </div>
+
+          <!-- Estado del Trabajo -->
+          <div>
+            <label class="block text-gray-700 font-bold mb-2">Estado de la Acción:</label>
+            <select id="workStatus" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition bg-white" required>
+              <option value="">Selecciona el estado</option>
+              <option value="en-proceso">🔄 En Proceso</option>
+              <option value="culminado">✅ Culminado</option>
+              <option value="pendiente">⏳ Pendiente</option>
+              <option value="postergado">⏸️ Postergado</option>
+            </select>
+          </div>
+
+          <!-- Descripción Adicional -->
+          <div>
+            <label class="block text-gray-700 font-bold mb-2">Descripción Adicional (Opcional):</label>
+            <textarea id="workDescription" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition h-24" placeholder="Agrega detalles adicionales sobre el trabajo..."></textarea>
+          </div>
+
+          <!-- Botones -->
+          <div class="flex gap-4 pt-4">
+            <button type="submit" class="flex-1 px-6 py-4 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-lg font-bold hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
+              <span class="inline-block align-middle mr-2">💾</span> Guardar Trabajo
+            </button>
+            <button type="button" id="cancelWorkBtn" class="flex-1 px-6 py-4 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 text-white text-lg font-bold hover:from-gray-500 hover:to-gray-600 transform hover:scale-105 transition-all duration-200 shadow-lg">
+              <span class="inline-block align-middle mr-2">❌</span> Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
     <div class="flex flex-col md:flex-row gap-8 items-start mt-8">
       <div class="w-full md:w-1/3 bg-white/80 rounded-xl shadow p-6 mb-8 md:mb-0">
         <h2 class="text-xl font-bold text-brandGreen mb-4 text-center">Cantidad de Archivos Subidos</h2>
@@ -150,13 +386,32 @@
   <!-- Texto 'Total de archivos' eliminado -->
         <h2 class="text-xl font-bold text-red-600 mb-2 text-center">Cantidad de Archivos Eliminados</h2>
   <div class="text-6xl font-extrabold text-red-500 text-center mb-2" id="deletedFilesCount">0</div>
-  <button id="showDeletedBtn" class="px-4 py-2 rounded-full bg-red-500 text-white font-bold hover:bg-red-700 transition w-full">Ver Detalles</button>
+  <button id="showDeletedBtn" class="px-4 py-2 rounded-full bg-red-500 text-white font-bold hover:bg-red-700 transition w-full mb-4">Ver Detalles</button>
+  <button id="hideDeletedBtn" style="display: none;" class="px-4 py-2 rounded-full bg-red-600 text-white font-bold hover:bg-red-800 transition w-full mb-4">Cerrar Detalles</button>
+        
+        <h2 class="text-xl font-bold text-blue-600 mb-2 text-center">Trabajos Registrados</h2>
+        <div class="text-6xl font-extrabold text-blue-500 text-center mb-2" id="workCount">0</div>
+        <button id="showWorkBtn" class="px-4 py-2 rounded-full bg-blue-500 text-white font-bold hover:bg-blue-700 transition w-full">Ver Trabajos</button>
+        <button id="hideWorkBtn" style="display: none;" class="px-4 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-800 transition w-full">Cerrar Trabajos</button>
+        
+        <!-- Lista de archivos eliminados (inline) -->
+        <div id="deletedFilesList" class="mt-4 space-y-4" style="display: none;"></div>
+        <div id="deletedPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Detalles" para ver los archivos eliminados</div>
+        
+        <!-- Lista de trabajos registrados (inline) -->
+        <div id="workListContent" class="mt-4 space-y-4" style="display: none;"></div>
+        <div id="workPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Trabajos" para ver tus trabajos registrados</div>
+        
+        <h2 class="text-xl font-bold text-brandGreen mb-2 text-center">Tus Archivos Subidos</h2>
+        <div class="text-6xl font-extrabold text-brandGreen text-center mb-2" id="filesCount2">0</div>
+        <button id="showFilesBtn" class="px-4 py-2 rounded-full bg-green-500 text-white font-bold hover:bg-green-700 transition w-full mb-4">Ver Detalles</button>
+        <button id="hideFilesBtn" style="display: none;" class="px-4 py-2 rounded-full bg-green-600 text-white font-bold hover:bg-green-800 transition w-full mb-4">Cerrar Detalles</button>
+        
+        <!-- Lista de archivos subidos (inline) -->
+        <div class="file-list mt-4 space-y-4" id="filesList" style="display: none;"></div>
+        <div id="filesPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Detalles" para ver tus archivos subidos</div>
       </div>
-          <!-- Modal para archivos eliminados -->
-    <div id="deletedModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
-      <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg">
-        <h2 class="text-2xl font-bold text-red-600 mb-4 text-center">Detalles de Archivos Eliminados</h2>
-        <div id="deletedFilesList" class="space-y-4"></div>
+
     <!-- Modal para editar archivos -->
     <div id="editModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
       <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg">
@@ -182,13 +437,9 @@
       </div>
     </div>
 
-  <!-- Botón de cerrar eliminado -->
       </div>
     </div>
-      <div class="w-full md:w-2/3">
-        <h2 class="text-xl font-bold text-brandGreen mb-4 text-center">Tus Archivos Subidos</h2>
-        <div class="file-list" id="filesList"></div>
-      </div>
+
     </div>
     <div class="flex justify-center mt-10">
       <div class="bg-black rounded-xl shadow-lg p-4 flex items-center justify-center gap-4" style="min-width: 140px;">
@@ -216,6 +467,343 @@
     </template>
 
     <script>
+      // --- FUNCIONALIDAD DE REGISTRO DE TRABAJO ---
+      let selectedZones = [];
+
+      // Abrir modal de registro de trabajo
+      document.getElementById('registerWorkBtn').addEventListener('click', () => {
+        document.getElementById('workModal').classList.remove('hidden');
+        // Establecer fecha actual por defecto
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('startDate').value = today;
+        document.getElementById('endDate').value = today;
+        // Limpiar zonas seleccionadas
+        selectedZones = [];
+        updateSelectedZonesDisplay();
+      });
+
+      // Cerrar modal de registro de trabajo
+      document.getElementById('cancelWorkBtn').addEventListener('click', () => {
+        document.getElementById('workModal').classList.add('hidden');
+        document.getElementById('workForm').reset();
+        selectedZones = [];
+        updateSelectedZonesDisplay();
+      });
+
+      // Cerrar modal haciendo clic fuera
+      document.getElementById('workModal').addEventListener('click', (e) => {
+        if (e.target.id === 'workModal') {
+          document.getElementById('workModal').classList.add('hidden');
+        }
+      });
+
+      // Agregar zona personalizada
+      document.getElementById('addZoneBtn').addEventListener('click', () => {
+        const zoneInput = document.getElementById('zoneInput');
+        const zoneName = zoneInput.value.trim();
+        
+        if (zoneName && !selectedZones.includes(zoneName)) {
+          selectedZones.push(zoneName);
+          updateSelectedZonesDisplay();
+          zoneInput.value = '';
+        }
+      });
+
+      // Agregar zona desde botones preestablecidos
+      document.querySelectorAll('.zone-preset').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const zoneName = btn.dataset.zone;
+          if (!selectedZones.includes(zoneName)) {
+            selectedZones.push(zoneName);
+            updateSelectedZonesDisplay();
+          }
+        });
+      });
+
+      // Actualizar display de zonas seleccionadas
+      function updateSelectedZonesDisplay() {
+        const container = document.getElementById('selectedZones');
+        container.innerHTML = '';
+        
+        selectedZones.forEach((zone, index) => {
+          const zoneTag = document.createElement('div');
+          zoneTag.className = 'zone-tag';
+          zoneTag.innerHTML = `
+            <span>📍 ${zone}</span>
+            <button type="button" class="text-white hover:text-red-200 font-bold text-lg leading-none" onclick="removeZone(${index})" title="Eliminar zona">×</button>
+          `;
+          container.appendChild(zoneTag);
+        });
+
+        // Actualizar campo oculto
+        document.getElementById('zonesHidden').value = selectedZones.join(', ');
+      }
+
+      // Función global para remover zona
+      window.removeZone = function(index) {
+        selectedZones.splice(index, 1);
+        updateSelectedZonesDisplay();
+      }
+
+      // Enviar formulario de trabajo
+      document.getElementById('workForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Validar que se haya seleccionado al menos una zona
+        if (selectedZones.length === 0) {
+          alert('Por favor selecciona al menos una zona de trabajo.');
+          return;
+        }
+
+        // Recopilar datos del formulario
+        const workData = {
+          tipo: document.getElementById('workType').value,
+          fechaInicio: document.getElementById('startDate').value,
+          fechaFin: document.getElementById('endDate').value,
+          horaInicio: document.getElementById('startTime').value,
+          horaFin: document.getElementById('endTime').value,
+          zonas: selectedZones,
+          estado: document.getElementById('workStatus').value,
+          descripcion: document.getElementById('workDescription').value,
+          fechaRegistro: new Date().toISOString()
+        };
+
+        try {
+          // Enviar a la API
+          const res = await fetch('/api/trabajos', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + token 
+            },
+            body: JSON.stringify(workData)
+          });
+
+          const json = await res.json();
+          
+          if (res.ok) {
+            alert('¡Trabajo registrado exitosamente! 🎉');
+            document.getElementById('workModal').classList.add('hidden');
+            document.getElementById('workForm').reset();
+            selectedZones = [];
+            updateSelectedZonesDisplay();
+            updateWorkCount(); // Actualizar contador
+          } else {
+            alert(json.message || 'Error al registrar el trabajo');
+          }
+        } catch (error) {
+          console.error('Error al registrar trabajo:', error);
+          alert('Error al registrar el trabajo. Por favor intenta de nuevo.');
+        }
+      });
+
+      // Validar rango de fechas
+      document.getElementById('startDate').addEventListener('change', validateDateRange);
+      document.getElementById('endDate').addEventListener('change', validateDateRange);
+
+      function validateDateRange() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        
+        if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+          alert('La fecha de inicio no puede ser posterior a la fecha de fin.');
+          document.getElementById('endDate').value = startDate;
+        }
+      }
+
+      // Validar rango de horarios
+      document.getElementById('startTime').addEventListener('change', validateTimeRange);
+      document.getElementById('endTime').addEventListener('change', validateTimeRange);
+
+      function validateTimeRange() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const startTime = document.getElementById('startTime').value;
+        const endTime = document.getElementById('endTime').value;
+        
+        // Solo validar si son el mismo día
+        if (startDate && endDate && startTime && endTime && startDate === endDate) {
+          if (startTime >= endTime) {
+            alert('La hora de inicio debe ser anterior a la hora de fin.');
+            document.getElementById('endTime').value = '';
+          }
+        }
+      }
+
+      // Actualizar contador de trabajos registrados
+      async function updateWorkCount() {
+        try {
+          const res = await fetch('/api/trabajos', { 
+            headers: { Authorization: 'Bearer ' + token } 
+          });
+          if (res.ok) {
+            const trabajos = await res.json();
+            document.getElementById('workCount').textContent = trabajos.length;
+          }
+        } catch (error) {
+          console.error('Error al obtener contador de trabajos:', error);
+        }
+      }
+
+      // Mostrar trabajos registrados (inline)
+      document.getElementById('showWorkBtn').addEventListener('click', async () => {
+        try {
+          const res = await fetch('/api/trabajos', { 
+            headers: { Authorization: 'Bearer ' + token } 
+          });
+          
+          if (!res.ok) {
+            alert('Error al cargar los trabajos');
+            return;
+          }
+          
+          const trabajosRegistrados = await res.json();
+        const content = document.getElementById('workListContent');
+        
+        content.innerHTML = '';
+        
+        if (trabajosRegistrados.length === 0) {
+          content.innerHTML = '<div class="text-center text-gray-500 p-4 bg-blue-50 rounded-lg">No hay trabajos registrados todavía.</div>';
+        } else {
+          trabajosRegistrados.forEach((trabajo, index) => {
+            const statusColors = {
+              'en-proceso': 'bg-yellow-100 text-yellow-800 border-yellow-200',
+              'culminado': 'bg-green-100 text-green-800 border-green-200',
+              'pendiente': 'bg-blue-100 text-blue-800 border-blue-200',
+              'postergado': 'bg-red-100 text-red-800 border-red-200'
+            };
+            
+            const statusIcons = {
+              'en-proceso': '🔄',
+              'culminado': '✅',
+              'pendiente': '⏳',
+              'postergado': '⏸️'
+            };
+
+            const statusNames = {
+              'en-proceso': 'En Proceso',
+              'culminado': 'Culminado', 
+              'pendiente': 'Pendiente',
+              'postergado': 'Postergado'
+            };
+
+            const workCard = document.createElement('div');
+            workCard.className = 'bg-gray-50 rounded-xl p-4 shadow-md hover:shadow-lg transition-all border text-sm';
+            workCard.innerHTML = `
+              <div class="flex justify-between items-start mb-3">
+                <h3 class="text-lg font-bold text-gray-800">${trabajo.tipo}</h3>
+                <div class="flex gap-2">
+                  <span class="px-2 py-1 rounded-full text-xs font-semibold border ${statusColors[trabajo.estado] || 'bg-gray-100 text-gray-800'}">${statusIcons[trabajo.estado]} ${statusNames[trabajo.estado]}</span>
+                  <button onclick="deleteWork(${trabajo.id})" class="text-red-500 hover:text-red-700 px-1 py-1 rounded font-bold text-sm" title="Eliminar trabajo">🗑️</button>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-1 gap-2 mb-3">
+                <div>
+                  <strong class="text-gray-600 text-xs">📅 Período:</strong>
+                  <div class="ml-4 text-xs">${formatDate(trabajo.fechaInicio)} - ${formatDate(trabajo.fechaFin)}</div>
+                </div>
+                <div>
+                  <strong class="text-gray-600 text-xs">🕐 Horario:</strong>
+                  <div class="ml-4 text-xs">${trabajo.horaInicio} - ${trabajo.horaFin}</div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <strong class="text-gray-600 text-xs">📍 Zonas:</strong>
+                <div class="flex flex-wrap gap-1 mt-1">
+                  ${trabajo.zonas.map(zona => `<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-lg text-xs font-medium">${zona}</span>`).join('')}
+                </div>
+              </div>
+              
+              ${trabajo.descripcion ? `
+                <div class="mb-3">
+                  <strong class="text-gray-600 text-xs">📝 Descripción:</strong>
+                  <div class="ml-4 text-gray-700 mt-1 text-xs">${trabajo.descripcion}</div>
+                </div>
+              ` : ''}
+              
+              <div class="text-xs text-gray-500 pt-2 border-t">
+                Registrado: ${formatDateTime(trabajo.fechaRegistro)}
+              </div>
+            `;
+            content.appendChild(workCard);
+          });
+        }
+        
+        // Mostrar lista y ocultar placeholder
+        content.style.display = 'block';
+        document.getElementById('workPlaceholder').style.display = 'none';
+        // Intercambiar botones
+        document.getElementById('showWorkBtn').style.display = 'none';
+        document.getElementById('hideWorkBtn').style.display = 'block';
+        } catch (error) {
+          console.error('Error al cargar trabajos:', error);
+          alert('Error al cargar los trabajos');
+        }
+      });
+      
+      // Ocultar trabajos registrados
+      document.getElementById('hideWorkBtn').addEventListener('click', () => {
+        // Ocultar lista y mostrar placeholder
+        document.getElementById('workListContent').style.display = 'none';
+        document.getElementById('workPlaceholder').style.display = 'block';
+        // Intercambiar botones
+        document.getElementById('showWorkBtn').style.display = 'block';
+        document.getElementById('hideWorkBtn').style.display = 'none';
+      });
+
+      // Función para eliminar trabajo
+      window.deleteWork = async function(trabajoId) {
+        if (confirm('¿Estás seguro de que quieres eliminar este trabajo?')) {
+          try {
+            const res = await fetch(`/api/trabajos/${trabajoId}`, {
+              method: 'DELETE',
+              headers: { Authorization: 'Bearer ' + token }
+            });
+            
+            const json = await res.json();
+            
+            if (res.ok) {
+              alert(json.message || 'Trabajo eliminado exitosamente');
+              updateWorkCount();
+              // Recargar la lista solo si está visible
+              if (document.getElementById('workListContent').style.display === 'block') {
+                document.getElementById('showWorkBtn').click();
+              }
+            } else {
+              alert(json.message || 'Error al eliminar el trabajo');
+            }
+          } catch (error) {
+            console.error('Error al eliminar trabajo:', error);
+            alert('Error al eliminar el trabajo');
+          }
+        }
+      }
+
+      // Funciones auxiliares para formateo
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit', 
+          year: 'numeric'
+        });
+      }
+
+      function formatDateTime(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      }
+
+      // --- FIN FUNCIONALIDAD DE REGISTRO DE TRABAJO ---
+
       // Placeholder visual para input de archivo
       const fileInput = document.getElementById('fileInput');
       const filePlaceholder = document.getElementById('filePlaceholder');
@@ -240,8 +828,9 @@
     async function fetchFiles() {
       const res = await fetch('/api/files', { headers: { Authorization: 'Bearer ' + token } });
       const files = await res.json();
-      // Mostrar número total
+      // Mostrar número total en ambos contadores
       document.getElementById('filesCount').textContent = files.length;
+      document.getElementById('filesCount2').textContent = files.length;
       // Mostrar lista visual
       const container = document.getElementById('filesList');
       const template = document.getElementById('fileTemplate');
@@ -289,22 +878,56 @@
       const deletedRes = await fetch('/api/files/deleted', { headers: { Authorization: 'Bearer ' + token } });
       const deletedFiles = await deletedRes.json();
       document.getElementById('deletedFilesCount').textContent = deletedFiles.length;
-      // Botón para mostrar modal
+      // Botón para mostrar archivos eliminados (inline)
       document.getElementById('showDeletedBtn').onclick = () => {
-        const modal = document.getElementById('deletedModal');
         const list = document.getElementById('deletedFilesList');
         list.innerHTML = '';
         if (deletedFiles.length === 0) {
-          list.innerHTML = '<div class="text-center text-gray-500">No hay archivos eliminados.</div>';
+          list.innerHTML = '<div class="text-center text-gray-500 p-4 bg-red-50 rounded-lg">No hay archivos eliminados.</div>';
         } else {
           deletedFiles.forEach(f => {
             const item = document.createElement('div');
-            item.className = 'p-4 rounded-xl bg-red-50 flex flex-col gap-2 shadow';
-            item.innerHTML = `<div class='font-bold text-lg text-red-700'>${f.file_name}</div><div class='text-gray-600 text-sm'>${new Date(f.deleted_at).toLocaleString()}</div>`;
+            item.className = 'p-4 rounded-xl bg-red-50 flex flex-col gap-2 shadow hover:shadow-md transition-all border border-red-100';
+            item.innerHTML = `<div class='font-bold text-lg text-red-700'>${f.file_name}</div><div class='text-gray-600 text-sm'>🗑️ Eliminado: ${new Date(f.deleted_at).toLocaleString()}</div>`;
             list.appendChild(item);
           });
         }
-        modal.classList.remove('hidden');
+        // Mostrar lista y ocultar placeholder
+        list.style.display = 'block';
+        document.getElementById('deletedPlaceholder').style.display = 'none';
+        // Intercambiar botones
+        document.getElementById('showDeletedBtn').style.display = 'none';
+        document.getElementById('hideDeletedBtn').style.display = 'block';
+      };
+      
+      // Botón para ocultar archivos eliminados
+      document.getElementById('hideDeletedBtn').onclick = () => {
+        // Ocultar lista y mostrar placeholder
+        document.getElementById('deletedFilesList').style.display = 'none';
+        document.getElementById('deletedPlaceholder').style.display = 'block';
+        // Intercambiar botones
+        document.getElementById('showDeletedBtn').style.display = 'block';
+        document.getElementById('hideDeletedBtn').style.display = 'none';
+      };
+      
+      // Botón para mostrar archivos subidos (inline)
+      document.getElementById('showFilesBtn').onclick = () => {
+        // Mostrar lista y ocultar placeholder  
+        document.getElementById('filesList').style.display = 'block';
+        document.getElementById('filesPlaceholder').style.display = 'none';
+        // Intercambiar botones
+        document.getElementById('showFilesBtn').style.display = 'none';
+        document.getElementById('hideFilesBtn').style.display = 'block';
+      };
+      
+      // Botón para ocultar archivos subidos
+      document.getElementById('hideFilesBtn').onclick = () => {
+        // Ocultar lista y mostrar placeholder
+        document.getElementById('filesList').style.display = 'none';
+        document.getElementById('filesPlaceholder').style.display = 'block';
+        // Intercambiar botones
+        document.getElementById('showFilesBtn').style.display = 'block';
+        document.getElementById('hideFilesBtn').style.display = 'none';
       };
     }
 
@@ -358,6 +981,177 @@
     });
 
     fetchFiles();
+    updateWorkCount(); // Actualizar contador de trabajos al cargar la página
+    
+    // --- FUNCIONALIDAD DE MARCACIÓN DE ASISTENCIA ---
+    
+    let estadoActual = 'inactivo';
+    
+    // Cargar estado inicial
+    async function cargarEstadoMarcacion() {
+      try {
+        const res = await fetch('/api/marcaciones/estado', {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        
+        if (res.ok) {
+          const data = await res.json();
+          actualizarInterfazMarcacion(data);
+        }
+      } catch (error) {
+        console.error('Error al cargar estado:', error);
+      }
+    }
+    
+    // Actualizar interfaz según el estado
+    function actualizarInterfazMarcacion(data) {
+      estadoActual = data.estado;
+      const btnMarcar = document.getElementById('btnMarcar');
+      const btnTexto = document.getElementById('btnTexto');
+      const estadoIcon = document.getElementById('estadoIcon');
+      const estadoTexto = document.getElementById('estadoTexto');
+      const estadoActualDiv = document.getElementById('estadoActual');
+      const ultimaEntrada = document.getElementById('ultimaEntrada');
+      const ultimaSalida = document.getElementById('ultimaSalida');
+      const horaEntrada = document.getElementById('horaEntrada');
+      const horaSalida = document.getElementById('horaSalida');
+      
+      if (data.estado === 'activo') {
+        // Usuario está activo (ya marcó entrada)
+        btnMarcar.className = 'w-full py-3 px-6 rounded-xl text-white font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg bg-red-500 hover:bg-red-600';
+        btnTexto.textContent = 'Marcar Salida';
+        estadoIcon.textContent = '🟢';
+        estadoTexto.textContent = 'Activo';
+        estadoActualDiv.className = 'inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-800';
+        
+        // Mostrar última entrada
+        if (data.ultimaEntrada) {
+          ultimaEntrada.style.display = 'block';
+          horaEntrada.textContent = formatDateTime(data.ultimaEntrada);
+        }
+        ultimaSalida.style.display = 'none';
+        
+      } else {
+        // Usuario está inactivo
+        btnMarcar.className = 'w-full py-3 px-6 rounded-xl text-white font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg bg-green-500 hover:bg-green-600';
+        btnTexto.textContent = 'Marcar Entrada';
+        estadoIcon.textContent = '🔴';
+        estadoTexto.textContent = 'Inactivo';
+        estadoActualDiv.className = 'inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-red-100 text-red-800';
+        
+        // Mostrar última salida si existe
+        if (data.ultimaSalida) {
+          ultimaSalida.style.display = 'block';
+          horaSalida.textContent = formatDateTime(data.ultimaSalida);
+        }
+        ultimaEntrada.style.display = 'none';
+      }
+    }
+    
+    // Marcar entrada o salida
+    document.getElementById('btnMarcar').addEventListener('click', async () => {
+      try {
+        const btn = document.getElementById('btnMarcar');
+        const originalText = btn.textContent;
+        btn.textContent = 'Marcando...';
+        btn.disabled = true;
+        
+        const res = await fetch('/api/marcaciones/marcar', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token 
+          }
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+          alert(`✅ ${data.message}`);
+          // Recargar estado
+          await cargarEstadoMarcacion();
+          // Actualizar historial si está visible
+          if (document.getElementById('historialHoy').style.display === 'block') {
+            cargarMarcacionesHoy();
+          }
+        } else {
+          alert(`❌ ${data.message}`);
+        }
+        
+      } catch (error) {
+        console.error('Error al marcar:', error);
+        alert('Error al procesar la marcación');
+      } finally {
+        const btn = document.getElementById('btnMarcar');
+        btn.disabled = false;
+        // El texto se actualizará cuando se recargue el estado
+      }
+    });
+    
+    // Ver historial del día
+    document.getElementById('btnHistorial').addEventListener('click', async () => {
+      const historial = document.getElementById('historialHoy');
+      const btn = document.getElementById('btnHistorial');
+      
+      if (historial.style.display === 'none') {
+        await cargarMarcacionesHoy();
+        historial.style.display = 'block';
+        btn.textContent = 'Ocultar Historial';
+      } else {
+        historial.style.display = 'none';
+        btn.textContent = 'Ver Historial de Hoy';
+      }
+    });
+    
+    // Cargar marcaciones del día
+    async function cargarMarcacionesHoy() {
+      try {
+        const res = await fetch('/api/marcaciones/hoy', {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        
+        if (res.ok) {
+          const marcaciones = await res.json();
+          const lista = document.getElementById('listaMarcaciones');
+          lista.innerHTML = '';
+          
+          if (marcaciones.length === 0) {
+            lista.innerHTML = '<div class="text-gray-500 text-xs text-center py-2">No hay marcaciones hoy</div>';
+          } else {
+            marcaciones.forEach(marcacion => {
+              const div = document.createElement('div');
+              const tipoColor = marcacion.tipo === 'entrada' ? 'text-green-600' : 'text-red-600';
+              const tipoIcon = marcacion.tipo === 'entrada' ? '🟢' : '🔴';
+              div.className = `flex justify-between items-center py-1 px-2 bg-gray-50 rounded text-xs ${tipoColor}`;
+              div.innerHTML = `
+                <span>${tipoIcon} ${marcacion.tipo.toUpperCase()}</span>
+                <span>${formatTime(marcacion.fecha_hora)}</span>
+              `;
+              lista.appendChild(div);
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error al cargar marcaciones:', error);
+      }
+    }
+    
+    // Función auxiliar para formatear solo la hora
+    function formatTime(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+    
+    // Cargar estado inicial al iniciar
+    cargarEstadoMarcacion();
+    
+    // Actualizar estado cada 30 segundos
+    setInterval(cargarEstadoMarcacion, 30000);
+    
+    // --- FIN FUNCIONALIDAD DE MARCACIÓN ---
   </script>
 
   <!-- Botón de WhatsApp flotante -->
