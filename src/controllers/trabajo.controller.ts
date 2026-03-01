@@ -1,6 +1,13 @@
 import { Request, Response } from 'express';
 import { pool } from '../config/db';
-import { AuthRequest } from '../middleware/auth.middleware';
+
+interface AuthRequest extends Request {
+  user?: {
+    id: number;
+    username: string;
+    role: string;
+  };
+}
 
 // Crear nuevo trabajo
 export const createTrabajo = async (req: AuthRequest, res: Response) => {
@@ -56,7 +63,7 @@ export const getTrabajos = async (req: AuthRequest, res: Response) => {
       zonas: trabajo.zonas ? trabajo.zonas.split(', ') : [],
       estado: trabajo.estado,
       descripcion: trabajo.descripcion,
-      fechaRegistro: trabajo.created_at
+      createdAt: trabajo.created_at
     }));
 
     res.json(trabajos);
@@ -152,8 +159,8 @@ export const getTrabajosEliminados = async (req: AuthRequest, res: Response) => 
       zonas: trabajo.zonas ? trabajo.zonas.split(', ') : [],
       estado: trabajo.estado,
       descripcion: trabajo.descripcion,
-      fechaRegistro: trabajo.created_at,
-      deleted_at: trabajo.deleted_at
+      createdAt: trabajo.created_at,
+      deletedAt: trabajo.deleted_at
     }));
 
     res.json(trabajos);

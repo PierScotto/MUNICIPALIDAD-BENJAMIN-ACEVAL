@@ -178,7 +178,7 @@
       <h1 class="text-4xl font-extrabold text-brandRed text-center flex-1">Panel de Administración - Trabajadores</h1>
       <div class="flex gap-4">
         <button id="backToDashboard" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
-          <span>🏠</span> Dashboard
+          <span>🏠</span> Cliente
         </button>
         <button id="logout" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
           <span>👋</span> Cerrar sesión
@@ -200,7 +200,7 @@
         <h3 class="text-xl font-bold text-red-600 mb-2">Archivos Eliminados</h3>
         <div class="text-4xl font-extrabold text-red-500" id="totalDeleted">Cargando...</div>
         <button id="refreshStats" class="mt-3 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg text-sm">
-          🔄 Actualizar Stats
+          🔄 Actualizar Datos
         </button>
       </div>
     </div>
@@ -251,7 +251,7 @@
           <span>🗑️</span> Archivos Eliminados
         </button>
         <button id="reportsTab" class="px-6 py-3 rounded-full bg-transparent text-gray-600 font-bold hover:bg-gray-300 transition-all duration-300 flex items-center gap-2">
-          <span>📊</span> Reportes & Analytics
+          <span>📊</span> Reporte de Datos
         </button>
       </div>
     </div>
@@ -329,7 +329,7 @@
     <div id="reportsContent" class="hidden">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold text-purple-600 flex items-center gap-2">
-          <span>📊</span> Reportes & Analytics
+          <span>📊</span> Reporte de Datos
         </h2>
         <div class="flex gap-3">
           <button id="showReportsBtn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold hover:from-purple-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
@@ -455,7 +455,7 @@
       
       <div id="reportsPlaceholder" class="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
         <div class="text-gray-400 text-6xl mb-4">📊</div>
-        <p class="text-gray-500 text-lg font-medium">Haz clic en "Mostrar Reportes" para ver los reportes y analytics</p>
+        <p class="text-gray-500 text-lg font-medium">Haz clic en "Mostrar Reportes" para ver los reportes de datos</p>
       </div>
     </div>
   </div>
@@ -1031,7 +1031,17 @@
       loadStats();
     }, 30000);
     
-    // loadUsers(); // Comentado para no cargar automáticamente
+    // Cargar usuarios automáticamente
+    setTimeout(() => {
+      console.log('👥 Cargando usuarios iniciales...');
+      loadUsers();
+    }, 1000);
+
+    // Cargar reportes y analytics
+    setTimeout(() => {
+      console.log('📊 Cargando reportes y analytics...');
+      loadReportsData();
+    }, 1500);
 
     // 📊 SISTEMA DE REPORTES Y ANALYTICS
     let chartInstances = {}; // Para manejar múltiples gráficos

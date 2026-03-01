@@ -268,7 +268,7 @@
     </div>
     <div style="height: 2.5rem;"></div>
     <form id="uploadForm" class="mb-10 flex flex-col items-center">
-      <label class="block mb-4 font-extrabold text-2xl text-brandGreen tracking-wide text-center">Selecciona tu Foto - Archivo</label>
+      <label class="block mb-4 font-extrabold text-2xl text-brandGreen tracking-wide text-center">Selecciona tu Archivo</label>
       <div class="relative w-full max-w-xs mb-4">
         <input id="fileInput" type="file" name="file" accept="image/*" required class="w-full px-4 py-3 rounded-2xl border-2 border-brandGreen focus:border-emerald-400 transition-colors bg-white shadow-lg file-input-modern" />
         <span id="filePlaceholder" class="absolute left-0 top-0 w-full h-full flex items-center justify-center text-gray-400 pointer-events-none text-lg font-semibold">Ningún archivo seleccionado</span>
@@ -282,25 +282,25 @@
     <!-- Sección de Registro de Trabajo -->
     <div class="mb-10">
       <button id="registerWorkBtn" class="big-btn w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xl font-bold shadow-lg hover:shadow-blue-200/50 transform hover:-translate-y-1 transition-all duration-200">
-        <span class="inline-block align-middle mr-2">🏗️</span> Registrar Trabajo
+        <span class="inline-block align-middle mr-2">🏗️</span> Registrar Actividad
       </button>
     </div>
 
     <!-- Modal para Registrar Trabajo -->
     <div id="workModal" class="fixed inset-0 bg-black/40 work-modal-overlay flex items-center justify-center z-50 hidden">
       <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto work-modal-content">
-        <h2 class="text-3xl font-bold text-blue-600 mb-6 text-center">📋 Registrar Nuevo Trabajo</h2>
+        <h2 class="text-3xl font-bold text-blue-600 mb-6 text-center">📋 Registrar Mi Actividad</h2>
         <form id="workForm" class="space-y-6">
           <!-- Tipo de Trabajo -->
           <div>
             <label class="block text-gray-700 font-bold mb-2">Tipo de Trabajo:</label>
             <select id="workType" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition bg-white" required>
               <option value="">Selecciona una opción</option>
-              <option value="opcion1">Opción A Seleccionar 1</option>
-              <option value="opcion2">Opción A Seleccionar 2</option>
-              <option value="opcion3">Opción A Seleccionar 3</option>
-              <option value="opcion4">Opción A Seleccionar 4</option>
-              <option value="opcion5">Opción A Seleccionar 5</option>
+              <option value="Trabajo Exterior">Trabajo Exterior</option>
+              <option value="Trabajo Interior">Trabajo Interior</option>
+              <option value="Mantenimiento">Mantenimiento</option>
+              <option value="Inspección">Inspección</option>
+              <option value="Otro">Otro</option>
             </select>
           </div>
 
@@ -369,7 +369,7 @@
           <!-- Botones -->
           <div class="flex gap-4 pt-4">
             <button type="submit" class="flex-1 px-6 py-4 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-lg font-bold hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
-              <span class="inline-block align-middle mr-2">💾</span> Guardar Trabajo
+              <span class="inline-block align-middle mr-2">💾</span> Guardar Registro
             </button>
             <button type="button" id="cancelWorkBtn" class="flex-1 px-6 py-4 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 text-white text-lg font-bold hover:from-gray-500 hover:to-gray-600 transform hover:scale-105 transition-all duration-200 shadow-lg">
               <span class="inline-block align-middle mr-2">❌</span> Cancelar
@@ -381,35 +381,45 @@
     
     <div class="flex flex-col md:flex-row gap-8 items-start mt-8">
       <div class="w-full md:w-1/3 bg-white/80 rounded-xl shadow p-6 mb-8 md:mb-0">
-        <h2 class="text-xl font-bold text-brandGreen mb-4 text-center">Cantidad de Archivos Subidos</h2>
-  <div class="text-6xl font-extrabold text-brandRed text-center mb-2" id="filesCount">0</div>
-  <!-- Texto 'Total de archivos' eliminado -->
-        <h2 class="text-xl font-bold text-red-600 mb-2 text-center">Cantidad de Archivos Eliminados</h2>
-  <div class="text-6xl font-extrabold text-red-500 text-center mb-2" id="deletedFilesCount">0</div>
-  <button id="showDeletedBtn" class="px-4 py-2 rounded-full bg-red-500 text-white font-bold hover:bg-red-700 transition w-full mb-4">Ver Detalles</button>
-  <button id="hideDeletedBtn" style="display: none;" class="px-4 py-2 rounded-full bg-red-600 text-white font-bold hover:bg-red-800 transition w-full mb-4">Cerrar Detalles</button>
+        <!-- SECCIÓN ARCHIVOS ELIMINADOS -->
+        <div class="mt-6 pt-6">
+          <h2 class="text-xl font-bold text-red-600 mb-2 text-center">Cantidad de Archivos Eliminados</h2>
+          <div class="text-6xl font-extrabold text-red-500 text-center mb-2" id="deletedFilesCount">0</div>
+          <button id="showDeletedBtn" class="px-4 py-2 rounded-full bg-red-500 text-white font-bold hover:bg-red-700 transition w-full mb-4">Ver Detalles de Archivos Eliminados</button>
+          <button id="hideDeletedBtn" style="display: none;" class="px-4 py-2 rounded-full bg-red-600 text-white font-bold hover:bg-red-800 transition w-full mb-4">Cerrar Detalles de Archivos Eliminados</button>
+          
+          <!-- Lista de archivos eliminados (inline) - Inmediatamente después -->
+          <div id="deletedFilesList" class="mt-4 space-y-4" style="display: none;"></div>
+          <div id="deletedPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Detalles de Archivos Eliminados" para ver los archivos eliminados</div>
+        </div>
         
-        <h2 class="text-xl font-bold text-blue-600 mb-2 text-center">Trabajos Registrados</h2>
-        <div class="text-6xl font-extrabold text-blue-500 text-center mb-2" id="workCount">0</div>
-        <button id="showWorkBtn" class="px-4 py-2 rounded-full bg-blue-500 text-white font-bold hover:bg-blue-700 transition w-full">Ver Trabajos</button>
-        <button id="hideWorkBtn" style="display: none;" class="px-4 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-800 transition w-full">Cerrar Trabajos</button>
+        <!-- SECCIÓN TRABAJOS REGISTRADOS -->
+        <div class="border-t border-gray-200 mt-6 pt-6">
+          <h2 class="text-xl font-bold text-blue-600 mb-2 text-center">Trabajos Registrados</h2>
+          <div class="text-6xl font-extrabold text-blue-500 text-center mb-2" id="workCount">0</div>
+          <button id="showWorkBtn" class="px-4 py-2 rounded-full bg-blue-500 text-white font-bold hover:bg-blue-700 transition w-full">Ver Trabajos Registrados</button>
+          <button id="hideWorkBtn" style="display: none;" class="px-4 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-800 transition w-full">Cerrar Trabajos Registrados</button>
+          
+          <!-- Lista de trabajos registrados (inline) - Inmediatamente después -->
+          <div id="workListContent" class="mt-4 space-y-4" style="display: none;"></div>
+          <div id="workPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Trabajos Registrados" para ver tus trabajos registrados</div>
+        </div>
         
-        <!-- Lista de archivos eliminados (inline) -->
-        <div id="deletedFilesList" class="mt-4 space-y-4" style="display: none;"></div>
-        <div id="deletedPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Detalles" para ver los archivos eliminados</div>
+
         
-        <!-- Lista de trabajos registrados (inline) -->
-        <div id="workListContent" class="mt-4 space-y-4" style="display: none;"></div>
-        <div id="workPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Trabajos" para ver tus trabajos registrados</div>
+        <!-- SECCIÓN ARCHIVOS SUBIDOS -->
+        <div class="border-t border-gray-200 mt-6 pt-6">
+          <h2 class="text-xl font-bold text-brandGreen mb-2 text-center">Tus Archivos Subidos</h2>
+          <div class="text-6xl font-extrabold text-brandGreen text-center mb-2" id="filesCount2">0</div>
+          <button id="showFilesBtn" class="px-4 py-2 rounded-full bg-green-500 text-white font-bold hover:bg-green-700 transition w-full mb-4">Ver Detalles de Archivos Subidos</button>
+          <button id="hideFilesBtn" style="display: none;" class="px-4 py-2 rounded-full bg-green-600 text-white font-bold hover:bg-green-800 transition w-full mb-4">Cerrar Detalles de Archivos Subidos</button>
+          
+          <!-- Lista de archivos subidos (inline) - Inmediatamente después -->
+          <div class="file-list mt-4 space-y-4" id="filesList" style="display: none;"></div>
+          <div id="filesPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Detalles" para ver tus archivos subidos</div>
+        </div>
         
-        <h2 class="text-xl font-bold text-brandGreen mb-2 text-center">Tus Archivos Subidos</h2>
-        <div class="text-6xl font-extrabold text-brandGreen text-center mb-2" id="filesCount2">0</div>
-        <button id="showFilesBtn" class="px-4 py-2 rounded-full bg-green-500 text-white font-bold hover:bg-green-700 transition w-full mb-4">Ver Detalles</button>
-        <button id="hideFilesBtn" style="display: none;" class="px-4 py-2 rounded-full bg-green-600 text-white font-bold hover:bg-green-800 transition w-full mb-4">Cerrar Detalles</button>
-        
-        <!-- Lista de archivos subidos (inline) -->
-        <div class="file-list mt-4 space-y-4" id="filesList" style="display: none;"></div>
-        <div id="filesPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Detalles" para ver tus archivos subidos</div>
+
       </div>
 
     <!-- Modal para editar archivos -->
@@ -444,7 +454,7 @@
     <div class="flex justify-center mt-10">
       <div class="bg-black rounded-xl shadow-lg p-4 flex items-center justify-center gap-4" style="min-width: 140px;">
         <button id="adminPanel" class="logout-btn hidden" style="background:#9333ea;color:#fff;border:none;">
-          👑 Admin
+          Administrador
         </button>
         <button id="logout" class="logout-btn" style="background:#111;color:#fff;border:none;">Cerrar sesión</button>
       </div>
@@ -829,7 +839,7 @@
       const res = await fetch('/api/files', { headers: { Authorization: 'Bearer ' + token } });
       const files = await res.json();
       // Mostrar número total en ambos contadores
-      document.getElementById('filesCount').textContent = files.length;
+
       document.getElementById('filesCount2').textContent = files.length;
       // Mostrar lista visual
       const container = document.getElementById('filesList');
