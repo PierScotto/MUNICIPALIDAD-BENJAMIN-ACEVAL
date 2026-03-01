@@ -9,6 +9,7 @@ router.get('/users', auth_middleware_1.authMiddleware, admin_controller_1.adminM
 router.get('/files', auth_middleware_1.authMiddleware, admin_controller_1.adminMiddleware, admin_controller_1.getAllFiles);
 router.get('/files/:userId', auth_middleware_1.authMiddleware, admin_controller_1.adminMiddleware, admin_controller_1.getUserFiles);
 router.get('/deleted-files', auth_middleware_1.authMiddleware, admin_controller_1.adminMiddleware, admin_controller_1.getDeletedFiles);
+router.get('/activity-logs', auth_middleware_1.authMiddleware, admin_controller_1.adminMiddleware, admin_controller_1.getActivityLogs);
 router.put('/users/:userId/password', auth_middleware_1.authMiddleware, admin_controller_1.adminMiddleware, admin_controller_1.changeUserPassword);
 router.get('/stats', auth_middleware_1.authMiddleware, admin_controller_1.adminMiddleware, admin_controller_1.getStats);
 // 📊 Nuevas rutas para Reportes y Analytics

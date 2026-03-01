@@ -33,10 +33,28 @@
       box-shadow: 0 2px 12px rgba(239,68,68,0.07);
       transition: box-shadow 0.2s, border-color 0.2s;
       background: rgba(255,255,255,0.92);
+      appearance: none;
     }
     .input-effect:focus {
       border-color: #ef4444;
       box-shadow: 0 0 0 4px rgba(239,68,68,0.13);
+      outline: none;
+    }
+    /* Estilos específicos para el select */
+    select.input-effect {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23465f7e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.2em;
+      cursor: pointer;
+    }
+    select.input-effect:focus {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ef4444' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    }
+    select.input-effect option {
+      padding: 0.5rem;
+      background: white;
+      color: #374151;
     }
     .big-btn {
       font-size: 1.3rem;
@@ -111,8 +129,22 @@
                class="w-full input-effect" required />
       </div>
       <div>
-        <input name="area_trabajo" placeholder="Área de trabajo" 
-               class="w-full input-effect" required />
+        <select name="area_trabajo" class="w-full input-effect" required>
+          <option value="">Selecciona tu Área de Trabajo</option>
+          <option value="Administrativo">Administrativo</option>
+          <option value="Limpieza y Servicios Generales">Limpieza y Servicios Generales</option>
+          <option value="Contabilidad - Tesorería">Contabilidad - Tesorería</option>
+          <option value="Recursos Humanos">Recursos Humanos</option>
+          <option value="Informática / Sistemas - Soporte Técnico">Informática / Sistemas - Soporte Técnico</option>
+          <option value="Atención al Ciudadano - Desarrollo Social">Atención al Ciudadano - Desarrollo Social</option>
+          <option value="Catastro - Obras Públicas">Catastro - Obras Públicas</option>
+          <option value="Tránsito y Transporte">Tránsito y Transporte</option>
+          <option value="Fiscalización y Control">Fiscalización y Control</option>
+          <option value="Desarrollo Social - Medio Ambiente">Desarrollo Social - Medio Ambiente</option>
+          <option value="Asesoría Jurídica">Asesoría Jurídica</option>
+          <option value="Archivo y Documentación - Comunicación Institucional">Archivo y Documentación - Comunicación Institucional</option>
+          <option value="Planificación y Proyectos">Planificación y Proyectos</option>
+        </select>
       </div>
       <div>
         <input name="telefono" type="tel" placeholder="Número de teléfono" 

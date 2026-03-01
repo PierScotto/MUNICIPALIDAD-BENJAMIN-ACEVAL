@@ -9,6 +9,7 @@ exports.getStats = getStats;
 exports.getAnalytics = getAnalytics;
 exports.getDetailedReport = getDetailedReport;
 exports.getDeletedFiles = getDeletedFiles;
+exports.getActivityLogs = getActivityLogs;
 const db_1 = require("../config/db");
 // Middleware para verificar si el usuario es admin
 function adminMiddleware(req, res, next) {
@@ -245,6 +246,121 @@ async function getDeletedFiles(req, res) {
     }
     catch (err) {
         console.error(err);
+        res.status(500).json({ message: 'Error del servidor' });
+    }
+}
+// 📈 Obtener registros de actividad consolidados de todos los usuarios
+async function getActivityLogs(req, res) {
+    try {
+        const { date, type } = req.query;
+        // Construir condiciones de filtro
+        let whereConditions = [];
+        let params = [];
+        if (date) {
+            whereConditions.push('DATE(fecha) = ?');
+            params.push(date);
+        }
+        // Query para obtener todas las actividades combinadas
+        let query = `
+      SELECT 
+        'asistencia' as tipo,
+        u.id as user_id,
+        u.nombre,
+        u.apellido, 
+        u.area_trabajo,
+        DATE(m.fecha_entrada) as fecha,
+        TIME(m.hora_entrada) as hora,
+        CASE 
+          WHEN m.hora_salida IS NOT NULL THEN CONCAT('Marcó SALIDA a las ', m.hora_salida)
+          ELSE CONCAT('Marcó ENTRADA a las ', m.hora_entrada)
+        END as descripcion
+      FROM marcaciones m
+      JOIN users u ON m.user_id = u.id
+      WHERE 1=1
+    `;
+        if (date) {
+            query += ' AND DATE(m.fecha_entrada) = ?';
+        }
+        query += `
+      UNION ALL
+      
+      SELECT 
+        'trabajo' as tipo,
+        u.id as user_id,
+        u.nombre,
+        u.apellido,
+        u.area_trabajo,
+        DATE(t.fechaInicio) as fecha,
+        TIME(t.horaInicio) as hora,
+        CONCAT('Registró trabajo: ', t.tipoTrabajo, ' - Prioridad ', t.prioridad) as descripcion
+      FROM trabajos_registrados t
+      JOIN users u ON t.user_id = u.id
+      WHERE 1=1
+    `;
+        if (date) {
+            query += ' AND DATE(t.fechaInicio) = ?';
+        }
+        query += `
+      UNION ALL
+      
+      SELECT 
+        'archivo' as tipo,
+        u.id as user_id,
+        u.nombre,
+        u.apellido,
+        u.area_trabajo,
+        DATE(f.created_at) as fecha,
+        TIME(f.created_at) as hora,
+        CONCAT('Subió archivo: ', f.file_name) as descripcion
+      FROM files f
+      JOIN users u ON f.user_id = u.id
+      WHERE f.deleted_at IS NULL
+    `;
+        if (date) {
+            query += ' AND DATE(f.created_at) = ?';
+        }
+        query += `
+      UNION ALL
+      
+      SELECT 
+        'archivo' as tipo,
+        u.id as user_id,
+        u.nombre,
+        u.apellido,
+        u.area_trabajo,
+        DATE(df.deleted_at) as fecha,
+        TIME(df.deleted_at) as hora,
+        CONCAT('Eliminó archivo: ', df.file_name) as descripcion
+      FROM deleted_files df
+      JOIN users u ON df.user_id = u.id
+      WHERE 1=1
+    `;
+        if (date) {
+            query += ' AND DATE(df.deleted_at) = ?';
+        }
+        // Aplicar filtro de tipo si se especifica
+        if (type && type !== 'all') {
+            query = `SELECT * FROM (${query}) AS combined WHERE tipo = ?`;
+            params.push(type);
+            // Agregar parámetros de fecha para cada UNION si existe filtro de fecha
+            if (date) {
+                params = [date, date, date, date, type];
+            }
+            else {
+                params = [type];
+            }
+        }
+        else if (date) {
+            // Si solo hay filtro de fecha, duplicar parámetros para cada UNION
+            params = [date, date, date, date];
+        }
+        // Ordenar por fecha y hora más recientes primero
+        query += ' ORDER BY fecha DESC, hora DESC LIMIT 50';
+        const [activities] = await db_1.pool.query(query, params);
+        res.json(activities);
+    }
+    catch (err) {
+        console.error('Error en getActivityLogs:', err);
         res.status(500).json({ message: 'Error del servidor' });
     }
 }

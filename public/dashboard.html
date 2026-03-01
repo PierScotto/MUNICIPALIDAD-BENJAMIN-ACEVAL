@@ -54,6 +54,49 @@
       border-radius: 0.75rem;
       border: 2px solid #10b981;
     }
+    .file-icon {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      border: 2px dashed #10b981;
+      background: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%);
+    }
+    .file-icon:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(16,185,129,0.20);
+    }
+    .file-icon small {
+      font-size: 0.6rem;
+      margin-top: 2px;
+    }
+    .pdf-icon { 
+      color: #dc2626; 
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+      border-color: #dc2626;
+    }
+    .word-icon { 
+      color: #2563eb; 
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border-color: #2563eb;
+    }
+    .excel-icon { 
+      color: #059669; 
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border-color: #059669;
+    }
+    .powerpoint-icon { 
+      color: #ea580c; 
+      background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+      border-color: #ea580c;
+    }
     .file-meta {
       flex: 1;
       min-width: 0; /* Permite que flex funcione correctamente con overflow */
@@ -267,115 +310,132 @@
       </div>
     </div>
     <div style="height: 2.5rem;"></div>
-    <form id="uploadForm" class="mb-10 flex flex-col items-center">
-      <label class="block mb-4 font-extrabold text-2xl text-brandGreen tracking-wide text-center">Selecciona tu Archivo</label>
-      <div class="relative w-full max-w-xs mb-4">
-        <input id="fileInput" type="file" name="file" accept="image/*" required class="w-full px-4 py-3 rounded-2xl border-2 border-brandGreen focus:border-emerald-400 transition-colors bg-white shadow-lg file-input-modern" />
-        <span id="filePlaceholder" class="absolute left-0 top-0 w-full h-full flex items-center justify-center text-gray-400 pointer-events-none text-lg font-semibold">Ningún archivo seleccionado</span>
+    
+    <!-- Sección de Subida de Archivos -->
+    <div class="mb-10">
+      <div class="w-full bg-white/80 rounded-xl shadow p-6 border border-gray-200">
+        <h2 class="text-xl font-bold text-brandGreen mb-2 text-center">📤 Publicar Archivo</h2>
+        <button id="showUploadBtn" class="px-4 py-2 rounded-full bg-green-500 text-white font-bold hover:bg-green-700 transition w-full mb-4">📁 Ver Subida de Archivos</button>
+        <button id="hideUploadBtn" style="display: none;" class="px-4 py-2 rounded-full bg-green-600 text-white font-bold hover:bg-green-800 transition w-full mb-4">❌ Cerrar Subida de Archivos</button>
+        
+        <!-- Contenido del formulario de subida (inline) -->
+        <div id="uploadContent" class="mt-4" style="display: none;">
+          <form id="uploadForm" class="flex flex-col items-center">
+            <label class="block mb-4 font-extrabold text-lg text-brandGreen tracking-wide text-center">Selecciona tu Archivo</label>
+            <div class="relative w-full max-w-xs mb-4">
+              <input id="fileInput" type="file" name="file" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" required class="w-full px-4 py-3 rounded-2xl border-2 border-brandGreen focus:border-emerald-400 transition-colors bg-white shadow-lg file-input-modern" />
+              <span id="filePlaceholder" class="absolute left-0 top-0 w-full h-full flex items-center justify-center text-gray-400 pointer-events-none text-lg font-semibold">Ningún archivo seleccionado</span>
+            </div>
+            <button type="submit" class="big-btn w-full bg-gradient-to-r from-brandGreen to-emerald-400 text-white text-xl font-bold shadow-lg hover:shadow-green-200/50 transform hover:-translate-y-1 transition-all duration-200">
+              <span class="inline-block align-middle mr-2">📤</span> Publicar Archivo
+            </button>
+          </form>
+        </div>
+        
+        <!-- Placeholder cuando está cerrado -->
+        <div id="uploadPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Subida de Archivos" para publicar un nuevo archivo</div>
       </div>
-      <button type="submit" class="big-btn w-full bg-gradient-to-r from-brandGreen to-emerald-400 text-white text-xl font-bold shadow-lg hover:shadow-green-200/50 transform hover:-translate-y-1 transition-all duration-200">
-        <span class="inline-block align-middle mr-2">📤</span> Publicar Archivo
-      </button>
-    </form>
-    </form>
+    </div>
     
     <!-- Sección de Registro de Trabajo -->
     <div class="mb-10">
-      <button id="registerWorkBtn" class="big-btn w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xl font-bold shadow-lg hover:shadow-blue-200/50 transform hover:-translate-y-1 transition-all duration-200">
-        <span class="inline-block align-middle mr-2">🏗️</span> Registrar Actividad
-      </button>
-    </div>
-
-    <!-- Modal para Registrar Trabajo -->
-    <div id="workModal" class="fixed inset-0 bg-black/40 work-modal-overlay flex items-center justify-center z-50 hidden">
-      <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto work-modal-content">
-        <h2 class="text-3xl font-bold text-blue-600 mb-6 text-center">📋 Registrar Mi Actividad</h2>
-        <form id="workForm" class="space-y-6">
-          <!-- Tipo de Trabajo -->
-          <div>
-            <label class="block text-gray-700 font-bold mb-2">Tipo de Trabajo:</label>
-            <select id="workType" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition bg-white" required>
-              <option value="">Selecciona una opción</option>
-              <option value="Trabajo Exterior">Trabajo Exterior</option>
-              <option value="Trabajo Interior">Trabajo Interior</option>
-              <option value="Mantenimiento">Mantenimiento</option>
-              <option value="Inspección">Inspección</option>
-              <option value="Otro">Otro</option>
-            </select>
-          </div>
-
-          <!-- Rango de Fechas -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="w-full bg-white/80 rounded-xl shadow p-6 border border-gray-200">
+        <h2 class="text-xl font-bold text-blue-600 mb-2 text-center">📋 Registrar Mi Actividad</h2>
+        <button id="showRegisterBtn" class="px-4 py-2 rounded-full bg-blue-500 text-white font-bold hover:bg-blue-700 transition w-full mb-4">🏗️ Ver Registro de Actividad</button>
+        <button id="hideRegisterBtn" style="display: none;" class="px-4 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-800 transition w-full mb-4">❌ Cerrar Registro de Actividad</button>
+        
+        <!-- Contenido del formulario de registro (inline) -->
+        <div id="registerContent" class="mt-4" style="display: none;">
+          <form id="workForm" class="space-y-6">
+            <!-- Tipo de Trabajo -->
             <div>
-              <label class="block text-gray-700 font-bold mb-2">Fecha de Inicio:</label>
-              <input type="date" id="startDate" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
+              <label class="block text-gray-700 font-bold mb-2">Tipo de Trabajo:</label>
+              <select id="workType" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition bg-white" required>
+                <option value="">Selecciona una opción</option>
+                <option value="Trabajo Exterior">Trabajo Exterior</option>
+                <option value="Trabajo Interior">Trabajo Interior</option>
+                <option value="Mantenimiento">Mantenimiento</option>
+                <option value="Inspección">Inspección</option>
+                <option value="Otro">Otro</option>
+              </select>
             </div>
-            <div>
-              <label class="block text-gray-700 font-bold mb-2">Fecha de Fin:</label>
-              <input type="date" id="endDate" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
-            </div>
-          </div>
 
-          <!-- Horarios -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-gray-700 font-bold mb-2">Hora de Inicio:</label>
-              <input type="time" id="startTime" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
-            </div>
-            <div>
-              <label class="block text-gray-700 font-bold mb-2">Hora de Fin:</label>
-              <input type="time" id="endTime" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
-            </div>
-          </div>
-
-          <!-- Zona Trabajada -->
-          <div>
-            <label class="block text-gray-700 font-bold mb-2">Zona Trabajada:</label>
-            <div class="mb-3">
-              <div class="flex gap-2 mb-2">
-                <input type="text" id="zoneInput" placeholder="Escribir zona personalizada..." class="flex-1 px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition">
-                <button type="button" id="addZoneBtn" class="px-4 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 font-bold">Agregar</button>
+            <!-- Rango de Fechas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-gray-700 font-bold mb-2">Fecha de Inicio:</label>
+                <input type="date" id="startDate" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
               </div>
-              <div class="flex flex-wrap gap-2">
-                <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Norte">Zona Norte</button>
-                <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Sur">Zona Sur</button>
-                <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Este">Zona Este</button>
-                <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Oeste">Zona Oeste</button>
-                <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Centro">Centro</button>
+              <div>
+                <label class="block text-gray-700 font-bold mb-2">Fecha de Fin:</label>
+                <input type="date" id="endDate" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
               </div>
             </div>
-            <div id="selectedZones" class="flex flex-wrap gap-2"></div>
-            <input type="hidden" id="zonesHidden" name="zones">
-          </div>
 
-          <!-- Estado del Trabajo -->
-          <div>
-            <label class="block text-gray-700 font-bold mb-2">Estado de la Acción:</label>
-            <select id="workStatus" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition bg-white" required>
-              <option value="">Selecciona el estado</option>
-              <option value="en-proceso">🔄 En Proceso</option>
-              <option value="culminado">✅ Culminado</option>
-              <option value="pendiente">⏳ Pendiente</option>
-              <option value="postergado">⏸️ Postergado</option>
-            </select>
-          </div>
+            <!-- Horarios -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-gray-700 font-bold mb-2">Hora de Inicio:</label>
+                <input type="time" id="startTime" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
+              </div>
+              <div>
+                <label class="block text-gray-700 font-bold mb-2">Hora de Fin:</label>
+                <input type="time" id="endTime" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
+              </div>
+            </div>
 
-          <!-- Descripción Adicional -->
-          <div>
-            <label class="block text-gray-700 font-bold mb-2">Descripción Adicional (Opcional):</label>
-            <textarea id="workDescription" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition h-24" placeholder="Agrega detalles adicionales sobre el trabajo..."></textarea>
-          </div>
+            <!-- Zona Trabajada -->
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Zona Trabajada:</label>
+              <div class="mb-3">
+                <div class="flex gap-2 mb-2">
+                  <input type="text" id="zoneInput" placeholder="Escribir zona personalizada..." class="flex-1 px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition">
+                  <button type="button" id="addZoneBtn" class="px-4 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 font-bold">Agregar</button>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Norte">Zona Norte</button>
+                  <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Sur">Zona Sur</button>
+                  <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Este">Zona Este</button>
+                  <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Oeste">Zona Oeste</button>
+                  <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Centro">Centro</button>
+                </div>
+              </div>
+              <div id="selectedZones" class="flex flex-wrap gap-2"></div>
+              <input type="hidden" id="zonesHidden" name="zones">
+            </div>
 
-          <!-- Botones -->
-          <div class="flex gap-4 pt-4">
-            <button type="submit" class="flex-1 px-6 py-4 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-lg font-bold hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
-              <span class="inline-block align-middle mr-2">💾</span> Guardar Registro
-            </button>
-            <button type="button" id="cancelWorkBtn" class="flex-1 px-6 py-4 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 text-white text-lg font-bold hover:from-gray-500 hover:to-gray-600 transform hover:scale-105 transition-all duration-200 shadow-lg">
-              <span class="inline-block align-middle mr-2">❌</span> Cancelar
-            </button>
-          </div>
-        </form>
+            <!-- Estado del Trabajo -->
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Estado de la Acción:</label>
+              <select id="workStatus" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition bg-white" required>
+                <option value="">Selecciona el estado</option>
+                <option value="en-proceso">🔄 En Proceso</option>
+                <option value="culminado">✅ Culminado</option>
+                <option value="pendiente">⏳ Pendiente</option>
+                <option value="postergado">⏸️ Postergado</option>
+              </select>
+            </div>
+
+            <!-- Descripción Adicional -->
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Descripción Adicional (Opcional):</label>
+              <textarea id="workDescription" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition h-24" placeholder="Agrega detalles adicionales sobre el trabajo..."></textarea>
+            </div>
+
+            <!-- Botones -->
+            <div class="flex gap-4 pt-4">
+              <button type="submit" class="flex-1 px-6 py-4 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-lg font-bold hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                <span class="inline-block align-middle mr-2">💾</span> Guardar Registro
+              </button>
+              <button type="button" id="cancelWorkBtn" class="flex-1 px-6 py-4 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 text-white text-lg font-bold hover:from-gray-500 hover:to-gray-600 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                <span class="inline-block align-middle mr-2">❌</span> Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Placeholder cuando está cerrado -->
+        <div id="registerPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Registro de Actividad" para registrar tu trabajo</div>
       </div>
     </div>
     
@@ -417,35 +477,36 @@
           <!-- Lista de archivos subidos (inline) - Inmediatamente después -->
           <div class="file-list mt-4 space-y-4" id="filesList" style="display: none;"></div>
           <div id="filesPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Detalles" para ver tus archivos subidos</div>
+          
+          <!-- Sección de Edición de Archivos (Replegable) -->
+          <div id="editSection" class="mt-6 border-t border-gray-300 pt-4" style="display: none;">
+            <button id="showEditBtn" class="px-4 py-2 rounded-full bg-blue-500 text-white font-bold hover:bg-blue-700 transition w-full mb-4">✏️ Ver Edición de Archivo</button>
+            <button id="hideEditBtn" style="display: none;" class="px-4 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-800 transition w-full mb-4">❌ Cerrar Edición de Archivo</button>
+            
+            <!-- Contenido de edición -->
+            <div id="editContent" class="mt-4" style="display: none;">
+              <h3 class="text-lg font-bold text-blue-600 mb-4 text-center">Editar Archivo Seleccionado</h3>
+              <form id="editForm">
+                <div class="mb-4">
+                  <label class="block text-gray-700 font-bold mb-2">Nombre del archivo:</label>
+                  <input type="text" id="editFileName" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
+                </div>
+                <div class="mb-6">
+                  <label class="block text-gray-700 font-bold mb-2">Comentario:</label>
+                  <textarea id="editComment" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition h-24" placeholder="Agrega un comentario opcional..."></textarea>
+                </div>
+                <div class="flex gap-4">
+                  <button type="submit" class="flex-1 px-4 py-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg">✅ Guardar</button>
+                  <button type="button" id="cancelEdit" class="flex-1 px-4 py-3 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 text-white font-bold hover:from-gray-500 hover:to-gray-600 transition-all duration-200 shadow-lg">❌ Cancelar</button>
+                </div>
+              </form>
+            </div>
+            
+            <!-- Placeholder de edición -->
+            <div id="editPlaceholder" class="mt-4 text-center py-6 text-gray-500 text-sm">Haz clic en "Ver Edición de Archivo" para editar el archivo seleccionado</div>
+          </div>
         </div>
         
-
-      </div>
-
-    <!-- Modal para editar archivos -->
-    <div id="editModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
-      <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg">
-        <h2 class="text-2xl font-bold text-blue-600 mb-4 text-center">Selecciona Archivo para Editar</h2>
-        <form id="editForm">
-          <div class="mb-4">
-            <div class="text-center">
-              <label class="text-gray-700 font-extrabold mb-2 inline-block">Nombre del archivo:</label>
-            </div>
-            <input type="text" id="editFileName" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
-          </div>
-          <div class="mb-6">
-            <div class="text-center">
-              <label class="text-gray-700 font-bold mb-2 inline-block">Comentario:</label>
-            </div>
-            <textarea id="editComment" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition h-24" placeholder="Agrega un comentario opcional..."></textarea>
-          </div>
-          <div class="flex gap-4">
-            <button type="submit" class="flex-1 px-6 py-4 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-lg font-extrabold hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg">✅ Guardar</button>
-            <button type="button" id="cancelEdit" class="flex-1 px-6 py-4 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 text-white text-lg font-extrabold hover:from-gray-500 hover:to-gray-600 transform hover:scale-105 transition-all duration-200 shadow-lg">❌ Cancelar</button>
-          </div>
-        </form>
-      </div>
-    </div>
 
       </div>
     </div>
@@ -480,9 +541,15 @@
       // --- FUNCIONALIDAD DE REGISTRO DE TRABAJO ---
       let selectedZones = [];
 
-      // Abrir modal de registro de trabajo
-      document.getElementById('registerWorkBtn').addEventListener('click', () => {
-        document.getElementById('workModal').classList.remove('hidden');
+      // Mostrar formulario de registro de trabajo (replegable)
+      document.getElementById('showRegisterBtn').addEventListener('click', () => {
+        // Mostrar contenido y ocultar placeholder
+        document.getElementById('registerContent').style.display = 'block';
+        document.getElementById('registerPlaceholder').style.display = 'none';
+        // Intercambiar botones
+        document.getElementById('showRegisterBtn').style.display = 'none';
+        document.getElementById('hideRegisterBtn').style.display = 'block';
+        
         // Establecer fecha actual por defecto
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('startDate').value = today;
@@ -492,19 +559,21 @@
         updateSelectedZonesDisplay();
       });
 
-      // Cerrar modal de registro de trabajo
+      // Ocultar formulario de registro de trabajo
+      document.getElementById('hideRegisterBtn').addEventListener('click', () => {
+        // Ocultar contenido y mostrar placeholder
+        document.getElementById('registerContent').style.display = 'none';
+        document.getElementById('registerPlaceholder').style.display = 'block';
+        // Intercambiar botones
+        document.getElementById('showRegisterBtn').style.display = 'block';
+        document.getElementById('hideRegisterBtn').style.display = 'none';
+      });
+
+      // Cancelar registro (limpiar formulario)
       document.getElementById('cancelWorkBtn').addEventListener('click', () => {
-        document.getElementById('workModal').classList.add('hidden');
         document.getElementById('workForm').reset();
         selectedZones = [];
         updateSelectedZonesDisplay();
-      });
-
-      // Cerrar modal haciendo clic fuera
-      document.getElementById('workModal').addEventListener('click', (e) => {
-        if (e.target.id === 'workModal') {
-          document.getElementById('workModal').classList.add('hidden');
-        }
       });
 
       // Agregar zona personalizada
@@ -593,7 +662,12 @@
           
           if (res.ok) {
             alert('¡Trabajo registrado exitosamente! 🎉');
-            document.getElementById('workModal').classList.add('hidden');
+            // Ocultar la sección de registro después de guardar exitosamente
+            document.getElementById('registerContent').style.display = 'none';
+            document.getElementById('registerPlaceholder').style.display = 'block';
+            document.getElementById('showRegisterBtn').style.display = 'block';
+            document.getElementById('hideRegisterBtn').style.display = 'none';
+            
             document.getElementById('workForm').reset();
             selectedZones = [];
             updateSelectedZonesDisplay();
@@ -814,6 +888,33 @@
 
       // --- FIN FUNCIONALIDAD DE REGISTRO DE TRABAJO ---
 
+      // --- FUNCIONALIDAD DE SUBIDA DE ARCHIVOS ---
+
+      // Mostrar formulario de subida de archivos (replegable)
+      document.getElementById('showUploadBtn').addEventListener('click', () => {
+        // Mostrar contenido y ocultar placeholder
+        document.getElementById('uploadContent').style.display = 'block';
+        document.getElementById('uploadPlaceholder').style.display = 'none';
+        // Intercambiar botones
+        document.getElementById('showUploadBtn').style.display = 'none';
+        document.getElementById('hideUploadBtn').style.display = 'block';
+      });
+
+      // Ocultar formulario de subida de archivos
+      document.getElementById('hideUploadBtn').addEventListener('click', () => {
+        // Ocultar contenido y mostrar placeholder
+        document.getElementById('uploadContent').style.display = 'none';
+        document.getElementById('uploadPlaceholder').style.display = 'block';
+        // Intercambiar botones
+        document.getElementById('showUploadBtn').style.display = 'block';
+        document.getElementById('hideUploadBtn').style.display = 'none';
+        // Resetear input de archivo
+        document.getElementById('fileInput').value = '';
+        document.getElementById('filePlaceholder').style.display = 'flex';
+      });
+
+      // --- FIN FUNCIONALIDAD DE SUBIDA DE ARCHIVOS ---
+
       // Placeholder visual para input de archivo
       const fileInput = document.getElementById('fileInput');
       const filePlaceholder = document.getElementById('filePlaceholder');
@@ -852,8 +953,10 @@
         const nameDiv = card.querySelector('.file-name');
         const commentDiv = card.querySelector('.file-comment');
         const dateDiv = card.querySelector('.file-date');
-        img.src = '/uploads/' + f.file_path;
-        img.alt = f.file_name;
+        
+        // Renderizar vista previa según tipo de archivo
+        renderFilePreview(f, img);
+        
         nameDiv.textContent = f.file_name;
         commentDiv.textContent = f.comment || '- - - - -';
         dateDiv.textContent = new Date(f.created_at || f.uploaded_at).toLocaleString();
@@ -863,7 +966,18 @@
         editBtn.addEventListener('click', () => {
           document.getElementById('editFileName').value = f.file_name;
           document.getElementById('editComment').value = f.comment || '';
-          document.getElementById('editModal').classList.remove('hidden');
+          
+          // Mostrar la sección de edición si no está visible
+          const editSection = document.getElementById('editSection');
+          editSection.style.display = 'block';
+          
+          // Mostrar el contenido de edición y ocultar el placeholder
+          document.getElementById('editContent').style.display = 'block';
+          document.getElementById('editPlaceholder').style.display = 'none';
+          
+          // Intercambiar botones de edición
+          document.getElementById('showEditBtn').style.display = 'none';
+          document.getElementById('hideEditBtn').style.display = 'block';
           
           // Guardar el ID del archivo para editar
           document.getElementById('editForm').dataset.fileId = f.id;
@@ -935,9 +1049,34 @@
         // Ocultar lista y mostrar placeholder
         document.getElementById('filesList').style.display = 'none';
         document.getElementById('filesPlaceholder').style.display = 'block';
+        // También ocultar la sección de edición cuando se ocultan los archivos
+        document.getElementById('editSection').style.display = 'none';
         // Intercambiar botones
         document.getElementById('showFilesBtn').style.display = 'block';
         document.getElementById('hideFilesBtn').style.display = 'none';
+      };
+      
+      // Botón para mostrar edición de archivo
+      document.getElementById('showEditBtn').onclick = () => {
+        // Mostrar contenido y ocultar placeholder de edición
+        document.getElementById('editContent').style.display = 'block';
+        document.getElementById('editPlaceholder').style.display = 'none';
+        // Intercambiar botones de edición
+        document.getElementById('showEditBtn').style.display = 'none';
+        document.getElementById('hideEditBtn').style.display = 'block';
+      };
+      
+      // Botón para ocultar edición de archivo
+      document.getElementById('hideEditBtn').onclick = () => {
+        // Ocultar contenido y mostrar placeholder de edición 
+        document.getElementById('editContent').style.display = 'none';
+        document.getElementById('editPlaceholder').style.display = 'block';
+        // Intercambiar botones de edición
+        document.getElementById('showEditBtn').style.display = 'block';
+        document.getElementById('hideEditBtn').style.display = 'none';
+        // Limpiar el formulario
+        document.getElementById('editForm').reset();
+        document.getElementById('editForm').removeAttribute('data-file-id');
       };
     }
 
@@ -960,14 +1099,30 @@
       const json = await res.json();
       alert(json.message || 'Archivo actualizado');
       if (res.ok) {
-        document.getElementById('editModal').classList.add('hidden');
+        // Ocultar contenido de edición y mostrar placeholder
+        document.getElementById('editContent').style.display = 'none';
+        document.getElementById('editPlaceholder').style.display = 'block';
+        // Intercambiar botones de edición
+        document.getElementById('showEditBtn').style.display = 'block';
+        document.getElementById('hideEditBtn').style.display = 'none';
+        // Limpiar formulario
+        document.getElementById('editForm').reset();
+        document.getElementById('editForm').removeAttribute('data-file-id');
         fetchFiles();
       }
     });
 
     // Botón cancelar edición
     document.getElementById('cancelEdit').onclick = () => {
-      document.getElementById('editModal').classList.add('hidden');
+      // Ocultar contenido de edición y mostrar placeholder
+      document.getElementById('editContent').style.display = 'none';
+      document.getElementById('editPlaceholder').style.display = 'block';
+      // Intercambiar botones de edición
+      document.getElementById('showEditBtn').style.display = 'block';
+      document.getElementById('hideEditBtn').style.display = 'none';
+      // Limpiar formulario
+      document.getElementById('editForm').reset();
+      document.getElementById('editForm').removeAttribute('data-file-id');
     };
 
     // Mostrar botón admin si es admin
@@ -987,7 +1142,17 @@
       const res = await fetch('/api/files/upload', { method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: fd });
       const json = await res.json();
       alert(json.message || 'OK');
-      if (res.ok) fetchFiles();
+      if (res.ok) {
+        fetchFiles();
+        // Ocultar la sección de upload después de subir exitosamente
+        document.getElementById('uploadContent').style.display = 'none';
+        document.getElementById('uploadPlaceholder').style.display = 'block';
+        document.getElementById('showUploadBtn').style.display = 'block';
+        document.getElementById('hideUploadBtn').style.display = 'none';
+        // Resetear input de archivo
+        document.getElementById('fileInput').value = '';
+        document.getElementById('filePlaceholder').style.display = 'flex';
+      }
     });
 
     fetchFiles();
@@ -1153,6 +1318,70 @@
         hour: '2-digit',
         minute: '2-digit'
       });
+    }
+    
+    // Función para renderizar vista previa de archivos
+    function renderFilePreview(file, imgElement) {
+      const fileName = file.file_name || '';
+      const filePath = file.file_path || '';
+      const ext = fileName.split('.').pop()?.toLowerCase() || '';
+      
+      if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
+        // Mostrar imagen normalmente
+        imgElement.src = '/uploads/' + filePath;
+        imgElement.alt = fileName;
+        imgElement.style.display = 'block';
+        imgElement.onclick = null;
+      } else {
+        // Ocultar img y crear ícono personalizado
+        imgElement.style.display = 'none';
+        
+        // Crear div de ícono si no existe
+        let iconDiv = imgElement.parentNode.querySelector('.file-icon');
+        if (!iconDiv) {
+          iconDiv = document.createElement('div');
+          imgElement.parentNode.insertBefore(iconDiv, imgElement);
+        }
+        
+        // Configurar ícono según tipo
+        if (ext === 'pdf') {
+          iconDiv.className = 'file-icon pdf-icon';
+          iconDiv.innerHTML = '📄<br><small>PDF</small>';
+          iconDiv.onclick = () => openFile('/uploads/' + filePath);
+        } else if (['doc', 'docx'].includes(ext)) {
+          iconDiv.className = 'file-icon word-icon';
+          iconDiv.innerHTML = '📝<br><small>Word</small>';
+          iconDiv.onclick = () => downloadFile('/uploads/' + filePath, fileName);
+        } else if (['xls', 'xlsx'].includes(ext)) {
+          iconDiv.className = 'file-icon excel-icon';
+          iconDiv.innerHTML = '📊<br><small>Excel</small>';
+          iconDiv.onclick = () => downloadFile('/uploads/' + filePath, fileName);
+        } else if (['ppt', 'pptx'].includes(ext)) {
+          iconDiv.className = 'file-icon powerpoint-icon';
+          iconDiv.innerHTML = '🎯<br><small>PowerPoint</small>';
+          iconDiv.onclick = () => downloadFile('/uploads/' + filePath, fileName);
+        } else {
+          iconDiv.className = 'file-icon';
+          iconDiv.innerHTML = '📎<br><small>Archivo</small>';
+          iconDiv.onclick = () => downloadFile('/uploads/' + filePath, fileName);
+        }
+      }
+    }
+    
+    // Función para abrir archivos (PDFs)
+    function openFile(filePath) {
+      window.open(filePath, '_blank');
+    }
+    
+    // Función para descargar archivos
+    function downloadFile(filePath, fileName) {
+      const link = document.createElement('a');
+      link.href = filePath;
+      link.download = fileName;
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
     
     // Cargar estado inicial al iniciar

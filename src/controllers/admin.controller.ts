@@ -102,13 +102,18 @@ export async function getStats(req: Request, res: Response) {
 // Reportes y Analytics Avanzados
 export async function getAnalytics(req: Request, res: Response) {
   try {
+    console.log('Iniciando carga de analytics...');
+
     // Usuarios por área de trabajo
     const [usersByArea] = await pool.query(`
-      SELECT area_trabajo, COUNT(*) as total 
+      SELECT 
+        COALESCE(area_trabajo, 'Sin área') as area_trabajo, 
+        COUNT(*) as total 
       FROM users 
-      WHERE area_trabajo != '' 
+      WHERE area_trabajo != '' AND area_trabajo IS NOT NULL
       GROUP BY area_trabajo 
       ORDER BY total DESC
+      LIMIT 10
     `);
 
     // Archivos por mes (últimos 12 meses)
@@ -117,7 +122,7 @@ export async function getAnalytics(req: Request, res: Response) {
         DATE_FORMAT(created_at, '%Y-%m') as mes,
         COUNT(*) as total
       FROM files 
-      WHERE created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+      WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
       GROUP BY DATE_FORMAT(created_at, '%Y-%m')
       ORDER BY mes ASC
     `);
@@ -128,6 +133,7 @@ export async function getAnalytics(req: Request, res: Response) {
         DAYNAME(created_at) as dia,
         COUNT(*) as total
       FROM files 
+      WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
       GROUP BY DAYOFWEEK(created_at), DAYNAME(created_at)
       ORDER BY DAYOFWEEK(created_at)
     `);
@@ -135,22 +141,23 @@ export async function getAnalytics(req: Request, res: Response) {
     // Top 5 usuarios más activos
     const [topUsers] = await pool.query(`
       SELECT 
-        u.nombre, u.apellido, u.area_trabajo,
+        u.nombre, u.apellido, 
+        COALESCE(u.area_trabajo, 'Sin área') as area_trabajo,
         COUNT(f.id) as total_archivos
       FROM users u
       LEFT JOIN files f ON u.id = f.user_id
-      GROUP BY u.id
+      GROUP BY u.id, u.nombre, u.apellido, u.area_trabajo
       ORDER BY total_archivos DESC
       LIMIT 5
     `);
 
-    // Archivos eliminados por mes
+    // Archivos eliminados por mes (últimos 12 meses)
     const [deletedByMonth] = await pool.query(`
       SELECT 
         DATE_FORMAT(deleted_at, '%Y-%m') as mes,
         COUNT(*) as total
       FROM deleted_files 
-      WHERE deleted_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+      WHERE deleted_at >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
       GROUP BY DATE_FORMAT(deleted_at, '%Y-%m')
       ORDER BY mes ASC
     `);
@@ -161,10 +168,17 @@ export async function getAnalytics(req: Request, res: Response) {
         DATE(created_at) as fecha,
         COUNT(*) as nuevos_usuarios
       FROM users 
-      WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+      WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
       GROUP BY DATE(created_at)
       ORDER BY fecha DESC
     `);
+
+    console.log('Analytics cargados exitosamente:', {
+      usersByArea: Array.isArray(usersByArea) ? usersByArea.length : 0,
+      filesByMonth: Array.isArray(filesByMonth) ? filesByMonth.length : 0,
+      activityByDay: Array.isArray(activityByDay) ? activityByDay.length : 0,
+      topUsers: Array.isArray(topUsers) ? topUsers.length : 0
+    });
 
     res.json({
       usersByArea,
@@ -175,8 +189,11 @@ export async function getAnalytics(req: Request, res: Response) {
       recentActivity
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error del servidor' });
+    console.error('Error en getAnalytics:', err);
+    res.status(500).json({ 
+      message: 'Error del servidor',
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
   }
 }
 
@@ -185,11 +202,13 @@ export async function getDetailedReport(req: Request, res: Response) {
   try {
     const { startDate, endDate, area } = req.query;
     
+    console.log('Parámetros recibidos:', { startDate, endDate, area });
+    
     let whereClause = 'WHERE 1=1';
     let params: any[] = [];
     
     if (startDate && endDate) {
-      whereClause += ' AND f.created_at BETWEEN ? AND ?';
+      whereClause += ' AND DATE(f.created_at) BETWEEN DATE(?) AND DATE(?)';
       params.push(startDate, endDate);
     }
     
@@ -198,7 +217,11 @@ export async function getDetailedReport(req: Request, res: Response) {
       params.push(area);
     }
     
-    const [detailedData] = await pool.query(`
+    console.log('Query whereClause:', whereClause);
+    console.log('Query params:', params);
+    
+    // Primera consulta: datos detallados
+    const detailedQuery = `
       SELECT 
         u.nombre, u.apellido, u.area_trabajo,
         f.file_name, f.created_at,
@@ -210,20 +233,33 @@ export async function getDetailedReport(req: Request, res: Response) {
       LEFT JOIN files f ON u.id = f.user_id
       ${whereClause}
       ORDER BY f.created_at DESC
-    `, params);
+      LIMIT 1000
+    `;
+    
+    const [detailedData] = await pool.query(detailedQuery, params);
 
-    // Estadísticas del reporte
-    const [summary] = await pool.query(`
+    // Segunda consulta: estadísticas del reporte (más simple y segura)
+    const summaryQuery = `
       SELECT 
         COUNT(DISTINCT u.id) as usuarios_involucrados,
         COUNT(f.id) as total_archivos,
-        AVG(
-          SELECT COUNT(*) FROM files f2 WHERE f2.user_id = u.id
-        ) as promedio_archivos_usuario
+        CASE 
+          WHEN COUNT(DISTINCT u.id) > 0 
+          THEN ROUND(COUNT(f.id) / COUNT(DISTINCT u.id), 2)
+          ELSE 0 
+        END as promedio_archivos_usuario
       FROM users u
       LEFT JOIN files f ON u.id = f.user_id
       ${whereClause}
-    `, params);
+    `;
+
+    const [summary] = await pool.query(summaryQuery, params);
+
+    console.log('Datos obtenidos:', {
+      detailedCount: Array.isArray(detailedData) ? detailedData.length : 0,
+      // @ts-ignore
+      summary: summary[0]
+    });
 
     res.json({
       data: detailedData,
@@ -232,8 +268,11 @@ export async function getDetailedReport(req: Request, res: Response) {
       filters: { startDate, endDate, area }
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error del servidor' });
+    console.error('Error en getDetailedReport:', err);
+    res.status(500).json({ 
+      message: 'Error del servidor',
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
   }
 }
 

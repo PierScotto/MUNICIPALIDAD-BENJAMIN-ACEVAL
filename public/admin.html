@@ -209,7 +209,7 @@
     <div class="mb-6 debug-panel bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
       <div class="flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
         <h3 class="text-lg font-bold text-gray-700 flex items-center gap-2">
-          🔧 Panel de Debugging
+          🔧 Panel de Depuración
         </h3>
         <button id="toggleDebug" class="debug-toggle-btn">
           Ocultar
@@ -238,24 +238,6 @@
       </div>
     </div>
 
-    <!-- Pestañas -->
-    <div class="mb-6 flex justify-center">
-      <div class="flex bg-gray-200 rounded-full p-1 shadow-lg">
-        <button id="usersTab" class="px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold transition-all duration-300 shadow-lg flex items-center gap-2">
-          <span>👥</span> Usuarios
-        </button>
-        <button id="filesTab" class="px-6 py-3 rounded-full bg-transparent text-gray-600 font-bold hover:bg-gray-300 transition-all duration-300 flex items-center gap-2">
-          <span>📁</span> Archivos Activos
-        </button>
-        <button id="deletedTab" class="px-6 py-3 rounded-full bg-transparent text-gray-600 font-bold hover:bg-gray-300 transition-all duration-300 flex items-center gap-2">
-          <span>🗑️</span> Archivos Eliminados
-        </button>
-        <button id="reportsTab" class="px-6 py-3 rounded-full bg-transparent text-gray-600 font-bold hover:bg-gray-300 transition-all duration-300 flex items-center gap-2">
-          <span>📊</span> Reporte de Datos
-        </button>
-      </div>
-    </div>
-
     <!-- Contenido de Usuarios -->
     <div id="usersContent">
       <div class="flex justify-between items-center mb-4">
@@ -280,7 +262,7 @@
     </div>
 
     <!-- Contenido de Archivos -->
-    <div id="filesContent" class="hidden">
+    <div id="filesContent" class="mt-12">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold text-brandGreen">Archivos Activos</h2>
         <div class="flex gap-3">
@@ -303,7 +285,7 @@
     </div>
 
     <!-- Contenido de Archivos Eliminados -->
-    <div id="deletedContent" class="hidden">
+    <div id="deletedContent" class="mt-12">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold text-red-600">Archivos Eliminados</h2>
         <div class="flex gap-3">
@@ -326,7 +308,7 @@
     </div>
 
     <!-- 📊 Contenido de Reportes y Analytics -->
-    <div id="reportsContent" class="hidden">
+    <div id="reportsContent" class="mt-12">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold text-purple-600 flex items-center gap-2">
           <span>📊</span> Reporte de Datos
@@ -555,12 +537,6 @@
 
     // Actualizar estado del token
     document.getElementById('tokenStatus').textContent = token ? '✅ Token presente' : '❌ Sin token';
-
-    // Pestañas
-    document.getElementById('usersTab').onclick = () => showTab('users');
-    document.getElementById('filesTab').onclick = () => showTab('files');
-    document.getElementById('deletedTab').onclick = () => showTab('deleted');
-    document.getElementById('reportsTab').onclick = () => showTab('reports');
     
     // Botones de usuarios - Solución simple
     setTimeout(() => {
@@ -1062,24 +1038,30 @@
     // Cargar datos de analytics desde el servidor
     async function loadAnalyticsData() {
       try {
+        console.log('Cargando datos de analytics...');
         const res = await fetch('/api/admin/analytics', { 
           headers: { Authorization: 'Bearer ' + token } 
         });
         
-        if (!res.ok) throw new Error('Error cargando analytics');
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`Error ${res.status}: ${errorText}`);
+        }
         
         const data = await res.json();
+        console.log('Datos de analytics recibidos:', data);
         
-        // Crear todos los gráficos
-        createUsersByAreaChart(data.usersByArea);
-        createFilesByMonthChart(data.filesByMonth);
-        createActivityByDayChart(data.activityByDay);
-        createDeletedVsActiveChart(data.filesByMonth, data.deletedByMonth);
-        displayTopUsers(data.topUsers);
+        // Crear todos los gráficos solo si tenemos datos
+        if (data.usersByArea) createUsersByAreaChart(data.usersByArea);
+        if (data.filesByMonth) createFilesByMonthChart(data.filesByMonth);
+        if (data.activityByDay) createActivityByDayChart(data.activityByDay);
+        if (data.filesByMonth && data.deletedByMonth) createDeletedVsActiveChart(data.filesByMonth, data.deletedByMonth);
+        if (data.topUsers) displayTopUsers(data.topUsers);
         
-        console.log('Analytics loaded successfully');
+        console.log('Analytics cargados exitosamente');
       } catch (err) {
-        console.error('Error:', err);
+        console.error('Error cargando analytics:', err);
+        alert(`Error cargando datos de analytics: ${err.message}`);
       }
     }
 
@@ -1107,17 +1089,31 @@
 
     // Gráfico: Usuarios por Área
     function createUsersByAreaChart(data) {
-      const ctx = document.getElementById('usersByAreaChart').getContext('2d');
+      const canvas = document.getElementById('usersByAreaChart');
+      if (!canvas) {
+        console.error('Canvas usersByAreaChart no encontrado');
+        return;
+      }
+      
+      const ctx = canvas.getContext('2d');
       
       // Destruir gráfico anterior si existe
       if (chartInstances.usersByArea) {
         chartInstances.usersByArea.destroy();
       }
       
+      if (!data || data.length === 0) {
+        ctx.font = '16px Arial';
+        ctx.fillStyle = '#666';
+        ctx.textAlign = 'center';
+        ctx.fillText('No hay datos disponibles', canvas.width/2, canvas.height/2);
+        return;
+      }
+      
       chartInstances.usersByArea = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: data.map(d => d.area_trabajo),
+          labels: data.map(d => d.area_trabajo || 'Sin área'),
           datasets: [{
             data: data.map(d => d.total),
             backgroundColor: [
@@ -1141,10 +1137,24 @@
 
     // Gráfico: Archivos por Mes
     function createFilesByMonthChart(data) {
-      const ctx = document.getElementById('filesByMonthChart').getContext('2d');
+      const canvas = document.getElementById('filesByMonthChart');
+      if (!canvas) {
+        console.error('Canvas filesByMonthChart no encontrado');
+        return;
+      }
+      
+      const ctx = canvas.getContext('2d');
       
       if (chartInstances.filesByMonth) {
         chartInstances.filesByMonth.destroy();
+      }
+      
+      if (!data || data.length === 0) {
+        ctx.font = '16px Arial';
+        ctx.fillStyle = '#666';
+        ctx.textAlign = 'center';
+        ctx.fillText('No hay datos disponibles', canvas.width/2, canvas.height/2);
+        return;
       }
       
       chartInstances.filesByMonth = new Chart(ctx, {
@@ -1264,7 +1274,17 @@
     // Mostrar Top 5 usuarios
     function displayTopUsers(users) {
       const container = document.getElementById('topUsersList');
+      if (!container) {
+        console.error('Contenedor topUsersList no encontrado');
+        return;
+      }
+      
       container.innerHTML = '';
+      
+      if (!users || users.length === 0) {
+        container.innerHTML = '<div class="text-center text-gray-500 py-4">No hay usuarios con actividad registrada</div>';
+        return;
+      }
       
       users.forEach((user, index) => {
         const div = document.createElement('div');
@@ -1273,11 +1293,11 @@
           <div class="flex items-center gap-3">
             <span class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">${index + 1}</span>
             <div>
-              <div class="font-bold">${user.nombre} ${user.apellido}</div>
-              <div class="text-sm text-gray-600">${user.area_trabajo}</div>
+              <div class="font-bold">${user.nombre || 'N/A'} ${user.apellido || ''}</div>
+              <div class="text-sm text-gray-600">${user.area_trabajo || 'Sin área'}</div>
             </div>
           </div>
-          <div class="font-bold text-purple-600">${user.total_archivos} archivos</div>
+          <div class="font-bold text-purple-600">${user.total_archivos || 0} archivos</div>
         `;
         container.appendChild(div);
       });
@@ -1290,77 +1310,154 @@
       const area = document.getElementById('areaFilter').value;
       
       if (!startDate || !endDate) {
-        alert('Por favor selecciona un rango de fechas');
+        alert('Por favor selecciona un rango de fechas válido');
+        return;
+      }
+      
+      // Validar que la fecha de inicio sea menor que la de fin
+      if (new Date(startDate) > new Date(endDate)) {
+        alert('La fecha de inicio debe ser anterior a la fecha de fin');
         return;
       }
       
       try {
         const params = new URLSearchParams({ startDate, endDate, area });
+        console.log('Generando reporte con parámetros:', { startDate, endDate, area });
+        
         const res = await fetch(`/api/admin/reports/detailed?${params}`, {
           headers: { Authorization: 'Bearer ' + token }
         });
         
-        if (!res.ok) throw new Error('Error generando reporte');
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`Error ${res.status}: ${errorText}`);
+        }
         
         const data = await res.json();
+        console.log('Datos del reporte recibidos:', data);
         displayDetailedReport(data);
         
       } catch (err) {
-        console.error('Error:', err);
-        alert('Error generando reporte');
+        console.error('Error generando reporte:', err);
+        alert(`Error generando reporte: ${err.message}`);
       }
     };
 
     // Mostrar reporte detallado
     function displayDetailedReport(reportData) {
+      console.log('Mostrando reporte detallado:', reportData);
+      
       const section = document.getElementById('detailedReportSection');
       const summary = document.getElementById('reportSummary');
       const table = document.getElementById('detailedReportTable');
+      
+      if (!section || !summary || !table) {
+        console.error('Elementos del reporte no encontrados');
+        alert('Error: No se pudieron encontrar los elementos del reporte');
+        return;
+      }
       
       // Mostrar resumen
       summary.innerHTML = `
         <div class="stat-card">
           <h4 class="font-bold text-gray-600">Usuarios Involucrados</h4>
-          <div class="text-2xl font-bold text-blue-600">${reportData.summary.usuarios_involucrados || 0}</div>
+          <div class="text-2xl font-bold text-blue-600">${reportData.summary?.usuarios_involucrados || 0}</div>
         </div>
         <div class="stat-card">
           <h4 class="font-bold text-gray-600">Total Archivos</h4>
-          <div class="text-2xl font-bold text-green-600">${reportData.summary.total_archivos || 0}</div>
+          <div class="text-2xl font-bold text-green-600">${reportData.summary?.total_archivos || 0}</div>
         </div>
         <div class="stat-card">
           <h4 class="font-bold text-gray-600">Promedio por Usuario</h4>
-          <div class="text-2xl font-bold text-purple-600">${Math.round(reportData.summary.promedio_archivos_usuario || 0)}</div>
+          <div class="text-2xl font-bold text-purple-600">${Math.round(reportData.summary?.promedio_archivos_usuario || 0)}</div>
         </div>
       `;
       
       // Mostrar tabla
       table.innerHTML = '';
-      reportData.data.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td class="px-4 py-2 border">${item.nombre} ${item.apellido}</td>
-          <td class="px-4 py-2 border">${item.area_trabajo}</td>
-          <td class="px-4 py-2 border">${item.file_name || 'N/A'}</td>
-          <td class="px-4 py-2 border">${item.created_at ? new Date(item.created_at).toLocaleDateString() : 'N/A'}</td>
-          <td class="px-4 py-2 border">
-            <span class="px-2 py-1 rounded text-sm ${item.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${item.estado}</span>
-          </td>
-        `;
-        table.appendChild(row);
-      });
+      
+      if (!reportData.data || reportData.data.length === 0) {
+        table.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">No se encontraron datos para el período seleccionado</td></tr>';
+      } else {
+        reportData.data.forEach(item => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-50';
+          row.innerHTML = `
+            <td class="px-4 py-2 border">${item.nombre || 'N/A'} ${item.apellido || ''}</td>
+            <td class="px-4 py-2 border">${item.area_trabajo || 'N/A'}</td>
+            <td class="px-4 py-2 border">${item.file_name || 'Sin archivos'}</td>
+            <td class="px-4 py-2 border">${item.created_at ? new Date(item.created_at).toLocaleDateString('es-ES') : 'N/A'}</td>
+            <td class="px-4 py-2 border">
+              <span class="px-2 py-1 rounded text-sm ${item.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${item.estado || 'N/A'}</span>
+            </td>
+          `;
+          table.appendChild(row);
+        });
+      }
       
       section.classList.remove('hidden');
+      section.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Funciones de exportación (básicas)
+    // Funciones de exportación mejoradas
     document.getElementById('exportPDF').onclick = () => {
-      alert('Función de exportación PDF - En desarrollo');
-      // Aquí puedes implementar jsPDF o similar
+      const reportData = document.getElementById('detailedReportSection');
+      if (reportData.classList.contains('hidden')) {
+        alert('Primero genera un reporte para poder exportarlo');
+        return;
+      }
+      
+      // Función básica de impresión que puede convertirse a PDF
+      const printContent = reportData.innerHTML;
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Reporte de Datos - ${new Date().toLocaleDateString()}</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 20px; }
+              .stat-card { border: 1px solid #ccc; padding: 10px; margin: 5px; display: inline-block; }
+              table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+              th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+              th { background-color: #f2f2f2; }
+            </style>
+          </head>
+          <body>
+            <h1>Reporte de Datos</h1>
+            <p>Generado el: ${new Date().toLocaleString()}</p>
+            ${printContent}
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.print();
     };
 
     document.getElementById('exportExcel').onclick = () => {
-      alert('Función de exportación Excel - En desarrollo');
-      // Aquí puedes implementar SheetJS o similar
+      const table = document.getElementById('detailedReportTable');
+      if (!table || table.children.length === 0) {
+        alert('Primero genera un reporte para poder exportarlo');
+        return;
+      }
+      
+      // Convertir tabla a CSV básico
+      let csv = 'Nombre,Área de Trabajo,Archivo,Fecha de Creación,Estado\n';
+      
+      Array.from(table.children).forEach(row => {
+        const cells = Array.from(row.children).map(cell => {
+          return '"' + cell.textContent.replace(/"/g, '""') + '"';
+        });
+        csv += cells.join(',') + '\n';
+      });
+      
+      // Descargar CSV
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `reporte_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
     };
   </script>
 
