@@ -6,39 +6,65 @@
   <title>Panel de Administración - Trabajadores</title>
   <link href="/output.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ef4444 0%, #10b981 100%);
-      min-height: 100vh;
+    :root {
+      --admin-bg: #f1f5f9;
+      --admin-surface: #ffffff;
+      --admin-border: #dbe4ee;
+      --admin-text: #1e293b;
+      --admin-muted: #64748b;
+      --admin-primary: #047857;
+      --admin-primary-2: #059669;
+      --admin-danger: #dc2626;
+      --admin-danger-2: #ef4444;
     }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 100% 0%, #d1fae5 0%, transparent 30%), var(--admin-bg);
+      min-height: 100vh;
+      color: var(--admin-text);
+    }
+
     .admin-card {
-      background: rgba(255,255,255,0.97);
+      background: rgba(255,255,255,0.98);
       border-radius: 2rem;
-      box-shadow: 0 12px 40px rgba(16,185,129,0.10), 0 2px 8px rgba(239,68,68,0.08);
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08), 0 4px 10px rgba(15, 23, 42, 0.05);
+      border: 1px solid var(--admin-border);
       padding: 3rem 2.5rem;
       max-width: 1200px;
       margin: 2rem auto;
     }
+
     .stat-card {
-      background: rgba(255,255,255,0.9);
+      background: var(--admin-surface);
       border-radius: 1.5rem;
       padding: 2rem;
       text-align: center;
-      box-shadow: 0 4px 20px rgba(16,185,129,0.08);
+      border: 1px solid var(--admin-border);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.1);
+    }
+
     .user-row {
-      background: #f9f9f9;
+      background: #ffffff;
       border-radius: 1rem;
       padding: 1.5rem;
       margin-bottom: 1rem;
+      border: 1px solid var(--admin-border);
       cursor: pointer;
       transition: all 0.2s;
     }
     .user-row:hover {
-      background: #e5f5ff;
+      background: #f8fafc;
       transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
     }
     .file-item-admin {
       background: #fff;
@@ -169,6 +195,34 @@
     .debug-toggle-btn:hover {
       background: #4b5563;
     }
+
+    .admin-card button[id],
+    .admin-card button[type="submit"] {
+      letter-spacing: 0.01em;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    #usersList,
+    #allFilesList,
+    #deletedFilesList,
+    #reportsData {
+      border-top: 1px solid #eef2f7;
+      padding-top: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .admin-card {
+        padding: 1.25rem;
+        margin: 1rem;
+        border-radius: 1.25rem;
+      }
+
+      .whatsapp-btn {
+        right: 12px;
+        bottom: 12px;
+        padding: 12px 14px;
+      }
+    }
   </style>
 </head>
 <body class="gradient-bg p-6 min-h-screen">
@@ -177,10 +231,10 @@
     <div class="mb-8 flex justify-between items-center">
       <h1 class="text-4xl font-extrabold text-brandRed text-center flex-1">Panel de Administración - Trabajadores</h1>
       <div class="flex gap-4">
-        <button id="backToDashboard" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+        <button id="backToDashboard" class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
           <span>🏠</span> Cliente
         </button>
-        <button id="logout" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+        <button id="logout" class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
           <span>👋</span> Cerrar sesión
         </button>
       </div>
@@ -199,7 +253,7 @@
       <div class="stat-card">
         <h3 class="text-xl font-bold text-red-600 mb-2">Archivos Eliminados</h3>
         <div class="text-4xl font-extrabold text-red-500" id="totalDeleted">Cargando...</div>
-        <button id="refreshStats" class="mt-3 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg text-sm">
+        <button id="refreshStats" class="mt-3 px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg text-sm">
           🔄 Actualizar Datos
         </button>
       </div>
@@ -243,13 +297,13 @@
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold text-brandGreen">Lista de Usuarios</h2>
         <div class="flex gap-3">
-          <button id="showBtn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold hover:from-purple-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <button id="showBtn" class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span>👁️</span> Mostrar Lista
           </button>
-          <button id="hideBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <button id="hideBtn" style="display: none;" class="px-6 py-3 rounded-lg bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span></span> Cerrar Lista
           </button>
-          <button id="refreshBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <button id="refreshBtn" style="display: none;" class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span>🔄</span> Actualizar
           </button>
         </div>
@@ -266,13 +320,13 @@
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold text-brandGreen">Archivos Activos</h2>
         <div class="flex gap-3">
-          <button id="showFilesBtn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <button id="showFilesBtn" class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span>📁</span> Mostrar Archivos
           </button>
-          <button id="hideFilesBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <button id="hideFilesBtn" style="display: none;" class="px-6 py-3 rounded-lg bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span></span> Cerrar Archivos
           </button>
-          <button id="refreshFilesBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <button id="refreshFilesBtn" style="display: none;" class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span>🔄</span> Actualizar
           </button>
         </div>
@@ -289,13 +343,13 @@
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold text-red-600">Archivos Eliminados</h2>
         <div class="flex gap-3">
-          <button id="showDeletedBtn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <button id="showDeletedBtn" class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span>🗑️</span> Mostrar Eliminados
           </button>
-          <button id="hideDeletedBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <button id="hideDeletedBtn" style="display: none;" class="px-6 py-3 rounded-lg bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span></span> Cerrar Eliminados
           </button>
-          <button id="refreshDeletedBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <button id="refreshDeletedBtn" style="display: none;" class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span>🔄</span> Actualizar
           </button>
         </div>
@@ -314,13 +368,13 @@
           <span>📊</span> Reporte de Datos
         </h2>
         <div class="flex gap-3">
-          <button id="showReportsBtn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold hover:from-purple-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <button id="showReportsBtn" class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span>📊</span> Mostrar Reportes
           </button>
-          <button id="hideReportsBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <button id="hideReportsBtn" style="display: none;" class="px-6 py-3 rounded-lg bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span></span> Cerrar Reportes
           </button>
-          <button id="refreshReportsBtn" style="display: none;" class="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
+          <button id="refreshReportsBtn" style="display: none;" class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span>🔄</span> Actualizar
           </button>
         </div>
@@ -328,7 +382,7 @@
       
       <div id="reportsData" style="display: none;">
         <!-- Filtros de Reportes -->
-        <div class="bg-gray-50 rounded-2xl p-6 mb-8 border-2 border-purple-200">
+        <div class="bg-gray-50 rounded-2xl p-6 mb-8 border-2 border-emerald-200">
           <h3 class="text-xl font-bold text-gray-700 mb-4 flex items-center gap-2">
             <span>🔍</span> Generar Reporte Personalizado
           </h3>
@@ -348,7 +402,7 @@
               </select>
             </div>
             <div class="flex items-end">
-              <button id="generateReport" class="w-full px-4 py-2 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition">
+              <button id="generateReport" class="w-full px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg">
                 Generar Reporte
               </button>
             </div>
@@ -357,7 +411,7 @@
             <button id="exportPDF" class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition flex items-center gap-2">
               <span>📄</span> Exportar PDF
             </button>
-            <button id="exportExcel" class="px-4 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition flex items-center gap-2">
+            <button id="exportExcel" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 flex items-center gap-2">
               <span>📊</span> Exportar Excel
             </button>
           </div>
@@ -366,7 +420,7 @@
         <!-- Dashboard de Analytics -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <!-- Gráfico: Usuarios por Área -->
-          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-blue-200">
+          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-emerald-200">
             <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
               <span>👥</span> Usuarios por Área de Trabajo
             </h3>
@@ -374,7 +428,7 @@
           </div>
 
           <!-- Gráfico: Archivos por Mes -->
-          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-green-200">
+          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-emerald-200">
             <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
               <span>📈</span> Archivos Subidos por Mes
             </h3>
@@ -382,7 +436,7 @@
           </div>
 
           <!-- Gráfico: Actividad por Día -->
-          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200">
+          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-emerald-200">
             <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
               <span>📅</span> Actividad por Día de la Semana
             </h3>
@@ -390,7 +444,7 @@
           </div>
 
           <!-- Top 5 Usuarios -->
-          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-purple-200">
+          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-emerald-200">
             <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
               <span>🏆</span> Top 5 Usuarios Más Activos
             </h3>
@@ -483,18 +537,34 @@
       window.location.href = '/login.html';
     }
 
+    function setTextSafe(id, value) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.textContent = value;
+      }
+    }
+
+    function bindClick(id, handler) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.onclick = handler;
+      } else {
+        console.warn(`Elemento no encontrado para evento click: ${id}`);
+      }
+    }
+
     // Botones de navegación
-    document.getElementById('backToDashboard').onclick = () => window.location.href = '/dashboard.html';
-    document.getElementById('logout').onclick = () => {
+    bindClick('backToDashboard', () => window.location.href = '/dashboard.html');
+    bindClick('logout', () => {
       localStorage.removeItem('token');
       window.location.href = '/login.html';
-    };
+    });
 
     // Botón para actualizar estadísticas manualmente
-    document.getElementById('refreshStats').onclick = () => {
+    bindClick('refreshStats', () => {
       console.log('🔄 Actualizando estadísticas manualmente...');
       loadStats();
-    };
+    });
 
     // Agregar test de conectividad
     async function testConnection() {
@@ -506,26 +576,32 @@
         });
         console.log('✅ Conectividad básica OK:', response.status);
         addDebugLog(`✅ Conectividad básica OK: ${response.status}`);
-        document.getElementById('serverStatus').textContent = `✅ Conectado (${response.status})`;
+        setTextSafe('serverStatus', `✅ Conectado (${response.status})`);
       } catch (error) {
         console.error('❌ Problema de conectividad:', error);
         addDebugLog(`❌ Problema de conectividad: ${error.message}`);
-        document.getElementById('serverStatus').textContent = '❌ Sin conexión';
+        setTextSafe('serverStatus', '❌ Sin conexión');
       }
     }
 
     // Sistema de debugging
     function addDebugLog(message) {
       const logsElement = document.getElementById('recentLogs');
+      if (!logsElement) {
+        return;
+      }
       const timestamp = new Date().toLocaleTimeString();
       logsElement.textContent += `\\n[${timestamp}] ${message}`;
       logsElement.scrollTop = logsElement.scrollHeight;
     }
 
     // Toggle del panel de debugging
-    document.getElementById('toggleDebug').onclick = () => {
+    bindClick('toggleDebug', () => {
       const panel = document.getElementById('debugPanel');
       const button = document.getElementById('toggleDebug');
+      if (!panel || !button) {
+        return;
+      }
       if (panel.style.display === 'none') {
         panel.style.display = 'block';
         button.textContent = 'Ocultar';
@@ -533,15 +609,15 @@
         panel.style.display = 'none';
         button.textContent = 'Mostrar';
       }
-    };
+    });
 
     // Actualizar estado del token
-    document.getElementById('tokenStatus').textContent = token ? '✅ Token presente' : '❌ Sin token';
+    setTextSafe('tokenStatus', token ? '✅ Token presente' : '❌ Sin token');
     
     // Botones de usuarios - Solución simple
     setTimeout(() => {
       // Botones para USUARIOS
-      document.getElementById('showBtn').onclick = function() {
+      bindClick('showBtn', function() {
         console.log('MOSTRAR LISTA CLICKED');
         document.getElementById('usersList').style.display = 'block';
         document.getElementById('usersPlaceholder').style.display = 'none';
@@ -551,24 +627,24 @@
         if (document.getElementById('usersList').innerHTML === '') {
           loadUsers();
         }
-      };
+      });
       
-      document.getElementById('hideBtn').onclick = function() {
+      bindClick('hideBtn', function() {
         console.log('CERRAR LISTA CLICKED');
         document.getElementById('usersList').style.display = 'none';
         document.getElementById('usersPlaceholder').style.display = 'block';
         document.getElementById('showBtn').style.display = 'flex';
         document.getElementById('hideBtn').style.display = 'none';
         document.getElementById('refreshBtn').style.display = 'none';
-      };
+      });
       
-      document.getElementById('refreshBtn').onclick = function() {
+      bindClick('refreshBtn', function() {
         console.log('REFRESH CLICKED');
         loadUsers();
-      };
+      });
       
       // Botones para ARCHIVOS ACTIVOS
-      document.getElementById('showFilesBtn').onclick = function() {
+      bindClick('showFilesBtn', function() {
         console.log('MOSTRAR ARCHIVOS CLICKED');
         document.getElementById('allFilesList').style.display = 'block';
         document.getElementById('filesPlaceholder').style.display = 'none';
@@ -578,24 +654,24 @@
         if (document.getElementById('allFilesList').innerHTML === '') {
           loadAllFiles();
         }
-      };
+      });
       
-      document.getElementById('hideFilesBtn').onclick = function() {
+      bindClick('hideFilesBtn', function() {
         console.log('CERRAR ARCHIVOS CLICKED');
         document.getElementById('allFilesList').style.display = 'none';
         document.getElementById('filesPlaceholder').style.display = 'block';
         document.getElementById('showFilesBtn').style.display = 'flex';
         document.getElementById('hideFilesBtn').style.display = 'none';
         document.getElementById('refreshFilesBtn').style.display = 'none';
-      };
+      });
       
-      document.getElementById('refreshFilesBtn').onclick = function() {
+      bindClick('refreshFilesBtn', function() {
         console.log('REFRESH ARCHIVOS CLICKED');
         loadAllFiles();
-      };
+      });
       
       // Botones para ARCHIVOS ELIMINADOS
-      document.getElementById('showDeletedBtn').onclick = function() {
+      bindClick('showDeletedBtn', function() {
         console.log('MOSTRAR ELIMINADOS CLICKED');
         document.getElementById('deletedFilesList').style.display = 'block';
         document.getElementById('deletedPlaceholder').style.display = 'none';
@@ -605,24 +681,24 @@
         if (document.getElementById('deletedFilesList').innerHTML === '') {
           loadDeletedFiles();
         }
-      };
+      });
       
-      document.getElementById('hideDeletedBtn').onclick = function() {
+      bindClick('hideDeletedBtn', function() {
         console.log('CERRAR ELIMINADOS CLICKED');
         document.getElementById('deletedFilesList').style.display = 'none';
         document.getElementById('deletedPlaceholder').style.display = 'block';
         document.getElementById('showDeletedBtn').style.display = 'flex';
         document.getElementById('hideDeletedBtn').style.display = 'none';
         document.getElementById('refreshDeletedBtn').style.display = 'none';
-      };
+      });
       
-      document.getElementById('refreshDeletedBtn').onclick = function() {
+      bindClick('refreshDeletedBtn', function() {
         console.log('REFRESH ELIMINADOS CLICKED');
         loadDeletedFiles();
-      };
+      });
       
       // Botones para REPORTES Y ANALYTICS
-      document.getElementById('showReportsBtn').onclick = function() {
+      bindClick('showReportsBtn', function() {
         console.log('MOSTRAR REPORTES CLICKED');
         document.getElementById('reportsData').style.display = 'block';
         document.getElementById('reportsPlaceholder').style.display = 'none';
@@ -631,21 +707,21 @@
         document.getElementById('refreshReportsBtn').style.display = 'flex';
         // Cargar datos de reportes
         loadReportsData();
-      };
+      });
       
-      document.getElementById('hideReportsBtn').onclick = function() {
+      bindClick('hideReportsBtn', function() {
         console.log('CERRAR REPORTES CLICKED');
         document.getElementById('reportsData').style.display = 'none';
         document.getElementById('reportsPlaceholder').style.display = 'block';
         document.getElementById('showReportsBtn').style.display = 'flex';
         document.getElementById('hideReportsBtn').style.display = 'none';
         document.getElementById('refreshReportsBtn').style.display = 'none';
-      };
+      });
       
-      document.getElementById('refreshReportsBtn').onclick = function() {
+      bindClick('refreshReportsBtn', function() {
         console.log('REFRESH REPORTES CLICKED');
         loadReportsData();
-      };
+      });
     }, 100);
 
     // Funciones para mostrar/ocultar archivos de usuario

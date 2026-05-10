@@ -1,195 +1,204 @@
-<!doctype html>
-<html>
+﻿<!doctype html>
+<html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Registro</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <title>Crear Cuenta</title>
   <link href="/output.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; }
     body {
-      font-family: 'Poppins', sans-serif;
-    }
-    .difuminado-bg {
-      background: linear-gradient(135deg, #ef4444 0%, #10b981 100%);
-      background-size: cover;
-    }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.97);
-      backdrop-filter: blur(24px);
-      border-radius: 2rem;
-      border: 1.5px solid rgba(239,68,68,0.15);
-      box-shadow: 0 12px 40px rgba(239,68,68,0.10), 0 2px 8px rgba(16,185,129,0.08);
-      padding: 3rem 2.5rem;
-      max-width: 480px;
-    }
-    .input-effect {
-      font-size: 1.25rem;
-      padding: 1.1rem 1rem;
-      border-radius: 1.2rem;
-      border: 2px solid #e5e7eb;
-      box-shadow: 0 2px 12px rgba(239,68,68,0.07);
-      transition: box-shadow 0.2s, border-color 0.2s;
-      background: rgba(255,255,255,0.92);
-      appearance: none;
-    }
-    .input-effect:focus {
-      border-color: #ef4444;
-      box-shadow: 0 0 0 4px rgba(239,68,68,0.13);
-      outline: none;
-    }
-    /* Estilos específicos para el select */
-    select.input-effect {
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23465f7e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 1.2em;
-      cursor: pointer;
-    }
-    select.input-effect:focus {
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ef4444' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
-    }
-    select.input-effect option {
-      padding: 0.5rem;
-      background: white;
-      color: #374151;
-    }
-    .big-btn {
-      font-size: 1.3rem;
-      padding: 1.2rem 0;
-      border-radius: 1.2rem;
-      box-shadow: 0 4px 24px rgba(239,68,68,0.13);
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-    .big-btn:hover {
-      box-shadow: 0 8px 32px rgba(16,185,129,0.13);
-      transform: translateY(-2px) scale(1.03);
-    }
-    /* Botón de WhatsApp flotante */
-    .whatsapp-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #ef4444;
-      color: white;
-      border-radius: 50px;
-      padding: 15px 20px;
-      box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
-      font-weight: bold;
-      text-decoration: none;
+      font-family: "Inter", sans-serif;
+      background: #f1f5f9;
+      min-height: 100vh;
+      margin: 0;
       display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.3s ease;
-      z-index: 1000;
-      font-size: 16px;
+      flex-direction: column;
     }
-    .whatsapp-btn:hover {
-      background: #dc2626;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(239, 68, 68, 0.6);
-      color: white;
-      text-decoration: none;
+    .page-body {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2.5rem 1rem 4rem;
     }
+    .auth-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem 2.5rem;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+    }
+    .auth-header { text-align:center;margin-bottom:2rem; }
+    .auth-icon { width:60px;height:60px;background:linear-gradient(135deg,#047857,#059669);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem; }
+    .auth-title { font-size:1.6rem;font-weight:800;color:#1e293b;letter-spacing:-0.02em;margin-bottom:0.3rem; }
+    .auth-subtitle { font-size:0.88rem;color:#64748b; }
+    .form-section-label {
+      font-size:0.7rem;font-weight:700;color:#94a3b8;
+      text-transform:uppercase;letter-spacing:0.08em;
+      margin:1.5rem 0 0.85rem;
+      display:flex;align-items:center;gap:0.5rem;
+    }
+    .form-section-label::after { content:"";flex:1;height:1px;background:#f1f5f9; }
+    .form-group { margin-bottom:1rem; }
+    .form-label { display:block;font-size:0.83rem;font-weight:600;color:#374151;margin-bottom:0.4rem; }
+    .form-input {
+      width:100%;padding:0.72rem 1rem;border-radius:10px;
+      border:1.5px solid #e2e8f0;font-size:0.93rem;
+      font-family:"Inter",sans-serif;color:#1e293b;
+      background:#f8fafc;transition:border-color 0.18s,box-shadow 0.18s;outline:none;
+      appearance:none;
+    }
+    .form-input:focus { border-color:#047857;box-shadow:0 0 0 3px rgba(4,120,87,0.12);background:white; }
+    select.form-input {
+      background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat:no-repeat;background-position:right 1rem center;background-size:1.1em;
+      padding-right:2.5rem;cursor:pointer;
+    }
+    .form-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:0.85rem; }
+    .btn-submit {
+      width:100%;padding:0.85rem;border-radius:10px;border:none;
+      background:linear-gradient(135deg,#047857,#059669);
+      color:white;font-weight:700;font-size:1rem;
+      font-family:"Inter",sans-serif;cursor:pointer;
+      transition:all 0.2s;box-shadow:0 4px 14px rgba(99,102,241,0.3);
+      margin-top:0.75rem;
+    }
+    .btn-submit:hover { transform:translateY(-1px);box-shadow:0 6px 20px rgba(4,120,87,0.4); }
+    .divider { display:flex;align-items:center;gap:0.75rem;margin:1.5rem 0; }
+    .divider-line { flex:1;height:1px;background:#e2e8f0; }
+    .divider-text { font-size:0.78rem;color:#94a3b8;font-weight:500; }
+    .auth-footer { text-align:center;font-size:0.85rem;color:#64748b; }
+    .auth-footer a { color:#047857;font-weight:600;text-decoration:none; }
+    .auth-footer a:hover { color:#065f46;text-decoration:underline; }
+    .whatsapp-btn {
+      position:fixed;bottom:24px;right:24px;
+      background:linear-gradient(135deg,#ef4444,#dc2626);color:white;
+      border-radius:50px;padding:0.9rem 1.4rem;
+      box-shadow:0 6px 24px rgba(239,68,68,0.4);
+      font-weight:700;text-decoration:none;display:flex;align-items:center;
+      gap:0.6rem;transition:all 0.2s;z-index:1000;font-size:0.9rem;
+    }
+    .whatsapp-btn:hover { transform:translateY(-3px);box-shadow:0 10px 30px rgba(239,68,68,0.5);color:white;text-decoration:none; }
+    @media(max-width:540px){ .form-grid-2{grid-template-columns:1fr} .auth-card{padding:2rem 1.25rem;border-radius:16px;} }
   </style>
 </head>
-<body class="difuminado-bg flex items-center justify-center min-h-screen p-6">
-  <div class="w-full max-w-2xl glass-card p-12 rounded-3xl">
-    <div class="text-center mb-12">
-      <h2 class="text-6xl font-extrabold text-brandRed mb-6 tracking-tight">Crear Cuenta</h2>
-      <p class="text-2xl text-gray-600 font-medium">Introduce tus Datos para Registrarte</p>
+<body>
+  <div class="page-body">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-icon">👤</div>
+        <div class="auth-title">Crear Cuenta</div>
+        <div class="auth-subtitle">Completa los datos para registrarte en el sistema</div>
+      </div>
+
+      <form id="registerForm">
+
+        <div class="form-section-label">Credenciales de acceso</div>
+
+        <div class="form-group">
+          <label class="form-label">Nombre de usuario</label>
+          <input name="username" placeholder="mi_usuario" class="form-input" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Correo electrónico</label>
+          <input name="email" type="email" placeholder="usuario@email.com" class="form-input" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contraseña</label>
+          <input name="password" type="password" placeholder="••••••••" class="form-input" required />
+        </div>
+
+        <div class="form-section-label">Información personal</div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Nombre</label>
+            <input name="nombre" placeholder="Juan" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Apellido</label>
+            <input name="apellido" placeholder="Pérez" class="form-input" required />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Fecha de nacimiento</label>
+            <input name="fecha_nacimiento" type="date" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Teléfono</label>
+            <input name="telefono" type="tel" placeholder="+595 981 000 000" class="form-input" required
+              pattern="^\+?[0-9\s\-().]{7,20}$"
+              title="Ingresa un teléfono válido (7-20 dígitos)" />
+          </div>
+        </div>
+
+        <div class="form-section-label">Área de trabajo</div>
+
+        <div class="form-group">
+          <label class="form-label">Departamento</label>
+          <select name="area_trabajo" class="form-input" required>
+            <option value="">Selecciona tu área</option>
+            <option value="Administrativo">Administrativo</option>
+            <option value="Limpieza y Servicios Generales">Limpieza y Servicios Generales</option>
+            <option value="Contabilidad - Tesorería">Contabilidad - Tesorería</option>
+            <option value="Recursos Humanos">Recursos Humanos</option>
+            <option value="Informática / Sistemas - Soporte Técnico">Informática / Sistemas - Soporte Técnico</option>
+            <option value="Atención al Ciudadano - Desarrollo Social">Atención al Ciudadano - Desarrollo Social</option>
+            <option value="Catastro - Obras Públicas">Catastro - Obras Públicas</option>
+            <option value="Tránsito y Transporte">Tránsito y Transporte</option>
+            <option value="Fiscalización y Control">Fiscalización y Control</option>
+            <option value="Desarrollo Social - Medio Ambiente">Desarrollo Social - Medio Ambiente</option>
+            <option value="Asesoría Jurídica">Asesoría Jurídica</option>
+            <option value="Archivo y Documentación - Comunicación Institucional">Archivo y Documentación - Comunicación Institucional</option>
+            <option value="Planificación y Proyectos">Planificación y Proyectos</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit">Crear cuenta →</button>
+      </form>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">¿Ya tienes cuenta?</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="auth-footer">
+        <a href="/login.html">Iniciar sesión aquí</a>
+      </div>
     </div>
-    <form id="registerForm" class="space-y-8 max-w-xl mx-auto">
-      <div>
-        <input name="username" placeholder="Nombre de usuario" 
-               class="w-full input-effect" required />
-      </div>
-      <div>
-        <input name="email" type="email" placeholder="Email" 
-               class="w-full input-effect" required />
-      </div>
-      <div>
-        <input name="password" type="password" placeholder="Contraseña" 
-               class="w-full input-effect" required />
-      </div>
-      <div>
-        <input name="nombre" placeholder="Nombre" 
-               class="w-full input-effect" required />
-      </div>
-      <div>
-        <input name="apellido" placeholder="Apellido" 
-               class="w-full input-effect" required />
-      </div>
-      <div>
-        <input name="fecha_nacimiento" type="date" placeholder="Fecha de nacimiento" 
-               class="w-full input-effect" required />
-      </div>
-      <div>
-        <select name="area_trabajo" class="w-full input-effect" required>
-          <option value="">Selecciona tu Área de Trabajo</option>
-          <option value="Administrativo">Administrativo</option>
-          <option value="Limpieza y Servicios Generales">Limpieza y Servicios Generales</option>
-          <option value="Contabilidad - Tesorería">Contabilidad - Tesorería</option>
-          <option value="Recursos Humanos">Recursos Humanos</option>
-          <option value="Informática / Sistemas - Soporte Técnico">Informática / Sistemas - Soporte Técnico</option>
-          <option value="Atención al Ciudadano - Desarrollo Social">Atención al Ciudadano - Desarrollo Social</option>
-          <option value="Catastro - Obras Públicas">Catastro - Obras Públicas</option>
-          <option value="Tránsito y Transporte">Tránsito y Transporte</option>
-          <option value="Fiscalización y Control">Fiscalización y Control</option>
-          <option value="Desarrollo Social - Medio Ambiente">Desarrollo Social - Medio Ambiente</option>
-          <option value="Asesoría Jurídica">Asesoría Jurídica</option>
-          <option value="Archivo y Documentación - Comunicación Institucional">Archivo y Documentación - Comunicación Institucional</option>
-          <option value="Planificación y Proyectos">Planificación y Proyectos</option>
-        </select>
-      </div>
-      <div>
-        <input name="telefono" type="tel" placeholder="Número de teléfono" 
-               class="w-full input-effect" required pattern="^\+?[0-9\s\-().]{7,20}$" title="Ingresa un teléfono válido (7-20 dígitos, puede incluir +, espacios, guiones o paréntesis)" />
-      </div>
-      <button class="w-full big-btn bg-gradient-to-r from-brandRed to-red-400 text-white">
-        Crear cuenta
-      </button>
-    </form>
-    <p class="text-center mt-10 text-xl text-gray-600">
-      ¿Ya tienes una cuenta? 
-      <a href="/login.html" class="text-brandGreen hover:text-emerald-600 font-semibold transition-colors duration-200">Inicia sesión aquí</a>
-    </p>
   </div>
 
+  <a href="https://wa.me/595983159658?text=Hola,%20necesito%20ayuda%20para%20crear%20mi%20cuenta"
+     class="whatsapp-btn" target="_blank" title="Soporte WhatsApp">
+    <span>❓</span><span>¿Necesitas Ayuda?</span>
+  </a>
+
   <script>
-    const form = document.getElementById('registerForm');
-    form.addEventListener('submit', async (e) => {
+    const form = document.getElementById("registerForm");
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      // Client-side phone validation (extra UX) to avoid roundtrip on obvious mistakes
-      const telefono = form.querySelector('input[name="telefono"]').value.trim();
+      const telefono = form.querySelector("input[name='telefono']").value.trim();
       const phoneRegex = /^\+?[0-9\s\-().]{7,20}$/;
       if (!phoneRegex.test(telefono)) {
-        alert('Número de teléfono inválido. Asegúrate de usar sólo dígitos y opcionalmente +, espacios, guiones o paréntesis (7-20 caracteres).');
+        alert("Número de teléfono inválido. Usa solo dígitos y opcionalmente +, espacios, guiones o paréntesis (7-20 caracteres).");
         return;
       }
-
       const fd = new FormData(form);
       const body = Object.fromEntries(fd.entries());
-      const res = await fetch('/api/auth/register', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+      const res = await fetch("/api/auth/register", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body)
       });
       const json = await res.json();
-      alert(json.message || 'OK');
-      if (res.ok) window.location.href = '/login.html';
+      alert(json.message || "OK");
+      if (res.ok) window.location.href = "/login.html";
     });
   </script>
-
-  <!-- Botón de WhatsApp flotante -->
-  <a href="https://wa.me/595983159658?text=Hola,%20necesito%20ayuda%20para%20crear%20mi%20cuenta" 
-     class="whatsapp-btn" 
-     target="_blank" 
-     title="Contactar soporte por WhatsApp">
-    <span>❓</span>
-    <span>¿Necesitas Ayuda?</span>
-  </a>
 </body>
 </html>

@@ -1,1405 +1,935 @@
-<!doctype html>
-<html>
+﻿<!doctype html>
+<html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard</title>
   <link href="/output.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; }
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ef4444 0%, #10b981 100%);
+      font-family: "Inter", sans-serif;
+      background: #f1f5f9;
       min-height: 100vh;
+      margin: 0;
     }
-    .dashboard-card {
-      background: rgba(255,255,255,0.97);
-      border-radius: 2rem;
-      box-shadow: 0 12px 40px rgba(16,185,129,0.10), 0 2px 8px rgba(239,68,68,0.08);
-      padding: 3rem 2.5rem;
-      max-width: 600px;
-      margin: 2rem auto;
-    }
-    .big-btn {
-      font-size: 1.3rem;
-      padding: 1.2rem 0;
-      border-radius: 1.2rem;
-      box-shadow: 0 4px 24px rgba(16,185,129,0.13);
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      transition: box-shadow 0.2s, transform 0.2s;
-      background: linear-gradient(90deg, #10b981, #34d399);
-      color: #fff;
-    }
-    .big-btn:hover {
-      box-shadow: 0 8px 32px rgba(239,68,68,0.13);
-      transform: translateY(-2px) scale(1.03);
-    }
-    .file-list {
-      margin-top: 2.5rem;
-    }
-    .file-item {
-      background: #f3f4f6;
-      border-radius: 1rem;
-      padding: 1.5rem 2rem;
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      gap: 2.5rem;
-      box-shadow: 0 2px 8px rgba(16,185,129,0.07);
-    }
-    .file-thumb {
-      width: 64px;
-      height: 64px;
-      object-fit: cover;
-      border-radius: 0.75rem;
-      border: 2px solid #10b981;
-    }
-    .file-icon {
-      width: 64px;
+    .navbar {
+      background: #1e293b;
+      padding: 0 2rem;
       height: 64px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      border-radius: 0.75rem;
-      cursor: pointer;
-      font-size: 1.2rem;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      border: 2px dashed #10b981;
-      background: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%);
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
     }
-    .file-icon:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(16,185,129,0.20);
-    }
-    .file-icon small {
-      font-size: 0.6rem;
-      margin-top: 2px;
-    }
-    .pdf-icon { 
-      color: #dc2626; 
-      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-      border-color: #dc2626;
-    }
-    .word-icon { 
-      color: #2563eb; 
-      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-      border-color: #2563eb;
-    }
-    .excel-icon { 
-      color: #059669; 
-      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-      border-color: #059669;
-    }
-    .powerpoint-icon { 
-      color: #ea580c; 
-      background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
-      border-color: #ea580c;
-    }
-    .file-meta {
-      flex: 1;
-      min-width: 0; /* Permite que flex funcione correctamente con overflow */
-      max-width: calc(100% - 200px); /* Reserva espacio para botones */
-    }
-    .file-name {
-      word-wrap: break-word;
-      word-break: break-word;
-      overflow-wrap: break-word;
-      hyphens: auto;
-      line-height: 1.2;
-    }
-    .file-comment {
-      word-wrap: break-word;
-      word-break: break-word;
-      overflow-wrap: break-word;
-      hyphens: auto;
-      line-height: 1.3;
-      /* Opción alternativa: truncar con puntos suspensivos */
-      /* overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap; */
-    }
-    .file-date {
-      color: #6b7280;
-      font-size: 0.95rem;
-    }
-    /* Botón de WhatsApp flotante */
-    .whatsapp-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #ef4444;
-      color: white;
-      border-radius: 50px;
-      padding: 15px 20px;
-      box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
-      font-weight: bold;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.3s ease;
-      z-index: 1000;
-      font-size: 16px;
-    }
-    .whatsapp-btn:hover {
-      background: #dc2626;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(239, 68, 68, 0.6);
-      color: white;
-      text-decoration: none;
-    }
-    .logout-btn {
-      font-size: 1rem;
-      padding: 0.7rem 1.5rem;
-      border-radius: 1rem;
-      border: 2px solid #ef4444;
-      color: #ef4444;
-      font-weight: 600;
-      background: #fff;
-      transition: background 0.2s, color 0.2s;
-    }
-    .logout-btn:hover {
-      background: #fee2e2;
-      color: #b91c1c;
-    }
-    
-    /* Estilos para el modal de registro de trabajo */
-    .work-modal-overlay {
-      backdrop-filter: blur(4px);
-    }
-    
-    .zone-tag {
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      color: white;
-      border-radius: 0.75rem;
-      padding: 0.5rem 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 600;
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
-      transition: all 0.2s ease;
-    }
-    
-    .zone-tag:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-    }
-    
-    .zone-preset {
-      transition: all 0.2s ease;
-      border: 1px solid #e5e7eb;
-    }
-    
-    .zone-preset:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
-    }
-    
-    .work-form-section {
-      background: #f8fafc;
-      border-radius: 1rem;
-      padding: 1.5rem;
-      border: 1px solid #e2e8f0;
-    }
-    
-    .status-option {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      transition: all 0.2s ease;
-    }
-    
-    .status-option:hover {
-      background: #eff6ff;
-    }
-    
-    /* Animación para el modal */
-    @keyframes modalShow {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    
-    .work-modal-content {
-      animation: modalShow 0.2s ease-out;
-    }
-    
-    /* Estilos para marcación de asistencia */
-    .estado-activo {
-      background: linear-gradient(135deg, #10b981, #34d399);
-      color: white;
-    }
-    
-    .estado-inactivo {
-      background: linear-gradient(135deg, #ef4444, #f87171);
-      color: white;
-    }
-    
-    .btn-marcar {
-      transition: all 0.3s ease;
-    }
-    
-    .btn-marcar:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-    
-    .marcacion-card {
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.2);
-    }
+    .navbar-brand { display:flex;align-items:center;gap:0.75rem; }
+    .brand-logo { width:36px;height:36px;background:linear-gradient(135deg,#047857,#059669);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem; }
+    .navbar-title { color:#f8fafc;font-weight:700;font-size:1.1rem; }
+    .navbar-user { display:flex;align-items:center;gap:0.85rem; }
+    .user-badge { display:flex;align-items:center;gap:0.6rem;background:rgba(255,255,255,0.08);border-radius:50px;padding:0.4rem 1rem 0.4rem 0.5rem; }
+    .user-avatar { width:32px;height:32px;background:linear-gradient(135deg,#047857,#059669);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:0.85rem; }
+    .user-info-text { color:#e2e8f0; }
+    .user-info-text .name { font-weight:600;font-size:0.92rem;line-height:1.2; }
+    .user-info-text .email { font-size:0.75rem;color:#94a3b8; }
+    .btn-nav { padding:0.45rem 1.1rem;border-radius:8px;font-weight:600;font-size:0.85rem;cursor:pointer;border:none;transition:all 0.18s; }
+    .btn-admin { background:linear-gradient(135deg,#f59e0b,#facc15);color:#1f2937; }
+    .btn-admin:hover { filter:brightness(0.95);transform:translateY(-1px); }
+    .btn-logout { background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3); }
+    .btn-logout:hover { background:rgba(239,68,68,0.25);color:#fecaca; }
+    .main-container { max-width:1100px;margin:0 auto;padding:2rem 1.5rem 4rem; }
+    .stats-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2rem; }
+    .stat-card { background:white;border-radius:16px;padding:1.5rem;display:flex;align-items:center;gap:1.25rem;box-shadow:0 1px 4px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);border:1px solid #e2e8f0;transition:transform 0.18s,box-shadow 0.18s; }
+    .stat-card:hover { transform:translateY(-2px);box-shadow:0 4px 24px rgba(0,0,0,0.1); }
+    .stat-icon { width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0; }
+    .stat-icon-green { background:#dcfce7; }
+    .stat-icon-blue  { background:#dbeafe; }
+    .stat-icon-red   { background:#fee2e2; }
+    .stat-value { font-size:2.2rem;font-weight:800;line-height:1;letter-spacing:-0.02em; }
+    .stat-value-green { color:#16a34a; }
+    .stat-value-blue  { color:#2563eb; }
+    .stat-value-red   { color:#dc2626; }
+    .stat-label { font-size:0.82rem;color:#64748b;font-weight:500;margin-top:2px; }
+    .section { background:white;border-radius:18px;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);border:1px solid #e2e8f0;overflow:hidden; }
+    .section-header { display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.75rem;border-bottom:1px solid #f1f5f9; }
+    .section-header-left { display:flex;align-items:center;gap:0.85rem; }
+    .section-icon { width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem; }
+    .section-title { font-weight:700;font-size:1.05rem;color:#1e293b; }
+    .section-subtitle { font-size:0.78rem;color:#94a3b8; }
+    .section-body { padding:1.5rem 1.75rem; }
+    .attendance-status { display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem; }
+    .status-badge { display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1.25rem;border-radius:50px;font-weight:600;font-size:0.9rem; }
+    .status-badge-active   { background:#dcfce7;color:#15803d; }
+    .status-badge-inactive { background:#fee2e2;color:#b91c1c; }
+    .attendance-info { font-size:0.82rem;color:#64748b;margin-top:0.25rem; }
+    .btn-mark { padding:0.85rem 2.5rem;border-radius:12px;font-weight:700;font-size:1rem;cursor:pointer;border:none;transition:all 0.2s;box-shadow:0 4px 14px rgba(0,0,0,0.15); }
+    .btn-mark-entry { background:linear-gradient(135deg,#10b981,#059669);color:white; }
+    .btn-mark-entry:hover { transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,185,129,0.35); }
+    .btn-mark-exit { background:linear-gradient(135deg,#ef4444,#dc2626);color:white; }
+    .btn-mark-exit:hover { transform:translateY(-2px);box-shadow:0 6px 20px rgba(239,68,68,0.35); }
+    .btn-toggle { display:inline-flex;align-items:center;gap:0.5rem;padding:0.55rem 1.2rem;border-radius:9px;font-weight:600;font-size:0.85rem;cursor:pointer;border:none;transition:all 0.18s; }
+    .btn-toggle-green { background:#dcfce7;color:#16a34a; }
+    .btn-toggle-green:hover { background:#bbf7d0; }
+    .btn-toggle-blue  { background:#dbeafe;color:#2563eb; }
+    .btn-toggle-blue:hover  { background:#bfdbfe; }
+    .btn-toggle-red   { background:#fee2e2;color:#dc2626; }
+    .btn-toggle-red:hover   { background:#fecaca; }
+    .btn-toggle-gray  { background:#f1f5f9;color:#475569; }
+    .btn-toggle-gray:hover  { background:#e2e8f0; }
+    .chevron { transition:transform 0.2s;display:inline-block; }
+    .chevron.open { transform:rotate(180deg); }
+    .form-label { display:block;font-size:0.85rem;font-weight:600;color:#374151;margin-bottom:0.45rem; }
+    .form-input { width:100%;padding:0.7rem 1rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.92rem;font-family:"Inter",sans-serif;color:#1e293b;background:#f8fafc;transition:border-color 0.18s,box-shadow 0.18s;outline:none; }
+    .form-input:focus { border-color:#047857;box-shadow:0 0 0 3px rgba(4,120,87,0.12);background:white; }
+    .form-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:1rem; }
+    .form-group { margin-bottom:1rem; }
+    .btn-primary { padding:0.75rem 1.5rem;border-radius:10px;font-weight:700;font-size:0.95rem;cursor:pointer;border:none;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;transition:all 0.2s;box-shadow:0 2px 8px rgba(99,102,241,0.3); }
+    .btn-primary:hover { transform:translateY(-1px);box-shadow:0 6px 20px rgba(4,120,87,0.4); }
+    .btn-success { padding:0.75rem 1.5rem;border-radius:10px;font-weight:700;font-size:0.95rem;cursor:pointer;border:none;background:linear-gradient(135deg,#10b981,#059669);color:white;transition:all 0.2s;box-shadow:0 2px 8px rgba(16,185,129,0.3); }
+    .btn-success:hover { transform:translateY(-1px);box-shadow:0 4px 16px rgba(16,185,129,0.4); }
+    .btn-muted { padding:0.75rem 1.5rem;border-radius:10px;font-weight:600;font-size:0.95rem;cursor:pointer;border:1.5px solid #e2e8f0;background:white;color:#64748b;transition:all 0.2s; }
+    .btn-muted:hover { background:#f1f5f9; }
+    .btn-icon { width:34px;height:34px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;border:none;font-size:0.95rem;transition:all 0.18s; }
+    .btn-icon-blue { background:#dbeafe;color:#2563eb; }
+    .btn-icon-blue:hover { background:#bfdbfe; }
+    .btn-icon-red  { background:#fee2e2;color:#dc2626; }
+    .btn-icon-red:hover  { background:#fecaca; }
+    .upload-zone { border:2px dashed #c7d2fe;background:#f5f3ff;border-radius:12px;padding:2rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative; }
+    .upload-zone:hover { border-color:#6366f1;background:#ede9fe; }
+    .upload-zone input[type="file"] { position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%; }
+    .upload-zone-icon { font-size:2.5rem;margin-bottom:0.5rem; }
+    .upload-zone-text { font-weight:600;color:#4338ca;font-size:0.95rem; }
+    .upload-zone-hint { color:#94a3b8;font-size:0.8rem;margin-top:0.3rem; }
+    .zone-tag { display:inline-flex;align-items:center;gap:0.4rem;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;padding:0.35rem 0.85rem;border-radius:50px;font-size:0.8rem;font-weight:600; }
+    .zone-tag button { background:none;border:none;color:rgba(255,255,255,0.8);cursor:pointer;font-size:1rem;line-height:1;padding:0; }
+    .zone-tag button:hover { color:white; }
+    .zone-preset { padding:0.4rem 0.9rem;border-radius:8px;background:#f1f5f9;border:1.5px solid #e2e8f0;color:#475569;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.18s; }
+    .zone-preset:hover { background:#dbeafe;border-color:#93c5fd;color:#1d4ed8; }
+    .pill { display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:50px;font-size:0.75rem;font-weight:600; }
+    .pill-yellow { background:#fef9c3;color:#854d0e; }
+    .pill-green  { background:#dcfce7;color:#15803d; }
+    .pill-blue   { background:#dbeafe;color:#1d4ed8; }
+    .pill-red    { background:#fee2e2;color:#b91c1c; }
+    .file-item { display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:#f8fafc;border-radius:12px;border:1.5px solid #e2e8f0;margin-bottom:0.75rem;transition:box-shadow 0.18s; }
+    .file-item:hover { box-shadow:0 4px 12px rgba(0,0,0,0.07);border-color:#c7d2fe; }
+    .file-thumb { width:52px;height:52px;object-fit:cover;border-radius:10px;border:2px solid #e2e8f0;flex-shrink:0; }
+    .file-icon { width:52px;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;font-size:1.4rem;font-weight:bold;transition:all 0.2s;border:2px solid #e2e8f0;flex-shrink:0; }
+    .file-icon:hover { transform:scale(1.07); }
+    .file-icon small { font-size:0.55rem;margin-top:2px;font-weight:600; }
+    .pdf-icon        { color:#dc2626;background:#fff1f2;border-color:#fecaca; }
+    .word-icon       { color:#2563eb;background:#eff6ff;border-color:#bfdbfe; }
+    .excel-icon      { color:#16a34a;background:#f0fdf4;border-color:#bbf7d0; }
+    .powerpoint-icon { color:#ea580c;background:#fff7ed;border-color:#fed7aa; }
+    .file-meta { flex:1;min-width:0; }
+    .file-name { font-weight:700;font-size:0.92rem;color:#1e293b;word-break:break-word; }
+    .file-comment { font-size:0.8rem;color:#64748b;margin-top:2px;word-break:break-word; }
+    .file-date { font-size:0.75rem;color:#94a3b8;margin-top:3px; }
+    .work-card { background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:14px;padding:1.1rem 1.25rem;margin-bottom:0.75rem;transition:box-shadow 0.18s; }
+    .work-card:hover { box-shadow:0 4px 12px rgba(0,0,0,0.07);border-color:#c7d2fe; }
+    .work-card-header { display:flex;align-items:flex-start;justify-content:space-between;gap:0.5rem;margin-bottom:0.75rem; }
+    .work-title { font-weight:700;font-size:0.95rem;color:#1e293b; }
+    .work-detail-label { font-size:0.72rem;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em; }
+    .work-detail-value { font-size:0.85rem;color:#374151;margin-top:1px; }
+    .deleted-card { background:#fff5f5;border:1.5px solid #fecaca;border-radius:12px;padding:0.9rem 1.1rem;margin-bottom:0.6rem; }
+    .deleted-name { font-weight:700;font-size:0.92rem;color:#b91c1c; }
+    .deleted-date { font-size:0.78rem;color:#ef4444;margin-top:3px; }
+    .history-item { display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.75rem;border-radius:8px;font-size:0.82rem;font-weight:600;margin-bottom:0.3rem; }
+    .history-entry { background:#f0fdf4;color:#15803d; }
+    .history-exit  { background:#fff1f2;color:#b91c1c; }
+    .divider { height:1px;background:#f1f5f9;margin:1.25rem 0; }
+    .whatsapp-btn { position:fixed;bottom:24px;right:24px;background:linear-gradient(135deg,#ef4444,#dc2626);color:white;border-radius:50px;padding:0.9rem 1.4rem;box-shadow:0 6px 24px rgba(239,68,68,0.4);font-weight:700;text-decoration:none;display:flex;align-items:center;gap:0.6rem;transition:all 0.2s;z-index:1000;font-size:0.9rem; }
+    .whatsapp-btn:hover { transform:translateY(-3px);box-shadow:0 10px 30px rgba(239,68,68,0.5);color:white;text-decoration:none; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+    .fade-in { animation:fadeIn 0.25s ease; }
+    @media(max-width:640px){ .stats-grid{grid-template-columns:1fr} .form-grid-2{grid-template-columns:1fr} .navbar{padding:0 1rem} .main-container{padding:1rem 1rem 4rem} .attendance-status{flex-direction:column;align-items:flex-start} }
+    @media(max-width:768px){ .stats-grid{grid-template-columns:1fr 1fr} }
   </style>
 </head>
-<body class="gradient-bg p-6 min-h-screen">
-  <div class="dashboard-card">
-    <div class="mb-8 flex justify-center">
-      <div class="bg-white/90 rounded-2xl shadow-lg px-8 py-6 flex flex-col items-center w-full max-w-md border border-gray-200">
-        <h1 class="text-4xl font-extrabold text-brandRed mb-2 border-b-2 border-brandRed pb-2 w-full text-center" id="username">Usuario</h1>
-        <p class="text-gray-700 text-lg font-medium mb-2 w-full text-center" id="userEmail"></p>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-logo">🗂️</div>
+      <span class="navbar-title">Sistema de Archivos</span>
+    </div>
+    <div class="navbar-user">
+      <div class="user-badge">
+        <div class="user-avatar" id="userAvatarLetter">U</div>
+        <div class="user-info-text">
+          <div class="name" id="username">Usuario</div>
+          <div class="email" id="userEmail"></div>
+        </div>
+      </div>
+      <button id="adminPanel" class="btn-nav btn-admin hidden">⚙️ Administrador</button>
+      <button id="logout" class="btn-nav btn-logout">Salir →</button>
+    </div>
+  </nav>
+
+  <div class="main-container">
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-green">📁</div>
+        <div>
+          <div class="stat-value stat-value-green" id="filesCount2">0</div>
+          <div class="stat-label">Archivos Subidos</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-blue">📋</div>
+        <div>
+          <div class="stat-value stat-value-blue" id="workCount">0</div>
+          <div class="stat-label">Trabajos Registrados</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-red">🗑️</div>
+        <div>
+          <div class="stat-value stat-value-red" id="deletedFilesCount">0</div>
+          <div class="stat-label">Archivos Eliminados</div>
+        </div>
       </div>
     </div>
-    
-    <!-- Sección de Marcación de Asistencia -->
-    <div class="mb-8">
-      <div class="bg-white/95 rounded-2xl shadow-lg p-6 max-w-md mx-auto border border-gray-200 marcacion-card">
-        <h2 class="text-2xl font-bold text-center mb-4" id="estadoTitulo">🕐 Control de Asistencia</h2>
-        
-        <!-- Estado Actual -->
-        <div class="text-center mb-4">
-          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold" id="estadoActual">
-            <span id="estadoIcon">🔴</span>
-            <span id="estadoTexto">Inactivo</span>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-header-left">
+          <div class="section-icon" style="background:#f0fdf4;">🕐</div>
+          <div>
+            <div class="section-title">Control de Asistencia</div>
+            <div class="section-subtitle">Marca tu entrada y salida</div>
           </div>
         </div>
-        
-        <!-- Información de última marcación -->
-        <div class="text-center mb-4 text-sm text-gray-600" id="infoMarcacion">
-          <div id="ultimaEntrada" style="display: none;">
-            <strong>Última entrada:</strong> <span id="horaEntrada"></span>
+        <button id="btnHistorial" class="btn-toggle btn-toggle-gray">
+          📅 Historial de Hoy <span class="chevron" id="historialChevron">▾</span>
+        </button>
+      </div>
+      <div class="section-body">
+        <div class="attendance-status">
+          <div>
+            <div class="status-badge status-badge-inactive" id="estadoActual">
+              <span id="estadoIcon">🔴</span>
+              <span id="estadoTexto">Inactivo</span>
+            </div>
+            <div class="attendance-info" id="infoMarcacion">
+              <div id="ultimaEntrada" style="display:none;">Última entrada: <strong id="horaEntrada"></strong></div>
+              <div id="ultimaSalida"  style="display:none;">Última salida: <strong id="horaSalida"></strong></div>
+            </div>
           </div>
-          <div id="ultimaSalida" style="display: none;">
-            <strong>Última salida:</strong> <span id="horaSalida"></span>
-          </div>
+          <button id="btnMarcar" class="btn-mark btn-mark-entry">
+            <span id="btnTexto">▶ Marcar Entrada</span>
+          </button>
         </div>
-        
-        <!-- Botón de marcación -->
-        <button id="btnMarcar" class="w-full py-3 px-6 rounded-xl text-white font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
-          <span id="btnTexto">Marcar Entrada</span>
-        </button>
-        
-        <!-- Botón para ver historial -->
-        <button id="btnHistorial" class="w-full mt-3 py-2 px-4 rounded-xl bg-gray-500 text-white font-medium text-sm hover:bg-gray-600 transition-all">
-          Ver Historial de Hoy
-        </button>
-        
-        <!-- Lista de marcaciones del día -->
-        <div id="historialHoy" class="mt-4 space-y-2" style="display: none;">
-          <h3 class="font-semibold text-gray-700 text-sm">Marcaciones de Hoy:</h3>
+        <div id="historialHoy" style="display:none;" class="fade-in">
+          <div class="divider"></div>
+          <div style="font-size:0.82rem;font-weight:700;color:#64748b;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.05em;">Marcaciones de Hoy</div>
           <div id="listaMarcaciones"></div>
         </div>
       </div>
     </div>
-    <div style="height: 2.5rem;"></div>
-    
-    <!-- Sección de Subida de Archivos -->
-    <div class="mb-10">
-      <div class="w-full bg-white/80 rounded-xl shadow p-6 border border-gray-200">
-        <h2 class="text-xl font-bold text-brandGreen mb-2 text-center">📤 Publicar Archivo</h2>
-        <button id="showUploadBtn" class="px-4 py-2 rounded-full bg-green-500 text-white font-bold hover:bg-green-700 transition w-full mb-4">📁 Ver Subida de Archivos</button>
-        <button id="hideUploadBtn" style="display: none;" class="px-4 py-2 rounded-full bg-green-600 text-white font-bold hover:bg-green-800 transition w-full mb-4">❌ Cerrar Subida de Archivos</button>
-        
-        <!-- Contenido del formulario de subida (inline) -->
-        <div id="uploadContent" class="mt-4" style="display: none;">
-          <form id="uploadForm" class="flex flex-col items-center">
-            <label class="block mb-4 font-extrabold text-lg text-brandGreen tracking-wide text-center">Selecciona tu Archivo</label>
-            <div class="relative w-full max-w-xs mb-4">
-              <input id="fileInput" type="file" name="file" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" required class="w-full px-4 py-3 rounded-2xl border-2 border-brandGreen focus:border-emerald-400 transition-colors bg-white shadow-lg file-input-modern" />
-              <span id="filePlaceholder" class="absolute left-0 top-0 w-full h-full flex items-center justify-center text-gray-400 pointer-events-none text-lg font-semibold">Ningún archivo seleccionado</span>
-            </div>
-            <button type="submit" class="big-btn w-full bg-gradient-to-r from-brandGreen to-emerald-400 text-white text-xl font-bold shadow-lg hover:shadow-green-200/50 transform hover:-translate-y-1 transition-all duration-200">
-              <span class="inline-block align-middle mr-2">📤</span> Publicar Archivo
-            </button>
-          </form>
-        </div>
-        
-        <!-- Placeholder cuando está cerrado -->
-        <div id="uploadPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Subida de Archivos" para publicar un nuevo archivo</div>
-      </div>
-    </div>
-    
-    <!-- Sección de Registro de Trabajo -->
-    <div class="mb-10">
-      <div class="w-full bg-white/80 rounded-xl shadow p-6 border border-gray-200">
-        <h2 class="text-xl font-bold text-blue-600 mb-2 text-center">📋 Registrar Mi Actividad</h2>
-        <button id="showRegisterBtn" class="px-4 py-2 rounded-full bg-blue-500 text-white font-bold hover:bg-blue-700 transition w-full mb-4">🏗️ Ver Registro de Actividad</button>
-        <button id="hideRegisterBtn" style="display: none;" class="px-4 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-800 transition w-full mb-4">❌ Cerrar Registro de Actividad</button>
-        
-        <!-- Contenido del formulario de registro (inline) -->
-        <div id="registerContent" class="mt-4" style="display: none;">
-          <form id="workForm" class="space-y-6">
-            <!-- Tipo de Trabajo -->
-            <div>
-              <label class="block text-gray-700 font-bold mb-2">Tipo de Trabajo:</label>
-              <select id="workType" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition bg-white" required>
-                <option value="">Selecciona una opción</option>
-                <option value="Trabajo Exterior">Trabajo Exterior</option>
-                <option value="Trabajo Interior">Trabajo Interior</option>
-                <option value="Mantenimiento">Mantenimiento</option>
-                <option value="Inspección">Inspección</option>
-                <option value="Otro">Otro</option>
-              </select>
-            </div>
 
-            <!-- Rango de Fechas -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-gray-700 font-bold mb-2">Fecha de Inicio:</label>
-                <input type="date" id="startDate" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
-              </div>
-              <div>
-                <label class="block text-gray-700 font-bold mb-2">Fecha de Fin:</label>
-                <input type="date" id="endDate" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
-              </div>
-            </div>
-
-            <!-- Horarios -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-gray-700 font-bold mb-2">Hora de Inicio:</label>
-                <input type="time" id="startTime" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
-              </div>
-              <div>
-                <label class="block text-gray-700 font-bold mb-2">Hora de Fin:</label>
-                <input type="time" id="endTime" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
-              </div>
-            </div>
-
-            <!-- Zona Trabajada -->
-            <div>
-              <label class="block text-gray-700 font-bold mb-2">Zona Trabajada:</label>
-              <div class="mb-3">
-                <div class="flex gap-2 mb-2">
-                  <input type="text" id="zoneInput" placeholder="Escribir zona personalizada..." class="flex-1 px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition">
-                  <button type="button" id="addZoneBtn" class="px-4 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 font-bold">Agregar</button>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                  <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Norte">Zona Norte</button>
-                  <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Sur">Zona Sur</button>
-                  <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Este">Zona Este</button>
-                  <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Zona Oeste">Zona Oeste</button>
-                  <button type="button" class="zone-preset px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition font-medium" data-zone="Centro">Centro</button>
-                </div>
-              </div>
-              <div id="selectedZones" class="flex flex-wrap gap-2"></div>
-              <input type="hidden" id="zonesHidden" name="zones">
-            </div>
-
-            <!-- Estado del Trabajo -->
-            <div>
-              <label class="block text-gray-700 font-bold mb-2">Estado de la Acción:</label>
-              <select id="workStatus" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition bg-white" required>
-                <option value="">Selecciona el estado</option>
-                <option value="en-proceso">🔄 En Proceso</option>
-                <option value="culminado">✅ Culminado</option>
-                <option value="pendiente">⏳ Pendiente</option>
-                <option value="postergado">⏸️ Postergado</option>
-              </select>
-            </div>
-
-            <!-- Descripción Adicional -->
-            <div>
-              <label class="block text-gray-700 font-bold mb-2">Descripción Adicional (Opcional):</label>
-              <textarea id="workDescription" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition h-24" placeholder="Agrega detalles adicionales sobre el trabajo..."></textarea>
-            </div>
-
-            <!-- Botones -->
-            <div class="flex gap-4 pt-4">
-              <button type="submit" class="flex-1 px-6 py-4 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-lg font-bold hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
-                <span class="inline-block align-middle mr-2">💾</span> Guardar Registro
-              </button>
-              <button type="button" id="cancelWorkBtn" class="flex-1 px-6 py-4 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 text-white text-lg font-bold hover:from-gray-500 hover:to-gray-600 transform hover:scale-105 transition-all duration-200 shadow-lg">
-                <span class="inline-block align-middle mr-2">❌</span> Cancelar
-              </button>
-            </div>
-          </form>
-        </div>
-        
-        <!-- Placeholder cuando está cerrado -->
-        <div id="registerPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Registro de Actividad" para registrar tu trabajo</div>
-      </div>
-    </div>
-    
-    <div class="flex flex-col md:flex-row gap-8 items-start mt-8">
-      <div class="w-full md:w-1/3 bg-white/80 rounded-xl shadow p-6 mb-8 md:mb-0">
-        <!-- SECCIÓN ARCHIVOS ELIMINADOS -->
-        <div class="mt-6 pt-6">
-          <h2 class="text-xl font-bold text-red-600 mb-2 text-center">Cantidad de Archivos Eliminados</h2>
-          <div class="text-6xl font-extrabold text-red-500 text-center mb-2" id="deletedFilesCount">0</div>
-          <button id="showDeletedBtn" class="px-4 py-2 rounded-full bg-red-500 text-white font-bold hover:bg-red-700 transition w-full mb-4">Ver Detalles de Archivos Eliminados</button>
-          <button id="hideDeletedBtn" style="display: none;" class="px-4 py-2 rounded-full bg-red-600 text-white font-bold hover:bg-red-800 transition w-full mb-4">Cerrar Detalles de Archivos Eliminados</button>
-          
-          <!-- Lista de archivos eliminados (inline) - Inmediatamente después -->
-          <div id="deletedFilesList" class="mt-4 space-y-4" style="display: none;"></div>
-          <div id="deletedPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Detalles de Archivos Eliminados" para ver los archivos eliminados</div>
-        </div>
-        
-        <!-- SECCIÓN TRABAJOS REGISTRADOS -->
-        <div class="border-t border-gray-200 mt-6 pt-6">
-          <h2 class="text-xl font-bold text-blue-600 mb-2 text-center">Trabajos Registrados</h2>
-          <div class="text-6xl font-extrabold text-blue-500 text-center mb-2" id="workCount">0</div>
-          <button id="showWorkBtn" class="px-4 py-2 rounded-full bg-blue-500 text-white font-bold hover:bg-blue-700 transition w-full">Ver Trabajos Registrados</button>
-          <button id="hideWorkBtn" style="display: none;" class="px-4 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-800 transition w-full">Cerrar Trabajos Registrados</button>
-          
-          <!-- Lista de trabajos registrados (inline) - Inmediatamente después -->
-          <div id="workListContent" class="mt-4 space-y-4" style="display: none;"></div>
-          <div id="workPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Trabajos Registrados" para ver tus trabajos registrados</div>
-        </div>
-        
-
-        
-        <!-- SECCIÓN ARCHIVOS SUBIDOS -->
-        <div class="border-t border-gray-200 mt-6 pt-6">
-          <h2 class="text-xl font-bold text-brandGreen mb-2 text-center">Tus Archivos Subidos</h2>
-          <div class="text-6xl font-extrabold text-brandGreen text-center mb-2" id="filesCount2">0</div>
-          <button id="showFilesBtn" class="px-4 py-2 rounded-full bg-green-500 text-white font-bold hover:bg-green-700 transition w-full mb-4">Ver Detalles de Archivos Subidos</button>
-          <button id="hideFilesBtn" style="display: none;" class="px-4 py-2 rounded-full bg-green-600 text-white font-bold hover:bg-green-800 transition w-full mb-4">Cerrar Detalles de Archivos Subidos</button>
-          
-          <!-- Lista de archivos subidos (inline) - Inmediatamente después -->
-          <div class="file-list mt-4 space-y-4" id="filesList" style="display: none;"></div>
-          <div id="filesPlaceholder" class="mt-4 text-center py-8 text-gray-500 text-sm">Haz clic en "Ver Detalles" para ver tus archivos subidos</div>
-          
-          <!-- Sección de Edición de Archivos (Replegable) -->
-          <div id="editSection" class="mt-6 border-t border-gray-300 pt-4" style="display: none;">
-            <button id="showEditBtn" class="px-4 py-2 rounded-full bg-blue-500 text-white font-bold hover:bg-blue-700 transition w-full mb-4">✏️ Ver Edición de Archivo</button>
-            <button id="hideEditBtn" style="display: none;" class="px-4 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-800 transition w-full mb-4">❌ Cerrar Edición de Archivo</button>
-            
-            <!-- Contenido de edición -->
-            <div id="editContent" class="mt-4" style="display: none;">
-              <h3 class="text-lg font-bold text-blue-600 mb-4 text-center">Editar Archivo Seleccionado</h3>
-              <form id="editForm">
-                <div class="mb-4">
-                  <label class="block text-gray-700 font-bold mb-2">Nombre del archivo:</label>
-                  <input type="text" id="editFileName" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition" required>
-                </div>
-                <div class="mb-6">
-                  <label class="block text-gray-700 font-bold mb-2">Comentario:</label>
-                  <textarea id="editComment" class="w-full px-4 py-3 rounded-xl border-2 border-blue-400 focus:border-blue-600 transition h-24" placeholder="Agrega un comentario opcional..."></textarea>
-                </div>
-                <div class="flex gap-4">
-                  <button type="submit" class="flex-1 px-4 py-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg">✅ Guardar</button>
-                  <button type="button" id="cancelEdit" class="flex-1 px-4 py-3 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 text-white font-bold hover:from-gray-500 hover:to-gray-600 transition-all duration-200 shadow-lg">❌ Cancelar</button>
-                </div>
-              </form>
-            </div>
-            
-            <!-- Placeholder de edición -->
-            <div id="editPlaceholder" class="mt-4 text-center py-6 text-gray-500 text-sm">Haz clic en "Ver Edición de Archivo" para editar el archivo seleccionado</div>
+    <div class="section">
+      <div class="section-header">
+        <div class="section-header-left">
+          <div class="section-icon" style="background:#f0fdf4;">📤</div>
+          <div>
+            <div class="section-title">Publicar Archivo</div>
+            <div class="section-subtitle">Sube documentos e imágenes</div>
           </div>
         </div>
-        
-
+        <button id="showUploadBtn" class="btn-toggle btn-toggle-green">+ Subir ▾</button>
+        <button id="hideUploadBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+      </div>
+      <div id="uploadContent" style="display:none;" class="section-body fade-in">
+        <form id="uploadForm">
+          <div class="upload-zone">
+            <input id="fileInput" type="file" name="file" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" required />
+            <div id="filePlaceholder">
+              <div class="upload-zone-icon">☁️</div>
+              <div class="upload-zone-text">Arrastra tu archivo o haz clic para seleccionar</div>
+              <div class="upload-zone-hint">Imágenes, PDF, Word, Excel, PowerPoint</div>
+            </div>
+          </div>
+          <div style="margin-top:1.25rem;">
+            <button type="submit" class="btn-success" style="width:100%;font-size:1rem;padding:0.85rem;">📤 Publicar Archivo</button>
+          </div>
+        </form>
+        <div id="uploadPlaceholder" style="display:none;"></div>
       </div>
     </div>
 
-    </div>
-    <div class="flex justify-center mt-10">
-      <div class="bg-black rounded-xl shadow-lg p-4 flex items-center justify-center gap-4" style="min-width: 140px;">
-        <button id="adminPanel" class="logout-btn hidden" style="background:#9333ea;color:#fff;border:none;">
-          Administrador
-        </button>
-        <button id="logout" class="logout-btn" style="background:#111;color:#fff;border:none;">Cerrar sesión</button>
+    <div class="section">
+      <div class="section-header">
+        <div class="section-header-left">
+          <div class="section-icon" style="background:#eff6ff;">📋</div>
+          <div>
+            <div class="section-title">Registrar Actividad</div>
+            <div class="section-subtitle">Documenta el trabajo realizado</div>
+          </div>
+        </div>
+        <button id="showRegisterBtn" class="btn-toggle btn-toggle-blue">+ Registrar ▾</button>
+        <button id="hideRegisterBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+      </div>
+      <div id="registerContent" style="display:none;" class="section-body fade-in">
+        <form id="workForm">
+          <div class="form-group">
+            <label class="form-label">Tipo de Trabajo</label>
+            <select id="workType" class="form-input" required>
+              <option value="">Selecciona una opción</option>
+              <option value="Trabajo Exterior">Trabajo Exterior</option>
+              <option value="Trabajo Interior">Trabajo Interior</option>
+              <option value="Mantenimiento">Mantenimiento</option>
+              <option value="Inspección">Inspección</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+          <div class="form-grid-2 form-group">
+            <div>
+              <label class="form-label">Fecha de Inicio</label>
+              <input type="date" id="startDate" class="form-input" required>
+            </div>
+            <div>
+              <label class="form-label">Fecha de Fin</label>
+              <input type="date" id="endDate" class="form-input" required>
+            </div>
+          </div>
+          <div class="form-grid-2 form-group">
+            <div>
+              <label class="form-label">Hora de Inicio</label>
+              <input type="time" id="startTime" class="form-input" required>
+            </div>
+            <div>
+              <label class="form-label">Hora de Fin</label>
+              <input type="time" id="endTime" class="form-input" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Zonas de Trabajo</label>
+            <div style="display:flex;gap:0.6rem;margin-bottom:0.75rem;">
+              <input type="text" id="zoneInput" placeholder="Zona personalizada..." class="form-input" style="flex:1;">
+              <button type="button" id="addZoneBtn" class="btn-primary" style="padding:0.7rem 1.1rem;white-space:nowrap;">+ Agregar</button>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">
+              <button type="button" class="zone-preset" data-zone="Zona Norte">Zona Norte</button>
+              <button type="button" class="zone-preset" data-zone="Zona Sur">Zona Sur</button>
+              <button type="button" class="zone-preset" data-zone="Zona Este">Zona Este</button>
+              <button type="button" class="zone-preset" data-zone="Zona Oeste">Zona Oeste</button>
+              <button type="button" class="zone-preset" data-zone="Centro">Centro</button>
+            </div>
+            <div id="selectedZones" style="display:flex;flex-wrap:wrap;gap:0.5rem;"></div>
+            <input type="hidden" id="zonesHidden" name="zones">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Estado de la Acción</label>
+            <select id="workStatus" class="form-input" required>
+              <option value="">Selecciona el estado</option>
+              <option value="en-proceso">🔄 En Proceso</option>
+              <option value="culminado">✅ Culminado</option>
+              <option value="pendiente">⏳ Pendiente</option>
+              <option value="postergado">⏸️ Postergado</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descripción Adicional <span style="color:#94a3b8;font-weight:400;">(Opcional)</span></label>
+            <textarea id="workDescription" class="form-input" rows="3" style="resize:vertical;" placeholder="Agrega detalles adicionales..."></textarea>
+          </div>
+          <div style="display:flex;gap:0.75rem;padding-top:0.5rem;">
+            <button type="submit" class="btn-primary" style="flex:1;padding:0.85rem;">💾 Guardar Registro</button>
+            <button type="button" id="cancelWorkBtn" class="btn-muted" style="flex:1;padding:0.85rem;">Cancelar</button>
+          </div>
+        </form>
+        <div id="registerPlaceholder" style="display:none;"></div>
       </div>
     </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-header-left">
+          <div class="section-icon" style="background:#f0fdf4;">🗂️</div>
+          <div>
+            <div class="section-title">Mis Archivos Subidos</div>
+            <div class="section-subtitle">Gestiona tus documentos</div>
+          </div>
+        </div>
+        <button id="showFilesBtn" class="btn-toggle btn-toggle-green">Ver archivos ▾</button>
+        <button id="hideFilesBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+      </div>
+      <div class="section-body" style="padding-top:0;padding-bottom:0;">
+        <div class="file-list" id="filesList" style="display:none;padding-top:1.25rem;"></div>
+        <div id="filesPlaceholder" style="padding:2rem;text-align:center;color:#94a3b8;font-size:0.85rem;">Haz clic en "Ver archivos" para ver tus documentos</div>
+      </div>
+      <div id="editSection" style="display:none;border-top:1px solid #f1f5f9;">
+        <div class="section-header" style="background:#f8fafc;">
+          <div class="section-header-left">
+            <div class="section-icon" style="background:#dbeafe;font-size:1rem;">✏️</div>
+            <div class="section-title" style="font-size:0.95rem;">Editar Archivo</div>
+          </div>
+          <button id="showEditBtn" style="display:none;" class="btn-toggle btn-toggle-blue">Ver ▾</button>
+          <button id="hideEditBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+        </div>
+        <div id="editContent" style="display:none;" class="section-body">
+          <form id="editForm">
+            <div class="form-group">
+              <label class="form-label">Nombre del archivo</label>
+              <input type="text" id="editFileName" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Comentario</label>
+              <textarea id="editComment" class="form-input" rows="3" placeholder="Comentario opcional..."></textarea>
+            </div>
+            <div style="display:flex;gap:0.75rem;">
+              <button type="submit" class="btn-primary" style="flex:1;">✅ Guardar</button>
+              <button type="button" id="cancelEdit" class="btn-muted" style="flex:1;">Cancelar</button>
+            </div>
+          </form>
+        </div>
+        <div id="editPlaceholder" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-header-left">
+          <div class="section-icon" style="background:#eff6ff;">📊</div>
+          <div>
+            <div class="section-title">Trabajos Registrados</div>
+            <div class="section-subtitle">Historial de actividades</div>
+          </div>
+        </div>
+        <button id="showWorkBtn" class="btn-toggle btn-toggle-blue">Ver trabajos ▾</button>
+        <button id="hideWorkBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+      </div>
+      <div class="section-body" style="padding-top:0;padding-bottom:0;">
+        <div id="workListContent" style="display:none;padding-top:1.25rem;"></div>
+        <div id="workPlaceholder" style="padding:2rem;text-align:center;color:#94a3b8;font-size:0.85rem;">Haz clic en "Ver trabajos" para ver tus registros</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-header-left">
+          <div class="section-icon" style="background:#fff1f2;">🗑️</div>
+          <div>
+            <div class="section-title">Archivos Eliminados</div>
+            <div class="section-subtitle">Registro de archivos borrados</div>
+          </div>
+        </div>
+        <button id="showDeletedBtn" class="btn-toggle btn-toggle-red">Ver eliminados ▾</button>
+        <button id="hideDeletedBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+      </div>
+      <div class="section-body" style="padding-top:0;padding-bottom:0;">
+        <div id="deletedFilesList" style="display:none;padding-top:1.25rem;"></div>
+        <div id="deletedPlaceholder" style="padding:2rem;text-align:center;color:#94a3b8;font-size:0.85rem;">Haz clic en "Ver eliminados" para ver el historial</div>
+      </div>
+    </div>
+
   </div>
 
-    <template id="fileTemplate">
-      <div class="file-item flex items-center gap-6 p-6 bg-white rounded-xl shadow-md mb-6">
-        <img src="" class="file-thumb" alt="Foto" />
-        <div class="file-meta flex flex-col min-w-0 flex-1">
-          <div class="font-extrabold file-name text-2xl mb-2"></div>
-          <div class="file-comment text-gray-500 text-lg mb-1"></div>
-          <div class="file-date text-gray-600 text-lg"></div>
-        </div>
-        <div class="flex flex-shrink-0 gap-2">
-          <button class="edit-btn px-4 py-2 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-700 transition" title="Editar archivo">✏️</button>
-          <button class="delete-btn px-4 py-2 rounded-lg bg-red-500 text-white font-bold hover:bg-red-700 transition" title="Eliminar archivo">🗑️</button>
-        </div>
+  <template id="fileTemplate">
+    <div class="file-item">
+      <img src="" class="file-thumb" alt="Foto" />
+      <div class="file-meta">
+        <div class="file-name"></div>
+        <div class="file-comment"></div>
+        <div class="file-date"></div>
       </div>
-    </template>
+      <div style="display:flex;gap:0.4rem;flex-shrink:0;">
+        <button class="btn-icon btn-icon-blue edit-btn" title="Editar">✏️</button>
+        <button class="btn-icon btn-icon-red delete-btn" title="Eliminar">🗑️</button>
+      </div>
+    </div>
+  </template>
 
-    <script>
-      // --- FUNCIONALIDAD DE REGISTRO DE TRABAJO ---
-      let selectedZones = [];
+  <a href="https://wa.me/595983159658?text=Hola,%20necesito%20ayuda%20con%20el%20sistema%20de%20archivos."
+     class="whatsapp-btn" target="_blank" title="Soporte WhatsApp">
+    <span>❓</span><span>¿Necesitas Ayuda?</span>
+  </a>
 
-      // Mostrar formulario de registro de trabajo (replegable)
-      document.getElementById('showRegisterBtn').addEventListener('click', () => {
-        // Mostrar contenido y ocultar placeholder
-        document.getElementById('registerContent').style.display = 'block';
-        document.getElementById('registerPlaceholder').style.display = 'none';
-        // Intercambiar botones
-        document.getElementById('showRegisterBtn').style.display = 'none';
-        document.getElementById('hideRegisterBtn').style.display = 'block';
-        
-        // Establecer fecha actual por defecto
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('startDate').value = today;
-        document.getElementById('endDate').value = today;
-        // Limpiar zonas seleccionadas
-        selectedZones = [];
-        updateSelectedZonesDisplay();
-      });
+  <script>
+    const token = localStorage.getItem("token");
+    if (!token) window.location.href = "/login.html";
 
-      // Ocultar formulario de registro de trabajo
-      document.getElementById('hideRegisterBtn').addEventListener('click', () => {
-        // Ocultar contenido y mostrar placeholder
-        document.getElementById('registerContent').style.display = 'none';
-        document.getElementById('registerPlaceholder').style.display = 'block';
-        // Intercambiar botones
-        document.getElementById('showRegisterBtn').style.display = 'block';
-        document.getElementById('hideRegisterBtn').style.display = 'none';
-      });
-
-      // Cancelar registro (limpiar formulario)
-      document.getElementById('cancelWorkBtn').addEventListener('click', () => {
-        document.getElementById('workForm').reset();
-        selectedZones = [];
-        updateSelectedZonesDisplay();
-      });
-
-      // Agregar zona personalizada
-      document.getElementById('addZoneBtn').addEventListener('click', () => {
-        const zoneInput = document.getElementById('zoneInput');
-        const zoneName = zoneInput.value.trim();
-        
-        if (zoneName && !selectedZones.includes(zoneName)) {
-          selectedZones.push(zoneName);
-          updateSelectedZonesDisplay();
-          zoneInput.value = '';
-        }
-      });
-
-      // Agregar zona desde botones preestablecidos
-      document.querySelectorAll('.zone-preset').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const zoneName = btn.dataset.zone;
-          if (!selectedZones.includes(zoneName)) {
-            selectedZones.push(zoneName);
-            updateSelectedZonesDisplay();
-          }
-        });
-      });
-
-      // Actualizar display de zonas seleccionadas
-      function updateSelectedZonesDisplay() {
-        const container = document.getElementById('selectedZones');
-        container.innerHTML = '';
-        
-        selectedZones.forEach((zone, index) => {
-          const zoneTag = document.createElement('div');
-          zoneTag.className = 'zone-tag';
-          zoneTag.innerHTML = `
-            <span>📍 ${zone}</span>
-            <button type="button" class="text-white hover:text-red-200 font-bold text-lg leading-none" onclick="removeZone(${index})" title="Eliminar zona">×</button>
-          `;
-          container.appendChild(zoneTag);
-        });
-
-        // Actualizar campo oculto
-        document.getElementById('zonesHidden').value = selectedZones.join(', ');
-      }
-
-      // Función global para remover zona
-      window.removeZone = function(index) {
-        selectedZones.splice(index, 1);
-        updateSelectedZonesDisplay();
-      }
-
-      // Enviar formulario de trabajo
-      document.getElementById('workForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        // Validar que se haya seleccionado al menos una zona
-        if (selectedZones.length === 0) {
-          alert('Por favor selecciona al menos una zona de trabajo.');
-          return;
-        }
-
-        // Recopilar datos del formulario
-        const workData = {
-          tipo: document.getElementById('workType').value,
-          fechaInicio: document.getElementById('startDate').value,
-          fechaFin: document.getElementById('endDate').value,
-          horaInicio: document.getElementById('startTime').value,
-          horaFin: document.getElementById('endTime').value,
-          zonas: selectedZones,
-          estado: document.getElementById('workStatus').value,
-          descripcion: document.getElementById('workDescription').value,
-          fechaRegistro: new Date().toISOString()
-        };
-
-        try {
-          // Enviar a la API
-          const res = await fetch('/api/trabajos', {
-            method: 'POST',
-            headers: { 
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + token 
-            },
-            body: JSON.stringify(workData)
-          });
-
-          const json = await res.json();
-          
-          if (res.ok) {
-            alert('¡Trabajo registrado exitosamente! 🎉');
-            // Ocultar la sección de registro después de guardar exitosamente
-            document.getElementById('registerContent').style.display = 'none';
-            document.getElementById('registerPlaceholder').style.display = 'block';
-            document.getElementById('showRegisterBtn').style.display = 'block';
-            document.getElementById('hideRegisterBtn').style.display = 'none';
-            
-            document.getElementById('workForm').reset();
-            selectedZones = [];
-            updateSelectedZonesDisplay();
-            updateWorkCount(); // Actualizar contador
-          } else {
-            alert(json.message || 'Error al registrar el trabajo');
-          }
-        } catch (error) {
-          console.error('Error al registrar trabajo:', error);
-          alert('Error al registrar el trabajo. Por favor intenta de nuevo.');
-        }
-      });
-
-      // Validar rango de fechas
-      document.getElementById('startDate').addEventListener('change', validateDateRange);
-      document.getElementById('endDate').addEventListener('change', validateDateRange);
-
-      function validateDateRange() {
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
-        
-        if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-          alert('La fecha de inicio no puede ser posterior a la fecha de fin.');
-          document.getElementById('endDate').value = startDate;
-        }
-      }
-
-      // Validar rango de horarios
-      document.getElementById('startTime').addEventListener('change', validateTimeRange);
-      document.getElementById('endTime').addEventListener('change', validateTimeRange);
-
-      function validateTimeRange() {
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
-        const startTime = document.getElementById('startTime').value;
-        const endTime = document.getElementById('endTime').value;
-        
-        // Solo validar si son el mismo día
-        if (startDate && endDate && startTime && endTime && startDate === endDate) {
-          if (startTime >= endTime) {
-            alert('La hora de inicio debe ser anterior a la hora de fin.');
-            document.getElementById('endTime').value = '';
-          }
-        }
-      }
-
-      // Actualizar contador de trabajos registrados
-      async function updateWorkCount() {
-        try {
-          const res = await fetch('/api/trabajos', { 
-            headers: { Authorization: 'Bearer ' + token } 
-          });
-          if (res.ok) {
-            const trabajos = await res.json();
-            document.getElementById('workCount').textContent = trabajos.length;
-          }
-        } catch (error) {
-          console.error('Error al obtener contador de trabajos:', error);
-        }
-      }
-
-      // Mostrar trabajos registrados (inline)
-      document.getElementById('showWorkBtn').addEventListener('click', async () => {
-        try {
-          const res = await fetch('/api/trabajos', { 
-            headers: { Authorization: 'Bearer ' + token } 
-          });
-          
-          if (!res.ok) {
-            alert('Error al cargar los trabajos');
-            return;
-          }
-          
-          const trabajosRegistrados = await res.json();
-        const content = document.getElementById('workListContent');
-        
-        content.innerHTML = '';
-        
-        if (trabajosRegistrados.length === 0) {
-          content.innerHTML = '<div class="text-center text-gray-500 p-4 bg-blue-50 rounded-lg">No hay trabajos registrados todavía.</div>';
-        } else {
-          trabajosRegistrados.forEach((trabajo, index) => {
-            const statusColors = {
-              'en-proceso': 'bg-yellow-100 text-yellow-800 border-yellow-200',
-              'culminado': 'bg-green-100 text-green-800 border-green-200',
-              'pendiente': 'bg-blue-100 text-blue-800 border-blue-200',
-              'postergado': 'bg-red-100 text-red-800 border-red-200'
-            };
-            
-            const statusIcons = {
-              'en-proceso': '🔄',
-              'culminado': '✅',
-              'pendiente': '⏳',
-              'postergado': '⏸️'
-            };
-
-            const statusNames = {
-              'en-proceso': 'En Proceso',
-              'culminado': 'Culminado', 
-              'pendiente': 'Pendiente',
-              'postergado': 'Postergado'
-            };
-
-            const workCard = document.createElement('div');
-            workCard.className = 'bg-gray-50 rounded-xl p-4 shadow-md hover:shadow-lg transition-all border text-sm';
-            workCard.innerHTML = `
-              <div class="flex justify-between items-start mb-3">
-                <h3 class="text-lg font-bold text-gray-800">${trabajo.tipo}</h3>
-                <div class="flex gap-2">
-                  <span class="px-2 py-1 rounded-full text-xs font-semibold border ${statusColors[trabajo.estado] || 'bg-gray-100 text-gray-800'}">${statusIcons[trabajo.estado]} ${statusNames[trabajo.estado]}</span>
-                  <button onclick="deleteWork(${trabajo.id})" class="text-red-500 hover:text-red-700 px-1 py-1 rounded font-bold text-sm" title="Eliminar trabajo">🗑️</button>
-                </div>
-              </div>
-              
-              <div class="grid grid-cols-1 gap-2 mb-3">
-                <div>
-                  <strong class="text-gray-600 text-xs">📅 Período:</strong>
-                  <div class="ml-4 text-xs">${formatDate(trabajo.fechaInicio)} - ${formatDate(trabajo.fechaFin)}</div>
-                </div>
-                <div>
-                  <strong class="text-gray-600 text-xs">🕐 Horario:</strong>
-                  <div class="ml-4 text-xs">${trabajo.horaInicio} - ${trabajo.horaFin}</div>
-                </div>
-              </div>
-              
-              <div class="mb-3">
-                <strong class="text-gray-600 text-xs">📍 Zonas:</strong>
-                <div class="flex flex-wrap gap-1 mt-1">
-                  ${trabajo.zonas.map(zona => `<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-lg text-xs font-medium">${zona}</span>`).join('')}
-                </div>
-              </div>
-              
-              ${trabajo.descripcion ? `
-                <div class="mb-3">
-                  <strong class="text-gray-600 text-xs">📝 Descripción:</strong>
-                  <div class="ml-4 text-gray-700 mt-1 text-xs">${trabajo.descripcion}</div>
-                </div>
-              ` : ''}
-              
-              <div class="text-xs text-gray-500 pt-2 border-t">
-                Registrado: ${formatDateTime(trabajo.fechaRegistro)}
-              </div>
-            `;
-            content.appendChild(workCard);
-          });
-        }
-        
-        // Mostrar lista y ocultar placeholder
-        content.style.display = 'block';
-        document.getElementById('workPlaceholder').style.display = 'none';
-        // Intercambiar botones
-        document.getElementById('showWorkBtn').style.display = 'none';
-        document.getElementById('hideWorkBtn').style.display = 'block';
-        } catch (error) {
-          console.error('Error al cargar trabajos:', error);
-          alert('Error al cargar los trabajos');
-        }
-      });
-      
-      // Ocultar trabajos registrados
-      document.getElementById('hideWorkBtn').addEventListener('click', () => {
-        // Ocultar lista y mostrar placeholder
-        document.getElementById('workListContent').style.display = 'none';
-        document.getElementById('workPlaceholder').style.display = 'block';
-        // Intercambiar botones
-        document.getElementById('showWorkBtn').style.display = 'block';
-        document.getElementById('hideWorkBtn').style.display = 'none';
-      });
-
-      // Función para eliminar trabajo
-      window.deleteWork = async function(trabajoId) {
-        if (confirm('¿Estás seguro de que quieres eliminar este trabajo?')) {
-          try {
-            const res = await fetch(`/api/trabajos/${trabajoId}`, {
-              method: 'DELETE',
-              headers: { Authorization: 'Bearer ' + token }
-            });
-            
-            const json = await res.json();
-            
-            if (res.ok) {
-              alert(json.message || 'Trabajo eliminado exitosamente');
-              updateWorkCount();
-              // Recargar la lista solo si está visible
-              if (document.getElementById('workListContent').style.display === 'block') {
-                document.getElementById('showWorkBtn').click();
-              }
-            } else {
-              alert(json.message || 'Error al eliminar el trabajo');
-            }
-          } catch (error) {
-            console.error('Error al eliminar trabajo:', error);
-            alert('Error al eliminar el trabajo');
-          }
-        }
-      }
-
-      // Funciones auxiliares para formateo
-      function formatDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('es-ES', {
-          day: '2-digit',
-          month: '2-digit', 
-          year: 'numeric'
-        });
-      }
-
-      function formatDateTime(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleString('es-ES', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-      }
-
-      // --- FIN FUNCIONALIDAD DE REGISTRO DE TRABAJO ---
-
-      // --- FUNCIONALIDAD DE SUBIDA DE ARCHIVOS ---
-
-      // Mostrar formulario de subida de archivos (replegable)
-      document.getElementById('showUploadBtn').addEventListener('click', () => {
-        // Mostrar contenido y ocultar placeholder
-        document.getElementById('uploadContent').style.display = 'block';
-        document.getElementById('uploadPlaceholder').style.display = 'none';
-        // Intercambiar botones
-        document.getElementById('showUploadBtn').style.display = 'none';
-        document.getElementById('hideUploadBtn').style.display = 'block';
-      });
-
-      // Ocultar formulario de subida de archivos
-      document.getElementById('hideUploadBtn').addEventListener('click', () => {
-        // Ocultar contenido y mostrar placeholder
-        document.getElementById('uploadContent').style.display = 'none';
-        document.getElementById('uploadPlaceholder').style.display = 'block';
-        // Intercambiar botones
-        document.getElementById('showUploadBtn').style.display = 'block';
-        document.getElementById('hideUploadBtn').style.display = 'none';
-        // Resetear input de archivo
-        document.getElementById('fileInput').value = '';
-        document.getElementById('filePlaceholder').style.display = 'flex';
-      });
-
-      // --- FIN FUNCIONALIDAD DE SUBIDA DE ARCHIVOS ---
-
-      // Placeholder visual para input de archivo
-      const fileInput = document.getElementById('fileInput');
-      const filePlaceholder = document.getElementById('filePlaceholder');
-      fileInput.addEventListener('change', () => {
-        filePlaceholder.style.display = fileInput.files.length ? 'none' : 'flex';
-      });
-      const token = localStorage.getItem('token');
-      if (!token) window.location.href = '/login.html';
-
-    // Mostrar nombre y email del usuario
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      document.getElementById('username').textContent = payload.username || payload.email || 'Usuario';
-      document.getElementById('userEmail').textContent = payload.email || '';
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const name = payload.username || payload.email || "Usuario";
+      document.getElementById("username").textContent = name;
+      document.getElementById("userEmail").textContent = payload.email || "";
+      document.getElementById("userAvatarLetter").textContent = name.charAt(0).toUpperCase();
+      if (payload.role === "admin") {
+        document.getElementById("adminPanel").classList.remove("hidden");
+        document.getElementById("adminPanel").onclick = () => { window.location.href = "/admin.html"; };
+      }
     } catch {}
 
-    document.getElementById('logout').addEventListener('click', () => {
-      localStorage.removeItem('token');
-      window.location.href = '/login.html';
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("token");
+      window.location.href = "/login.html";
     });
 
-    async function fetchFiles() {
-      const res = await fetch('/api/files', { headers: { Authorization: 'Bearer ' + token } });
-      const files = await res.json();
-      // Mostrar número total en ambos contadores
+    function formatDate(d) { return new Date(d).toLocaleDateString("es-ES",{day:"2-digit",month:"2-digit",year:"numeric"}); }
+    function formatDateTime(d) { return new Date(d).toLocaleString("es-ES",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}); }
+    function formatTime(d) { return new Date(d).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"}); }
 
-      document.getElementById('filesCount2').textContent = files.length;
-      // Mostrar lista visual
-      const container = document.getElementById('filesList');
-      const template = document.getElementById('fileTemplate');
-      container.innerHTML = '';
+    // ── REGISTRO DE TRABAJO ──
+    let selectedZones = [];
+
+    document.getElementById("showRegisterBtn").addEventListener("click", () => {
+      document.getElementById("registerContent").style.display = "block";
+      document.getElementById("registerPlaceholder").style.display = "none";
+      document.getElementById("showRegisterBtn").style.display = "none";
+      document.getElementById("hideRegisterBtn").style.display = "block";
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("startDate").value = today;
+      document.getElementById("endDate").value = today;
+      selectedZones = [];
+      updateSelectedZonesDisplay();
+    });
+
+    document.getElementById("hideRegisterBtn").addEventListener("click", () => {
+      document.getElementById("registerContent").style.display = "none";
+      document.getElementById("registerPlaceholder").style.display = "block";
+      document.getElementById("showRegisterBtn").style.display = "block";
+      document.getElementById("hideRegisterBtn").style.display = "none";
+    });
+
+    document.getElementById("cancelWorkBtn").addEventListener("click", () => {
+      document.getElementById("workForm").reset();
+      selectedZones = [];
+      updateSelectedZonesDisplay();
+    });
+
+    document.getElementById("addZoneBtn").addEventListener("click", () => {
+      const zi = document.getElementById("zoneInput");
+      const zoneName = zi.value.trim();
+      if (zoneName && !selectedZones.includes(zoneName)) {
+        selectedZones.push(zoneName);
+        updateSelectedZonesDisplay();
+        zi.value = "";
+      }
+    });
+
+    document.querySelectorAll(".zone-preset").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const z = btn.dataset.zone;
+        if (!selectedZones.includes(z)) { selectedZones.push(z); updateSelectedZonesDisplay(); }
+      });
+    });
+
+    function updateSelectedZonesDisplay() {
+      const c = document.getElementById("selectedZones");
+      c.innerHTML = "";
+      selectedZones.forEach((zone, i) => {
+        const t = document.createElement("div");
+        t.className = "zone-tag";
+        t.innerHTML = `<span>📍 ${zone}</span><button type="button" onclick="removeZone(${i})" title="Eliminar">×</button>`;
+        c.appendChild(t);
+      });
+      document.getElementById("zonesHidden").value = selectedZones.join(", ");
+    }
+
+    window.removeZone = function(i) { selectedZones.splice(i,1); updateSelectedZonesDisplay(); }
+
+    document.getElementById("workForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!selectedZones.length) { alert("Por favor selecciona al menos una zona."); return; }
+      const workData = {
+        tipo: document.getElementById("workType").value,
+        fechaInicio: document.getElementById("startDate").value,
+        fechaFin: document.getElementById("endDate").value,
+        horaInicio: document.getElementById("startTime").value,
+        horaFin: document.getElementById("endTime").value,
+        zonas: selectedZones,
+        estado: document.getElementById("workStatus").value,
+        descripcion: document.getElementById("workDescription").value,
+        fechaRegistro: new Date().toISOString()
+      };
+      try {
+        const res = await fetch("/api/trabajos", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+          body: JSON.stringify(workData)
+        });
+        const json = await res.json();
+        if (res.ok) {
+          alert("¡Trabajo registrado exitosamente! 🎉");
+          document.getElementById("registerContent").style.display = "none";
+          document.getElementById("registerPlaceholder").style.display = "block";
+          document.getElementById("showRegisterBtn").style.display = "block";
+          document.getElementById("hideRegisterBtn").style.display = "none";
+          document.getElementById("workForm").reset();
+          selectedZones = [];
+          updateSelectedZonesDisplay();
+          updateWorkCount();
+        } else { alert(json.message || "Error al registrar el trabajo"); }
+      } catch(err) { console.error(err); alert("Error al registrar el trabajo."); }
+    });
+
+    document.getElementById("startDate").addEventListener("change", validateDateRange);
+    document.getElementById("endDate").addEventListener("change", validateDateRange);
+    function validateDateRange() {
+      const s = document.getElementById("startDate").value;
+      const e = document.getElementById("endDate").value;
+      if (s && e && new Date(s) > new Date(e)) { alert("La fecha de inicio no puede ser posterior."); document.getElementById("endDate").value = s; }
+    }
+
+    document.getElementById("startTime").addEventListener("change", validateTimeRange);
+    document.getElementById("endTime").addEventListener("change", validateTimeRange);
+    function validateTimeRange() {
+      const sd = document.getElementById("startDate").value, ed = document.getElementById("endDate").value;
+      const st = document.getElementById("startTime").value, et = document.getElementById("endTime").value;
+      if (sd && ed && st && et && sd === ed && st >= et) { alert("La hora de inicio debe ser anterior a la hora de fin."); document.getElementById("endTime").value = ""; }
+    }
+
+    async function updateWorkCount() {
+      try {
+        const res = await fetch("/api/trabajos", { headers: { Authorization: "Bearer " + token } });
+        if (res.ok) { const t = await res.json(); document.getElementById("workCount").textContent = t.length; }
+      } catch(e) { console.error(e); }
+    }
+
+    document.getElementById("showWorkBtn").addEventListener("click", async () => {
+      try {
+        const res = await fetch("/api/trabajos", { headers: { Authorization: "Bearer " + token } });
+        if (!res.ok) { alert("Error al cargar trabajos"); return; }
+        const lista = await res.json();
+        const content = document.getElementById("workListContent");
+        content.innerHTML = "";
+        const sc = { "en-proceso":"pill-yellow","culminado":"pill-green","pendiente":"pill-blue","postergado":"pill-red" };
+        const si = { "en-proceso":"🔄","culminado":"✅","pendiente":"⏳","postergado":"⏸️" };
+        const sn = { "en-proceso":"En Proceso","culminado":"Culminado","pendiente":"Pendiente","postergado":"Postergado" };
+        if (!lista.length) {
+          content.innerHTML = "<div style=\"text-align:center;color:#94a3b8;padding:1.5rem;background:#f8fafc;border-radius:12px;font-size:0.85rem;\">No hay trabajos registrados.</div>";
+        } else {
+          lista.forEach(t => {
+            const card = document.createElement("div");
+            card.className = "work-card";
+            card.innerHTML = `
+              <div class="work-card-header">
+                <span class="work-title">${t.tipo}</span>
+                <div style="display:flex;align-items:center;gap:0.5rem;flex-shrink:0;">
+                  <span class="pill ${sc[t.estado]||"pill-blue"}">${si[t.estado]} ${sn[t.estado]}</span>
+                  <button onclick="deleteWork(${t.id})" class="btn-icon btn-icon-red" title="Eliminar">🗑️</button>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+                <div><div class="work-detail-label">📅 Período</div><div class="work-detail-value">${formatDate(t.fechaInicio)} → ${formatDate(t.fechaFin)}</div></div>
+                <div><div class="work-detail-label">🕐 Horario</div><div class="work-detail-value">${t.horaInicio} – ${t.horaFin}</div></div>
+              </div>
+              <div style="margin-bottom:${t.descripcion?"0.75rem":"0"};">
+                <div class="work-detail-label">📍 Zonas</div>
+                <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.35rem;">${t.zonas.map(z=>`<span class="pill pill-blue">${z}</span>`).join("")}</div>
+              </div>
+              ${t.descripcion?`<div><div class="work-detail-label">📝 Descripción</div><div class="work-detail-value" style="margin-top:0.25rem;">${t.descripcion}</div></div>`:""}
+              <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #e2e8f0;font-size:0.72rem;color:#94a3b8;">Registrado: ${formatDateTime(t.fechaRegistro)}</div>`;
+            content.appendChild(card);
+          });
+        }
+        content.style.display = "block";
+        document.getElementById("workPlaceholder").style.display = "none";
+        document.getElementById("showWorkBtn").style.display = "none";
+        document.getElementById("hideWorkBtn").style.display = "block";
+      } catch(e) { console.error(e); alert("Error al cargar trabajos"); }
+    });
+
+    document.getElementById("hideWorkBtn").addEventListener("click", () => {
+      document.getElementById("workListContent").style.display = "none";
+      document.getElementById("workPlaceholder").style.display = "block";
+      document.getElementById("showWorkBtn").style.display = "block";
+      document.getElementById("hideWorkBtn").style.display = "none";
+    });
+
+    window.deleteWork = async function(id) {
+      if (!confirm("¿Eliminar este trabajo?")) return;
+      try {
+        const res = await fetch(`/api/trabajos/${id}`, { method:"DELETE", headers:{ Authorization:"Bearer "+token } });
+        const json = await res.json();
+        if (res.ok) {
+          alert(json.message || "Trabajo eliminado");
+          updateWorkCount();
+          if (document.getElementById("workListContent").style.display === "block") document.getElementById("showWorkBtn").click();
+        } else { alert(json.message || "Error al eliminar"); }
+      } catch(e) { console.error(e); alert("Error al eliminar el trabajo"); }
+    }
+
+    // ── SUBIDA DE ARCHIVOS ──
+    document.getElementById("showUploadBtn").addEventListener("click", () => {
+      document.getElementById("uploadContent").style.display = "block";
+      document.getElementById("showUploadBtn").style.display = "none";
+      document.getElementById("hideUploadBtn").style.display = "block";
+    });
+    document.getElementById("hideUploadBtn").addEventListener("click", () => {
+      document.getElementById("uploadContent").style.display = "none";
+      document.getElementById("showUploadBtn").style.display = "block";
+      document.getElementById("hideUploadBtn").style.display = "none";
+      document.getElementById("fileInput").value = "";
+      document.getElementById("filePlaceholder").innerHTML = `<div class="upload-zone-icon">☁️</div><div class="upload-zone-text">Arrastra tu archivo o haz clic para seleccionar</div><div class="upload-zone-hint">Imágenes, PDF, Word, Excel, PowerPoint</div>`;
+    });
+
+    document.getElementById("fileInput").addEventListener("change", () => {
+      const fi = document.getElementById("fileInput");
+      const ph = document.getElementById("filePlaceholder");
+      if (fi.files.length) {
+        ph.innerHTML = `<div class="upload-zone-icon">📄</div><div class="upload-zone-text">${fi.files[0].name}</div><div class="upload-zone-hint">Listo para subir</div>`;
+      } else {
+        ph.innerHTML = `<div class="upload-zone-icon">☁️</div><div class="upload-zone-text">Arrastra tu archivo o haz clic para seleccionar</div><div class="upload-zone-hint">Imágenes, PDF, Word, Excel, PowerPoint</div>`;
+      }
+    });
+
+    document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const res = await fetch("/api/files/upload", { method:"POST", headers:{ Authorization:"Bearer "+token }, body:fd });
+      const json = await res.json();
+      alert(json.message || "OK");
+      if (res.ok) {
+        fetchFiles();
+        document.getElementById("uploadContent").style.display = "none";
+        document.getElementById("showUploadBtn").style.display = "block";
+        document.getElementById("hideUploadBtn").style.display = "none";
+        document.getElementById("fileInput").value = "";
+        document.getElementById("filePlaceholder").innerHTML = `<div class="upload-zone-icon">☁️</div><div class="upload-zone-text">Arrastra tu archivo o haz clic para seleccionar</div><div class="upload-zone-hint">Imágenes, PDF, Word, Excel, PowerPoint</div>`;
+      }
+    });
+
+    // ── ARCHIVOS ──
+    async function fetchFiles() {
+      const res = await fetch("/api/files", { headers:{ Authorization:"Bearer "+token } });
+      const files = await res.json();
+      document.getElementById("filesCount2").textContent = files.length;
+      const container = document.getElementById("filesList");
+      const template = document.getElementById("fileTemplate");
+      container.innerHTML = "";
       files.forEach(f => {
         const clone = template.content.cloneNode(true);
-        const card = clone.querySelector('.file-item');
-        const img = card.querySelector('img');
-        const nameDiv = card.querySelector('.file-name');
-        const commentDiv = card.querySelector('.file-comment');
-        const dateDiv = card.querySelector('.file-date');
-        
-        // Renderizar vista previa según tipo de archivo
+        const card = clone.querySelector(".file-item");
+        const img = card.querySelector("img");
+        card.querySelector(".file-name").textContent = f.file_name;
+        card.querySelector(".file-comment").textContent = f.comment || "— sin comentario —";
+        card.querySelector(".file-date").textContent = new Date(f.created_at || f.uploaded_at).toLocaleString();
         renderFilePreview(f, img);
-        
-        nameDiv.textContent = f.file_name;
-        commentDiv.textContent = f.comment || '- - - - -';
-        dateDiv.textContent = new Date(f.created_at || f.uploaded_at).toLocaleString();
-        
-        // Botón editar
-        const editBtn = card.querySelector('.edit-btn');
-        editBtn.addEventListener('click', () => {
-          document.getElementById('editFileName').value = f.file_name;
-          document.getElementById('editComment').value = f.comment || '';
-          
-          // Mostrar la sección de edición si no está visible
-          const editSection = document.getElementById('editSection');
-          editSection.style.display = 'block';
-          
-          // Mostrar el contenido de edición y ocultar el placeholder
-          document.getElementById('editContent').style.display = 'block';
-          document.getElementById('editPlaceholder').style.display = 'none';
-          
-          // Intercambiar botones de edición
-          document.getElementById('showEditBtn').style.display = 'none';
-          document.getElementById('hideEditBtn').style.display = 'block';
-          
-          // Guardar el ID del archivo para editar
-          document.getElementById('editForm').dataset.fileId = f.id;
+        card.querySelector(".edit-btn").addEventListener("click", () => {
+          document.getElementById("editFileName").value = f.file_name;
+          document.getElementById("editComment").value = f.comment || "";
+          document.getElementById("editSection").style.display = "block";
+          document.getElementById("editContent").style.display = "block";
+          document.getElementById("editPlaceholder").style.display = "none";
+          document.getElementById("showEditBtn").style.display = "none";
+          document.getElementById("hideEditBtn").style.display = "block";
+          document.getElementById("editForm").dataset.fileId = f.id;
         });
-        
-        // Botón eliminar
-        const delBtn = card.querySelector('.delete-btn');
-        delBtn.addEventListener('click', async () => {
-          if (confirm('¿Seguro que quieres eliminar este archivo?')) {
-            const res = await fetch(`/api/files/${f.id}`, {
-              method: 'DELETE',
-              headers: { Authorization: 'Bearer ' + token }
-            });
-            const json = await res.json();
-            alert(json.message || 'Archivo eliminado');
-            if (res.ok) fetchFiles();
+        card.querySelector(".delete-btn").addEventListener("click", async () => {
+          if (confirm("¿Eliminar este archivo?")) {
+            const r = await fetch(`/api/files/${f.id}`, { method:"DELETE", headers:{ Authorization:"Bearer "+token } });
+            const j = await r.json();
+            alert(j.message || "Eliminado");
+            if (r.ok) fetchFiles();
           }
         });
         container.appendChild(card);
       });
-      // Obtener archivos eliminados
-      const deletedRes = await fetch('/api/files/deleted', { headers: { Authorization: 'Bearer ' + token } });
-      const deletedFiles = await deletedRes.json();
-      document.getElementById('deletedFilesCount').textContent = deletedFiles.length;
-      // Botón para mostrar archivos eliminados (inline)
-      document.getElementById('showDeletedBtn').onclick = () => {
-        const list = document.getElementById('deletedFilesList');
-        list.innerHTML = '';
-        if (deletedFiles.length === 0) {
-          list.innerHTML = '<div class="text-center text-gray-500 p-4 bg-red-50 rounded-lg">No hay archivos eliminados.</div>';
+
+      const dRes = await fetch("/api/files/deleted", { headers:{ Authorization:"Bearer "+token } });
+      const deletedFiles = await dRes.json();
+      document.getElementById("deletedFilesCount").textContent = deletedFiles.length;
+
+      document.getElementById("showDeletedBtn").onclick = () => {
+        const list = document.getElementById("deletedFilesList");
+        list.innerHTML = "";
+        if (!deletedFiles.length) {
+          list.innerHTML = "<div style=\"text-align:center;color:#94a3b8;padding:1.5rem;background:#fff5f5;border-radius:12px;font-size:0.85rem;\">No hay archivos eliminados.</div>";
         } else {
           deletedFiles.forEach(f => {
-            const item = document.createElement('div');
-            item.className = 'p-4 rounded-xl bg-red-50 flex flex-col gap-2 shadow hover:shadow-md transition-all border border-red-100';
-            item.innerHTML = `<div class='font-bold text-lg text-red-700'>${f.file_name}</div><div class='text-gray-600 text-sm'>🗑️ Eliminado: ${new Date(f.deleted_at).toLocaleString()}</div>`;
+            const item = document.createElement("div");
+            item.className = "deleted-card";
+            item.innerHTML = `<div class="deleted-name">📄 ${f.file_name}</div><div class="deleted-date">🗑️ Eliminado: ${new Date(f.deleted_at).toLocaleString()}</div>`;
             list.appendChild(item);
           });
         }
-        // Mostrar lista y ocultar placeholder
-        list.style.display = 'block';
-        document.getElementById('deletedPlaceholder').style.display = 'none';
-        // Intercambiar botones
-        document.getElementById('showDeletedBtn').style.display = 'none';
-        document.getElementById('hideDeletedBtn').style.display = 'block';
+        list.style.display = "block";
+        document.getElementById("deletedPlaceholder").style.display = "none";
+        document.getElementById("showDeletedBtn").style.display = "none";
+        document.getElementById("hideDeletedBtn").style.display = "block";
       };
-      
-      // Botón para ocultar archivos eliminados
-      document.getElementById('hideDeletedBtn').onclick = () => {
-        // Ocultar lista y mostrar placeholder
-        document.getElementById('deletedFilesList').style.display = 'none';
-        document.getElementById('deletedPlaceholder').style.display = 'block';
-        // Intercambiar botones
-        document.getElementById('showDeletedBtn').style.display = 'block';
-        document.getElementById('hideDeletedBtn').style.display = 'none';
+      document.getElementById("hideDeletedBtn").onclick = () => {
+        document.getElementById("deletedFilesList").style.display = "none";
+        document.getElementById("deletedPlaceholder").style.display = "block";
+        document.getElementById("showDeletedBtn").style.display = "block";
+        document.getElementById("hideDeletedBtn").style.display = "none";
       };
-      
-      // Botón para mostrar archivos subidos (inline)
-      document.getElementById('showFilesBtn').onclick = () => {
-        // Mostrar lista y ocultar placeholder  
-        document.getElementById('filesList').style.display = 'block';
-        document.getElementById('filesPlaceholder').style.display = 'none';
-        // Intercambiar botones
-        document.getElementById('showFilesBtn').style.display = 'none';
-        document.getElementById('hideFilesBtn').style.display = 'block';
+      document.getElementById("showFilesBtn").onclick = () => {
+        document.getElementById("filesList").style.display = "block";
+        document.getElementById("filesPlaceholder").style.display = "none";
+        document.getElementById("showFilesBtn").style.display = "none";
+        document.getElementById("hideFilesBtn").style.display = "block";
       };
-      
-      // Botón para ocultar archivos subidos
-      document.getElementById('hideFilesBtn').onclick = () => {
-        // Ocultar lista y mostrar placeholder
-        document.getElementById('filesList').style.display = 'none';
-        document.getElementById('filesPlaceholder').style.display = 'block';
-        // También ocultar la sección de edición cuando se ocultan los archivos
-        document.getElementById('editSection').style.display = 'none';
-        // Intercambiar botones
-        document.getElementById('showFilesBtn').style.display = 'block';
-        document.getElementById('hideFilesBtn').style.display = 'none';
+      document.getElementById("hideFilesBtn").onclick = () => {
+        document.getElementById("filesList").style.display = "none";
+        document.getElementById("filesPlaceholder").style.display = "block";
+        document.getElementById("editSection").style.display = "none";
+        document.getElementById("showFilesBtn").style.display = "block";
+        document.getElementById("hideFilesBtn").style.display = "none";
       };
-      
-      // Botón para mostrar edición de archivo
-      document.getElementById('showEditBtn').onclick = () => {
-        // Mostrar contenido y ocultar placeholder de edición
-        document.getElementById('editContent').style.display = 'block';
-        document.getElementById('editPlaceholder').style.display = 'none';
-        // Intercambiar botones de edición
-        document.getElementById('showEditBtn').style.display = 'none';
-        document.getElementById('hideEditBtn').style.display = 'block';
+      document.getElementById("showEditBtn").onclick = () => {
+        document.getElementById("editContent").style.display = "block";
+        document.getElementById("editPlaceholder").style.display = "none";
+        document.getElementById("showEditBtn").style.display = "none";
+        document.getElementById("hideEditBtn").style.display = "block";
       };
-      
-      // Botón para ocultar edición de archivo
-      document.getElementById('hideEditBtn').onclick = () => {
-        // Ocultar contenido y mostrar placeholder de edición 
-        document.getElementById('editContent').style.display = 'none';
-        document.getElementById('editPlaceholder').style.display = 'block';
-        // Intercambiar botones de edición
-        document.getElementById('showEditBtn').style.display = 'block';
-        document.getElementById('hideEditBtn').style.display = 'none';
-        // Limpiar el formulario
-        document.getElementById('editForm').reset();
-        document.getElementById('editForm').removeAttribute('data-file-id');
+      document.getElementById("hideEditBtn").onclick = () => {
+        document.getElementById("editContent").style.display = "none";
+        document.getElementById("editPlaceholder").style.display = "block";
+        document.getElementById("showEditBtn").style.display = "block";
+        document.getElementById("hideEditBtn").style.display = "none";
+        document.getElementById("editForm").reset();
+        document.getElementById("editForm").removeAttribute("data-file-id");
       };
     }
 
-    // Formulario de edición
-    document.getElementById('editForm').addEventListener('submit', async (e) => {
+    document.getElementById("editForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const fileId = e.target.dataset.fileId;
-      const fileName = document.getElementById('editFileName').value;
-      const comment = document.getElementById('editComment').value;
-      
       const res = await fetch(`/api/files/${fileId}`, {
-        method: 'PUT',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token 
-        },
-        body: JSON.stringify({ file_name: fileName, comment })
+        method:"PUT",
+        headers:{ "Content-Type":"application/json", Authorization:"Bearer "+token },
+        body: JSON.stringify({ file_name: document.getElementById("editFileName").value, comment: document.getElementById("editComment").value })
       });
-      
       const json = await res.json();
-      alert(json.message || 'Archivo actualizado');
+      alert(json.message || "Actualizado");
       if (res.ok) {
-        // Ocultar contenido de edición y mostrar placeholder
-        document.getElementById('editContent').style.display = 'none';
-        document.getElementById('editPlaceholder').style.display = 'block';
-        // Intercambiar botones de edición
-        document.getElementById('showEditBtn').style.display = 'block';
-        document.getElementById('hideEditBtn').style.display = 'none';
-        // Limpiar formulario
-        document.getElementById('editForm').reset();
-        document.getElementById('editForm').removeAttribute('data-file-id');
+        document.getElementById("editContent").style.display = "none";
+        document.getElementById("editPlaceholder").style.display = "block";
+        document.getElementById("showEditBtn").style.display = "block";
+        document.getElementById("hideEditBtn").style.display = "none";
+        document.getElementById("editForm").reset();
+        document.getElementById("editForm").removeAttribute("data-file-id");
         fetchFiles();
       }
     });
 
-    // Botón cancelar edición
-    document.getElementById('cancelEdit').onclick = () => {
-      // Ocultar contenido de edición y mostrar placeholder
-      document.getElementById('editContent').style.display = 'none';
-      document.getElementById('editPlaceholder').style.display = 'block';
-      // Intercambiar botones de edición
-      document.getElementById('showEditBtn').style.display = 'block';
-      document.getElementById('hideEditBtn').style.display = 'none';
-      // Limpiar formulario
-      document.getElementById('editForm').reset();
-      document.getElementById('editForm').removeAttribute('data-file-id');
+    document.getElementById("cancelEdit").onclick = () => {
+      document.getElementById("editContent").style.display = "none";
+      document.getElementById("editPlaceholder").style.display = "block";
+      document.getElementById("showEditBtn").style.display = "block";
+      document.getElementById("hideEditBtn").style.display = "none";
+      document.getElementById("editForm").reset();
+      document.getElementById("editForm").removeAttribute("data-file-id");
     };
 
-    // Mostrar botón admin si es admin
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      if (payload.role === 'admin') {
-        document.getElementById('adminPanel').classList.remove('hidden');
-        document.getElementById('adminPanel').onclick = () => {
-          window.location.href = '/admin.html';
-        };
+    function renderFilePreview(file, imgElement) {
+      const fileName = file.file_name || "";
+      const filePath = file.file_path || "";
+      const ext = fileName.split(".").pop()?.toLowerCase() || "";
+      if (["jpg","jpeg","png","gif","webp"].includes(ext)) {
+        imgElement.src = "/uploads/" + filePath;
+        imgElement.alt = fileName;
+        imgElement.style.display = "block";
+        imgElement.onclick = null;
+      } else {
+        imgElement.style.display = "none";
+        let iconDiv = imgElement.parentNode.querySelector(".file-icon");
+        if (!iconDiv) { iconDiv = document.createElement("div"); imgElement.parentNode.insertBefore(iconDiv, imgElement); }
+        if (ext === "pdf") { iconDiv.className="file-icon pdf-icon"; iconDiv.innerHTML="📄<br><small>PDF</small>"; iconDiv.onclick=()=>window.open("/uploads/"+filePath,"_blank"); }
+        else if (["doc","docx"].includes(ext)) { iconDiv.className="file-icon word-icon"; iconDiv.innerHTML="📝<br><small>Word</small>"; iconDiv.onclick=()=>downloadFile("/uploads/"+filePath,fileName); }
+        else if (["xls","xlsx"].includes(ext)) { iconDiv.className="file-icon excel-icon"; iconDiv.innerHTML="📊<br><small>Excel</small>"; iconDiv.onclick=()=>downloadFile("/uploads/"+filePath,fileName); }
+        else if (["ppt","pptx"].includes(ext)) { iconDiv.className="file-icon powerpoint-icon"; iconDiv.innerHTML="🎯<br><small>PPT</small>"; iconDiv.onclick=()=>downloadFile("/uploads/"+filePath,fileName); }
+        else { iconDiv.className="file-icon"; iconDiv.innerHTML="📎<br><small>Archivo</small>"; iconDiv.onclick=()=>downloadFile("/uploads/"+filePath,fileName); }
       }
-    } catch {}
+    }
 
-    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const fd = new FormData(e.target);
-      const res = await fetch('/api/files/upload', { method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: fd });
-      const json = await res.json();
-      alert(json.message || 'OK');
-      if (res.ok) {
-        fetchFiles();
-        // Ocultar la sección de upload después de subir exitosamente
-        document.getElementById('uploadContent').style.display = 'none';
-        document.getElementById('uploadPlaceholder').style.display = 'block';
-        document.getElementById('showUploadBtn').style.display = 'block';
-        document.getElementById('hideUploadBtn').style.display = 'none';
-        // Resetear input de archivo
-        document.getElementById('fileInput').value = '';
-        document.getElementById('filePlaceholder').style.display = 'flex';
-      }
-    });
+    function downloadFile(filePath, fileName) {
+      const a = document.createElement("a");
+      a.href = filePath; a.download = fileName; a.style.display = "none";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
 
-    fetchFiles();
-    updateWorkCount(); // Actualizar contador de trabajos al cargar la página
-    
-    // --- FUNCIONALIDAD DE MARCACIÓN DE ASISTENCIA ---
-    
-    let estadoActual = 'inactivo';
-    
-    // Cargar estado inicial
+    // ── MARCACIÓN ──
+    let estadoActual = "inactivo";
+
     async function cargarEstadoMarcacion() {
       try {
-        const res = await fetch('/api/marcaciones/estado', {
-          headers: { Authorization: 'Bearer ' + token }
-        });
-        
-        if (res.ok) {
-          const data = await res.json();
-          actualizarInterfazMarcacion(data);
-        }
-      } catch (error) {
-        console.error('Error al cargar estado:', error);
-      }
+        const res = await fetch("/api/marcaciones/estado", { headers:{ Authorization:"Bearer "+token } });
+        if (res.ok) { const data = await res.json(); actualizarInterfazMarcacion(data); }
+      } catch(e) { console.error(e); }
     }
-    
-    // Actualizar interfaz según el estado
+
     function actualizarInterfazMarcacion(data) {
       estadoActual = data.estado;
-      const btnMarcar = document.getElementById('btnMarcar');
-      const btnTexto = document.getElementById('btnTexto');
-      const estadoIcon = document.getElementById('estadoIcon');
-      const estadoTexto = document.getElementById('estadoTexto');
-      const estadoActualDiv = document.getElementById('estadoActual');
-      const ultimaEntrada = document.getElementById('ultimaEntrada');
-      const ultimaSalida = document.getElementById('ultimaSalida');
-      const horaEntrada = document.getElementById('horaEntrada');
-      const horaSalida = document.getElementById('horaSalida');
-      
-      if (data.estado === 'activo') {
-        // Usuario está activo (ya marcó entrada)
-        btnMarcar.className = 'w-full py-3 px-6 rounded-xl text-white font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg bg-red-500 hover:bg-red-600';
-        btnTexto.textContent = 'Marcar Salida';
-        estadoIcon.textContent = '🟢';
-        estadoTexto.textContent = 'Activo';
-        estadoActualDiv.className = 'inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-800';
-        
-        // Mostrar última entrada
-        if (data.ultimaEntrada) {
-          ultimaEntrada.style.display = 'block';
-          horaEntrada.textContent = formatDateTime(data.ultimaEntrada);
-        }
-        ultimaSalida.style.display = 'none';
-        
+      const btn = document.getElementById("btnMarcar");
+      if (data.estado === "activo") {
+        btn.className = "btn-mark btn-mark-exit";
+        document.getElementById("btnTexto").textContent = "■ Marcar Salida";
+        document.getElementById("estadoIcon").textContent = "🟢";
+        document.getElementById("estadoTexto").textContent = "Activo";
+        document.getElementById("estadoActual").className = "status-badge status-badge-active";
+        if (data.ultimaEntrada) { document.getElementById("ultimaEntrada").style.display="block"; document.getElementById("horaEntrada").textContent=formatDateTime(data.ultimaEntrada); }
+        document.getElementById("ultimaSalida").style.display = "none";
       } else {
-        // Usuario está inactivo
-        btnMarcar.className = 'w-full py-3 px-6 rounded-xl text-white font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg bg-green-500 hover:bg-green-600';
-        btnTexto.textContent = 'Marcar Entrada';
-        estadoIcon.textContent = '🔴';
-        estadoTexto.textContent = 'Inactivo';
-        estadoActualDiv.className = 'inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-red-100 text-red-800';
-        
-        // Mostrar última salida si existe
-        if (data.ultimaSalida) {
-          ultimaSalida.style.display = 'block';
-          horaSalida.textContent = formatDateTime(data.ultimaSalida);
-        }
-        ultimaEntrada.style.display = 'none';
+        btn.className = "btn-mark btn-mark-entry";
+        document.getElementById("btnTexto").textContent = "▶ Marcar Entrada";
+        document.getElementById("estadoIcon").textContent = "🔴";
+        document.getElementById("estadoTexto").textContent = "Inactivo";
+        document.getElementById("estadoActual").className = "status-badge status-badge-inactive";
+        if (data.ultimaSalida) { document.getElementById("ultimaSalida").style.display="block"; document.getElementById("horaSalida").textContent=formatDateTime(data.ultimaSalida); }
+        document.getElementById("ultimaEntrada").style.display = "none";
       }
     }
-    
-    // Marcar entrada o salida
-    document.getElementById('btnMarcar').addEventListener('click', async () => {
+
+    document.getElementById("btnMarcar").addEventListener("click", async () => {
+      const btn = document.getElementById("btnMarcar");
+      document.getElementById("btnTexto").textContent = "Procesando...";
+      btn.disabled = true;
       try {
-        const btn = document.getElementById('btnMarcar');
-        const originalText = btn.textContent;
-        btn.textContent = 'Marcando...';
-        btn.disabled = true;
-        
-        const res = await fetch('/api/marcaciones/marcar', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + token 
-          }
-        });
-        
+        const res = await fetch("/api/marcaciones/marcar", { method:"POST", headers:{ "Content-Type":"application/json", Authorization:"Bearer "+token } });
         const data = await res.json();
-        
         if (res.ok) {
-          alert(`✅ ${data.message}`);
-          // Recargar estado
+          alert("✅ " + data.message);
           await cargarEstadoMarcacion();
-          // Actualizar historial si está visible
-          if (document.getElementById('historialHoy').style.display === 'block') {
-            cargarMarcacionesHoy();
-          }
-        } else {
-          alert(`❌ ${data.message}`);
-        }
-        
-      } catch (error) {
-        console.error('Error al marcar:', error);
-        alert('Error al procesar la marcación');
-      } finally {
-        const btn = document.getElementById('btnMarcar');
-        btn.disabled = false;
-        // El texto se actualizará cuando se recargue el estado
-      }
+          if (document.getElementById("historialHoy").style.display === "block") cargarMarcacionesHoy();
+        } else { alert("❌ " + data.message); }
+      } catch(e) { console.error(e); alert("Error al procesar la marcación");
+      } finally { btn.disabled = false; }
     });
-    
-    // Ver historial del día
-    document.getElementById('btnHistorial').addEventListener('click', async () => {
-      const historial = document.getElementById('historialHoy');
-      const btn = document.getElementById('btnHistorial');
-      
-      if (historial.style.display === 'none') {
+
+    document.getElementById("btnHistorial").addEventListener("click", async () => {
+      const h = document.getElementById("historialHoy");
+      if (h.style.display === "none") {
         await cargarMarcacionesHoy();
-        historial.style.display = 'block';
-        btn.textContent = 'Ocultar Historial';
+        h.style.display = "block";
+        document.getElementById("btnHistorial").innerHTML = "📅 Ocultar Historial ▴";
       } else {
-        historial.style.display = 'none';
-        btn.textContent = 'Ver Historial de Hoy';
+        h.style.display = "none";
+        document.getElementById("btnHistorial").innerHTML = "📅 Historial de Hoy ▾";
       }
     });
-    
-    // Cargar marcaciones del día
+
     async function cargarMarcacionesHoy() {
       try {
-        const res = await fetch('/api/marcaciones/hoy', {
-          headers: { Authorization: 'Bearer ' + token }
-        });
-        
+        const res = await fetch("/api/marcaciones/hoy", { headers:{ Authorization:"Bearer "+token } });
         if (res.ok) {
           const marcaciones = await res.json();
-          const lista = document.getElementById('listaMarcaciones');
-          lista.innerHTML = '';
-          
-          if (marcaciones.length === 0) {
-            lista.innerHTML = '<div class="text-gray-500 text-xs text-center py-2">No hay marcaciones hoy</div>';
+          const lista = document.getElementById("listaMarcaciones");
+          lista.innerHTML = "";
+          if (!marcaciones.length) {
+            lista.innerHTML = "<div style=\"text-align:center;color:#94a3b8;font-size:0.82rem;padding:0.75rem;\">No hay marcaciones hoy</div>";
           } else {
-            marcaciones.forEach(marcacion => {
-              const div = document.createElement('div');
-              const tipoColor = marcacion.tipo === 'entrada' ? 'text-green-600' : 'text-red-600';
-              const tipoIcon = marcacion.tipo === 'entrada' ? '🟢' : '🔴';
-              div.className = `flex justify-between items-center py-1 px-2 bg-gray-50 rounded text-xs ${tipoColor}`;
-              div.innerHTML = `
-                <span>${tipoIcon} ${marcacion.tipo.toUpperCase()}</span>
-                <span>${formatTime(marcacion.fecha_hora)}</span>
-              `;
-              lista.appendChild(div);
+            marcaciones.forEach(m => {
+              const d = document.createElement("div");
+              d.className = `history-item ${m.tipo === "entrada" ? "history-entry" : "history-exit"}`;
+              d.innerHTML = `<span>${m.tipo==="entrada"?"🟢":"🔴"} ${m.tipo.toUpperCase()}</span><span>${formatTime(m.fecha_hora)}</span>`;
+              lista.appendChild(d);
             });
           }
         }
-      } catch (error) {
-        console.error('Error al cargar marcaciones:', error);
-      }
+      } catch(e) { console.error(e); }
     }
-    
-    // Función auxiliar para formatear solo la hora
-    function formatTime(dateString) {
-      const date = new Date(dateString);
-      return date.toLocaleTimeString('es-ES', {
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    }
-    
-    // Función para renderizar vista previa de archivos
-    function renderFilePreview(file, imgElement) {
-      const fileName = file.file_name || '';
-      const filePath = file.file_path || '';
-      const ext = fileName.split('.').pop()?.toLowerCase() || '';
-      
-      if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
-        // Mostrar imagen normalmente
-        imgElement.src = '/uploads/' + filePath;
-        imgElement.alt = fileName;
-        imgElement.style.display = 'block';
-        imgElement.onclick = null;
-      } else {
-        // Ocultar img y crear ícono personalizado
-        imgElement.style.display = 'none';
-        
-        // Crear div de ícono si no existe
-        let iconDiv = imgElement.parentNode.querySelector('.file-icon');
-        if (!iconDiv) {
-          iconDiv = document.createElement('div');
-          imgElement.parentNode.insertBefore(iconDiv, imgElement);
-        }
-        
-        // Configurar ícono según tipo
-        if (ext === 'pdf') {
-          iconDiv.className = 'file-icon pdf-icon';
-          iconDiv.innerHTML = '📄<br><small>PDF</small>';
-          iconDiv.onclick = () => openFile('/uploads/' + filePath);
-        } else if (['doc', 'docx'].includes(ext)) {
-          iconDiv.className = 'file-icon word-icon';
-          iconDiv.innerHTML = '📝<br><small>Word</small>';
-          iconDiv.onclick = () => downloadFile('/uploads/' + filePath, fileName);
-        } else if (['xls', 'xlsx'].includes(ext)) {
-          iconDiv.className = 'file-icon excel-icon';
-          iconDiv.innerHTML = '📊<br><small>Excel</small>';
-          iconDiv.onclick = () => downloadFile('/uploads/' + filePath, fileName);
-        } else if (['ppt', 'pptx'].includes(ext)) {
-          iconDiv.className = 'file-icon powerpoint-icon';
-          iconDiv.innerHTML = '🎯<br><small>PowerPoint</small>';
-          iconDiv.onclick = () => downloadFile('/uploads/' + filePath, fileName);
-        } else {
-          iconDiv.className = 'file-icon';
-          iconDiv.innerHTML = '📎<br><small>Archivo</small>';
-          iconDiv.onclick = () => downloadFile('/uploads/' + filePath, fileName);
-        }
-      }
-    }
-    
-    // Función para abrir archivos (PDFs)
-    function openFile(filePath) {
-      window.open(filePath, '_blank');
-    }
-    
-    // Función para descargar archivos
-    function downloadFile(filePath, fileName) {
-      const link = document.createElement('a');
-      link.href = filePath;
-      link.download = fileName;
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-    
-    // Cargar estado inicial al iniciar
-    cargarEstadoMarcacion();
-    
-    // Actualizar estado cada 30 segundos
-    setInterval(cargarEstadoMarcacion, 30000);
-    
-    // --- FIN FUNCIONALIDAD DE MARCACIÓN ---
-  </script>
 
-  <!-- Botón de WhatsApp flotante -->
-  <a href="https://wa.me/595983159658?text=Hola,%20necesito%20ayuda%20con%20el%20sistema%20de%20archivos." 
-     class="whatsapp-btn" 
-     target="_blank" 
-     title="Contactar soporte por WhatsApp">
-    <span>❓</span>
-    <span>¿Necesitas Ayuda?</span>
-  </a>
+    fetchFiles();
+    updateWorkCount();
+    cargarEstadoMarcacion();
+    setInterval(cargarEstadoMarcacion, 30000);
+  </script>
 </body>
 </html>
