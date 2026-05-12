@@ -1,16 +1,36 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { pool } from '../config/db';
 
+interface AuthRequest extends Request {
+  user?: {
+    id: number;
+    email: string;
+    username: string;
+    role: string;
+  };
+}
+
+function getErrorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  return 'Error desconocido';
+}
+
+function asRows<T>(value: unknown): T[] {
+  return (value as T[]) || [];
+}
+
 // Middleware para verificar si el usuario es admin
-export function adminMiddleware(req: Request, res: Response, next: any) {
+export function adminMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    // @ts-ignore
+    if (!req.user) {
+      return res.status(401).json({ message: 'No autorizado' });
+    }
     if (req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Acceso denegado: Se requieren permisos de administrador' });
     }
     next();
   } catch (err) {
-    res.status(500).json({ message: 'Error del servidor' });
+    res.status(500).json({ message: 'Error del servidor', error: getErrorMessage(err) });
   }
 }
 
@@ -84,14 +104,15 @@ export async function getStats(req: Request, res: Response) {
     const [userCount] = await pool.query('SELECT COUNT(*) as total FROM users');
     const [fileCount] = await pool.query('SELECT COUNT(*) as total FROM files');
     const [deletedCount] = await pool.query('SELECT COUNT(*) as total FROM deleted_files');
+
+    const userRows = asRows<{ total: number }>(userCount);
+    const fileRows = asRows<{ total: number }>(fileCount);
+    const deletedRows = asRows<{ total: number }>(deletedCount);
     
     res.json({
-      // @ts-ignore
-      totalUsers: userCount[0].total,
-      // @ts-ignore
-      totalFiles: fileCount[0].total,
-      // @ts-ignore
-      totalDeleted: deletedCount[0].total
+      totalUsers: userRows[0]?.total || 0,
+      totalFiles: fileRows[0]?.total || 0,
+      totalDeleted: deletedRows[0]?.total || 0
     });
   } catch (err) {
     console.error(err);
@@ -192,7 +213,7 @@ export async function getAnalytics(req: Request, res: Response) {
     console.error('Error en getAnalytics:', err);
     res.status(500).json({ 
       message: 'Error del servidor',
-      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+      error: process.env.NODE_ENV === 'development' ? getErrorMessage(err) : undefined
     });
   }
 }
@@ -257,21 +278,21 @@ export async function getDetailedReport(req: Request, res: Response) {
 
     console.log('Datos obtenidos:', {
       detailedCount: Array.isArray(detailedData) ? detailedData.length : 0,
-      // @ts-ignore
-      summary: summary[0]
+      summary: asRows<{ usuarios_involucrados: number; total_archivos: number; promedio_archivos_usuario: number }>(summary)[0]
     });
+
+    const summaryRows = asRows<{ usuarios_involucrados: number; total_archivos: number; promedio_archivos_usuario: number }>(summary);
 
     res.json({
       data: detailedData,
-      // @ts-ignore
-      summary: summary[0],
+      summary: summaryRows[0] || { usuarios_involucrados: 0, total_archivos: 0, promedio_archivos_usuario: 0 },
       filters: { startDate, endDate, area }
     });
   } catch (err) {
     console.error('Error en getDetailedReport:', err);
     res.status(500).json({ 
       message: 'Error del servidor',
-      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+      error: process.env.NODE_ENV === 'development' ? getErrorMessage(err) : undefined
     });
   }
 }

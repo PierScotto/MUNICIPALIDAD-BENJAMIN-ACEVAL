@@ -18,13 +18,66 @@
       --admin-primary-2: #059669;
       --admin-danger: #dc2626;
       --admin-danger-2: #ef4444;
+      --dash-dark: #111827;
+      --dash-green: #065f46;
+      --dash-green-2: #15803d;
+      --dash-red: #dc2626;
     }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: radial-gradient(circle at 100% 0%, #d1fae5 0%, transparent 30%), var(--admin-bg);
+      background:
+        radial-gradient(circle at 100% 0%, #d1fae5 0%, transparent 34%),
+        radial-gradient(circle at 0% 100%, #fee2e2 0%, transparent 28%),
+        var(--admin-bg);
       min-height: 100vh;
       color: var(--admin-text);
+    }
+
+    .admin-top-header {
+      background: linear-gradient(120deg, var(--dash-dark), var(--dash-green));
+      color: #fff;
+      border-radius: 1.1rem;
+      padding: 1rem 1.1rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-top-title { font-size: 1.15rem; font-weight: 800; line-height: 1.2; }
+    .admin-top-subtitle { font-size: 0.8rem; opacity: 0.9; }
+
+    .admin-quick-nav {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-nav-chip {
+      border: 1px solid rgba(255,255,255,0.24);
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border-radius: 999px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .admin-nav-chip:hover { background: rgba(255,255,255,0.2); }
+
+    .admin-section {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 1rem;
+      padding: 1rem 1.1rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 6px 18px rgba(0,0,0,0.04);
     }
 
     .admin-card {
@@ -196,6 +249,219 @@
       background: #4b5563;
     }
 
+    /* Filtros y búsqueda */
+    .filter-bar {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      background: #f8fafc;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .filter-input {
+      flex: 1;
+      min-width: 180px;
+      padding: 0.6rem 0.9rem;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      font-size: 0.9rem;
+      font-family: 'Poppins', sans-serif;
+      background: white;
+    }
+    .filter-input:focus { outline: none; border-color: #047857; }
+    .filter-select {
+      padding: 0.6rem 0.9rem;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      font-size: 0.9rem;
+      background: white;
+      cursor: pointer;
+    }
+    .filter-select:focus { outline: none; border-color: #047857; }
+    .filter-btn {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      border: none;
+      background: #047857;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { background: #059669; transform: translateY(-1px); }
+    .user-info-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      border-left: 4px solid #047857;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .user-info-left { flex: 1; }
+    .user-info-main { font-weight: 700; color: #1e293b; margin-bottom: 0.3rem; }
+    .user-info-detail { font-size: 0.85rem; color: #64748b; margin-bottom: 0.2rem; }
+    .user-info-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .info-badge {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .file-info-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      border-left: 4px solid #2563eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .file-info-left { flex: 1; }
+    .file-info-main { font-weight: 700; color: #1e293b; margin-bottom: 0.3rem; }
+    .file-info-detail { font-size: 0.85rem; color: #64748b; margin-bottom: 0.2rem; }
+
+    .report-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .report-kpi-card {
+      background: #ffffff;
+      border: 1px solid #dbe4ee;
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    .report-kpi-label {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+    }
+
+    .report-kpi-value {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1;
+    }
+
+    .report-kpi-hint {
+      margin-top: 0.35rem;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    .report-table-tools {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.85rem;
+      padding: 0.85rem;
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 0.7rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .report-input,
+    .report-select {
+      border: 1px solid #cbd5e1;
+      border-radius: 0.55rem;
+      background: #ffffff;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.88rem;
+      color: #0f172a;
+    }
+
+    .report-input {
+      min-width: 220px;
+      flex: 1;
+    }
+
+    .report-select {
+      min-width: 170px;
+    }
+
+    .report-meta {
+      margin-left: auto;
+      font-size: 0.85rem;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    .report-accordion-item {
+      border: 1px solid #dbe4ee;
+      border-radius: 1rem;
+      background: #ffffff;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .report-accordion-btn {
+      width: 100%;
+      border: none;
+      background: linear-gradient(90deg, #f8fafc, #eef2f7);
+      color: #0f172a;
+      padding: 0.95rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .report-accordion-btn:hover {
+      background: linear-gradient(90deg, #f1f5f9, #e2e8f0);
+    }
+
+    .panel-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #86efac;
+      border-radius: 999px;
+      padding: 0.24rem 0.7rem;
+      font-size: 0.8rem;
+      font-weight: 800;
+      margin-bottom: 0.55rem;
+    }
+
+    .report-accordion-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, opacity 0.25s ease;
+      padding: 0 1rem;
+    }
+
+    .report-accordion-content.is-open {
+      max-height: 8000px;
+      opacity: 1;
+      padding: 1rem;
+    }
+
+    .report-chevron {
+      color: #475569;
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
     .admin-card button[id],
     .admin-card button[type="submit"] {
       letter-spacing: 0.01em;
@@ -217,6 +483,19 @@
         border-radius: 1.25rem;
       }
 
+      .report-kpi-grid {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+
+      .report-meta {
+        margin-left: 0;
+        width: 100%;
+      }
+
+      .report-accordion-btn {
+        font-size: 0.92rem;
+      }
+
       .whatsapp-btn {
         right: 12px;
         bottom: 12px;
@@ -227,6 +506,19 @@
 </head>
 <body class="gradient-bg p-6 min-h-screen">
   <div class="admin-card">
+    <div class="admin-top-header">
+      <div>
+        <div class="admin-top-title">Municipalidad de Benjamín Aceval · Panel Administrador</div>
+        <div class="admin-top-subtitle">Monitoreo de usuarios, documentos, eliminaciones y reportes</div>
+      </div>
+      <div class="admin-quick-nav">
+        <button class="admin-nav-chip" onclick="document.getElementById('usersContent').scrollIntoView({behavior:'smooth'})">👥 Usuarios</button>
+        <button class="admin-nav-chip" onclick="document.getElementById('filesContent').scrollIntoView({behavior:'smooth'})">📁 Archivos</button>
+        <button class="admin-nav-chip" onclick="document.getElementById('deletedContent').scrollIntoView({behavior:'smooth'})">🗑️ Eliminados</button>
+        <button class="admin-nav-chip" onclick="document.getElementById('reportsContent').scrollIntoView({behavior:'smooth'})">📊 Reportes</button>
+      </div>
+    </div>
+
     <!-- Header -->
     <div class="mb-8 flex justify-between items-center">
       <h1 class="text-4xl font-extrabold text-brandRed text-center flex-1">Panel de Administración - Trabajadores</h1>
@@ -293,9 +585,12 @@
     </div>
 
     <!-- Contenido de Usuarios -->
-    <div id="usersContent">
+    <div id="usersContent" class="admin-section">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold text-brandGreen">Lista de Usuarios</h2>
+        <div>
+          <div class="panel-title">👥 Gestión de Usuarios</div>
+          <h2 class="text-2xl font-bold text-brandGreen">Lista de Usuarios</h2>
+        </div>
         <div class="flex gap-3">
           <button id="showBtn" class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span>👁️</span> Mostrar Lista
@@ -308,6 +603,19 @@
           </button>
         </div>
       </div>
+      <div id="usersFilters" style="display: none;" class="filter-bar">
+        <input id="searchUsers" type="text" class="filter-input" placeholder="🔍 Buscar por nombre o email...">
+        <select id="filterAreaUsers" class="filter-select">
+          <option value="">Todas las áreas</option>
+          <option value="Administrativo">Administrativo</option>
+          <option value="Recursos Humanos">Recursos Humanos</option>
+          <option value="Contabilidad - Tesorería">Contabilidad - Tesorería</option>
+          <option value="Informática">Informática / Sistemas</option>
+          <option value="Desarrollo Social">Desarrollo Social</option>
+        </select>
+        <button class="filter-btn" onclick="applyUsersFilters()">Filtrar</button>
+        <button class="filter-btn" style="background: #e5e7eb; color: #374151;" onclick="clearUsersFilters()">Limpiar</button>
+      </div>
       <div id="usersList" style="display: none;"></div>
       <div id="usersPlaceholder" class="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
         <div class="text-gray-400 text-6xl mb-4">👥</div>
@@ -316,9 +624,12 @@
     </div>
 
     <!-- Contenido de Archivos -->
-    <div id="filesContent" class="mt-12">
+    <div id="filesContent" class="mt-12 admin-section">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold text-brandGreen">Archivos Activos</h2>
+        <div>
+          <div class="panel-title">📂 Gestión Documental</div>
+          <h2 class="text-2xl font-bold text-brandGreen">Archivos Activos</h2>
+        </div>
         <div class="flex gap-3">
           <button id="showFilesBtn" class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span>📁</span> Mostrar Archivos
@@ -331,6 +642,19 @@
           </button>
         </div>
       </div>
+      <div id="filesFilters" style="display: none;" class="filter-bar">
+        <input id="searchFiles" type="text" class="filter-input" placeholder="🔍 Buscar por nombre de archivo...">
+        <select id="filterTypeFiles" class="filter-select">
+          <option value="">Todos los tipos</option>
+          <option value=".pdf">PDF</option>
+          <option value=".docx">Word</option>
+          <option value=".xlsx">Excel</option>
+          <option value=".pptx">PowerPoint</option>
+          <option value="image">Imágenes</option>
+        </select>
+        <button class="filter-btn" onclick="applyFilesFilters()">Filtrar</button>
+        <button class="filter-btn" style="background: #e5e7eb; color: #374151;" onclick="clearFilesFilters()">Limpiar</button>
+      </div>
       <div id="allFilesList" style="display: none;"></div>
       <div id="filesPlaceholder" class="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
         <div class="text-gray-400 text-6xl mb-4">📁</div>
@@ -339,9 +663,12 @@
     </div>
 
     <!-- Contenido de Archivos Eliminados -->
-    <div id="deletedContent" class="mt-12">
+    <div id="deletedContent" class="mt-12 admin-section">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold text-red-600">Archivos Eliminados</h2>
+        <div>
+          <div class="panel-title" style="background:#fff1f2;color:#b91c1c;border-color:#fecaca;">🗑️ Auditoría de Eliminaciones</div>
+          <h2 class="text-2xl font-bold text-red-600">Archivos Eliminados</h2>
+        </div>
         <div class="flex gap-3">
           <button id="showDeletedBtn" class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center gap-2">
             <span>🗑️</span> Mostrar Eliminados
@@ -362,9 +689,9 @@
     </div>
 
     <!-- 📊 Contenido de Reportes y Analytics -->
-    <div id="reportsContent" class="mt-12">
+    <div id="reportsContent" class="mt-12 admin-section">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold text-purple-600 flex items-center gap-2">
+        <h2 class="text-2xl font-bold text-brandGreen flex items-center gap-2">
           <span>📊</span> Reporte de Datos
         </h2>
         <div class="flex gap-3">
@@ -381,12 +708,18 @@
       </div>
       
       <div id="reportsData" style="display: none;">
-        <!-- Filtros de Reportes -->
-        <div class="bg-gray-50 rounded-2xl p-6 mb-8 border-2 border-emerald-200">
+        <div class="report-accordion-item">
+          <button type="button" class="report-accordion-btn" aria-expanded="false" onclick="toggleReportSection('reportFiltersSection', this)">
+            <span>🔍 Filtros + KPIs</span>
+            <span class="report-chevron" data-chevron>▸</span>
+          </button>
+          <div id="reportFiltersSection" class="report-accordion-content">
+            <!-- Filtros de Reportes -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-8 border-2 border-emerald-200">
           <h3 class="text-xl font-bold text-gray-700 mb-4 flex items-center gap-2">
             <span>🔍</span> Generar Reporte Personalizado
           </h3>
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4">
             <div>
               <label class="block text-sm font-bold text-gray-600 mb-1">Fecha Inicio:</label>
               <input type="date" id="startDate" class="w-full px-3 py-2 border rounded-lg">
@@ -399,6 +732,20 @@
               <label class="block text-sm font-bold text-gray-600 mb-1">Área:</label>
               <select id="areaFilter" class="w-full px-3 py-2 border rounded-lg">
                 <option value="all">Todas las áreas</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-600 mb-1">Usuario:</label>
+              <select id="userFilter" class="w-full px-3 py-2 border rounded-lg">
+                <option value="all">Todos los usuarios</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-600 mb-1">Estado:</label>
+              <select id="statusFilter" class="w-full px-3 py-2 border rounded-lg">
+                <option value="all">Todos</option>
+                <option value="Activo">Activos</option>
+                <option value="N/A">Sin archivo</option>
               </select>
             </div>
             <div class="flex items-end">
@@ -414,8 +761,47 @@
             <button id="exportExcel" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 flex items-center gap-2">
               <span>📊</span> Exportar Excel
             </button>
+            <button id="clearReportFilters" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300 transition flex items-center gap-2">
+              <span>🧹</span> Limpiar filtros
+            </button>
           </div>
         </div>
+
+        <div class="report-kpi-grid md:grid-cols-5">
+          <div class="report-kpi-card">
+            <div class="report-kpi-label">Archivos activos (12 meses)</div>
+            <div id="kpiActiveFiles" class="report-kpi-value">0</div>
+            <div class="report-kpi-hint">Volumen reciente</div>
+          </div>
+          <div class="report-kpi-card">
+            <div class="report-kpi-label">Archivos eliminados (12 meses)</div>
+            <div id="kpiDeletedFiles" class="report-kpi-value">0</div>
+            <div class="report-kpi-hint">Control de depuración</div>
+          </div>
+          <div class="report-kpi-card">
+            <div class="report-kpi-label">Usuarios activos</div>
+            <div id="kpiActiveUsers" class="report-kpi-value">0</div>
+            <div class="report-kpi-hint">Con subida registrada</div>
+          </div>
+          <div class="report-kpi-card">
+            <div class="report-kpi-label">Áreas con actividad</div>
+            <div id="kpiAreasWithActivity" class="report-kpi-value">0</div>
+            <div class="report-kpi-hint">Cobertura organizacional</div>
+          </div>
+          <div class="report-kpi-card">
+            <div class="report-kpi-label">Tipo de archivo más usado</div>
+            <div id="kpiTopFileType" class="report-kpi-value">-</div>
+            <div class="report-kpi-hint">Formato dominante</div>
+          </div>
+        </div>
+        </div>
+
+        <div class="report-accordion-item">
+          <button type="button" class="report-accordion-btn" aria-expanded="false" onclick="toggleReportSection('reportAnalyticsSection', this)">
+            <span>📊 Gráficos de Analytics</span>
+            <span class="report-chevron" data-chevron>▸</span>
+          </button>
+          <div id="reportAnalyticsSection" class="report-accordion-content">
 
         <!-- Dashboard de Analytics -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -433,6 +819,14 @@
               <span>📈</span> Archivos Subidos por Mes
             </h3>
             <canvas id="filesByMonthChart" width="400" height="200"></canvas>
+          </div>
+
+          <!-- Gráfico: Archivos por Tipo -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-emerald-200">
+            <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
+              <span>🗂️</span> Distribución por Tipo de Archivo
+            </h3>
+            <canvas id="filesByTypeChart" width="400" height="200"></canvas>
           </div>
 
           <!-- Gráfico: Actividad por Día -->
@@ -453,6 +847,14 @@
             </div>
           </div>
         </div>
+        </div>
+
+        <div class="report-accordion-item">
+          <button type="button" class="report-accordion-btn" aria-expanded="false" onclick="toggleReportSection('reportCompareSection', this)">
+            <span>📉 Comparativo de Eliminaciones</span>
+            <span class="report-chevron" data-chevron>▸</span>
+          </button>
+          <div id="reportCompareSection" class="report-accordion-content">
 
         <!-- Comparativo de Eliminaciones -->
         <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-red-200 mb-8">
@@ -461,14 +863,28 @@
           </h3>
           <canvas id="deletedVsActiveChart" width="400" height="200"></canvas>
         </div>
+        </div>
+        </div>
 
         <!-- Reporte Detallado -->
-        <div id="detailedReportSection" class="bg-white rounded-2xl p-6 shadow-lg border-2 border-indigo-200 hidden">
-          <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
-            <span>📋</span> Reporte Detallado
-          </h3>
+        <div id="detailedReportSection" class="report-accordion-item hidden">
+          <button type="button" class="report-accordion-btn" aria-expanded="false" onclick="toggleReportSection('detailedReportContent', this)">
+            <span>📋 Reporte Detallado</span>
+            <span class="report-chevron" data-chevron>▸</span>
+          </button>
+          <div id="detailedReportContent" class="report-accordion-content">
           <div id="reportSummary" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <!-- Resumen estadístico -->
+          </div>
+          <div class="report-table-tools">
+            <input id="reportSearch" type="text" class="report-input" placeholder="Buscar por usuario, área o archivo...">
+            <select id="reportSort" class="report-select">
+              <option value="date_desc">Más recientes primero</option>
+              <option value="date_asc">Más antiguos primero</option>
+              <option value="user_asc">Usuario A-Z</option>
+              <option value="file_asc">Archivo A-Z</option>
+            </select>
+            <span id="reportResultsCount" class="report-meta">0 resultados</span>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full bg-white border border-gray-300 rounded-lg">
@@ -486,12 +902,14 @@
               </tbody>
             </table>
           </div>
+          </div>
         </div>
       </div>
       
       <div id="reportsPlaceholder" class="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
         <div class="text-gray-400 text-6xl mb-4">📊</div>
-        <p class="text-gray-500 text-lg font-medium">Haz clic en "Mostrar Reportes" para ver los reportes de datos</p>
+        <p class="text-gray-500 text-lg font-medium">Haz clic en "Mostrar Reportes" para ver los reportes</p>
+        <p class="text-gray-400 text-sm mt-2">Luego despliega cada seccion para visualizarla por separado.</p>
       </div>
     </div>
   </div>
@@ -551,6 +969,27 @@
       } else {
         console.warn(`Elemento no encontrado para evento click: ${id}`);
       }
+    }
+
+    async function apiFetchJSON(url, options = {}) {
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          Authorization: 'Bearer ' + token,
+          ...(options.headers || {})
+        }
+      });
+
+      if (!response.ok) {
+        let message = `HTTP ${response.status}`;
+        try {
+          const text = await response.text();
+          message = text || message;
+        } catch (_) {}
+        throw new Error(message);
+      }
+
+      return response.json();
     }
 
     // Botones de navegación
@@ -620,6 +1059,7 @@
       bindClick('showBtn', function() {
         console.log('MOSTRAR LISTA CLICKED');
         document.getElementById('usersList').style.display = 'block';
+        document.getElementById('usersFilters').style.display = 'flex';
         document.getElementById('usersPlaceholder').style.display = 'none';
         document.getElementById('showBtn').style.display = 'none';
         document.getElementById('hideBtn').style.display = 'flex';
@@ -632,6 +1072,7 @@
       bindClick('hideBtn', function() {
         console.log('CERRAR LISTA CLICKED');
         document.getElementById('usersList').style.display = 'none';
+        document.getElementById('usersFilters').style.display = 'none';
         document.getElementById('usersPlaceholder').style.display = 'block';
         document.getElementById('showBtn').style.display = 'flex';
         document.getElementById('hideBtn').style.display = 'none';
@@ -647,6 +1088,7 @@
       bindClick('showFilesBtn', function() {
         console.log('MOSTRAR ARCHIVOS CLICKED');
         document.getElementById('allFilesList').style.display = 'block';
+        document.getElementById('filesFilters').style.display = 'flex';
         document.getElementById('filesPlaceholder').style.display = 'none';
         document.getElementById('showFilesBtn').style.display = 'none';
         document.getElementById('hideFilesBtn').style.display = 'flex';
@@ -659,6 +1101,7 @@
       bindClick('hideFilesBtn', function() {
         console.log('CERRAR ARCHIVOS CLICKED');
         document.getElementById('allFilesList').style.display = 'none';
+        document.getElementById('filesFilters').style.display = 'none';
         document.getElementById('filesPlaceholder').style.display = 'block';
         document.getElementById('showFilesBtn').style.display = 'flex';
         document.getElementById('hideFilesBtn').style.display = 'none';
@@ -724,6 +1167,31 @@
       });
     }, 100);
 
+    // Event listeners para búsqueda y filtros
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchUsersInput = document.getElementById('searchUsers');
+      const filterAreaSelect = document.getElementById('filterAreaUsers');
+      const searchFilesInput = document.getElementById('searchFiles');
+      const filterTypeSelect = document.getElementById('filterTypeFiles');
+      
+      if (searchUsersInput) {
+        searchUsersInput.addEventListener('keyup', function(e) {
+          if (e.key === 'Enter') applyUsersFilters();
+        });
+      }
+      if (filterAreaSelect) {
+        filterAreaSelect.addEventListener('change', applyUsersFilters);
+      }
+      if (searchFilesInput) {
+        searchFilesInput.addEventListener('keyup', function(e) {
+          if (e.key === 'Enter') applyFilesFilters();
+        });
+      }
+      if (filterTypeSelect) {
+        filterTypeSelect.addEventListener('change', applyFilesFilters);
+      }
+    });
+
     // Funciones para mostrar/ocultar archivos de usuario
     async function showUserFiles(userId, username, buttonElement) {
       console.log('MOSTRAR ARCHIVOS USUARIO:', userId);
@@ -731,6 +1199,11 @@
       const filesList = document.getElementById(`filesList_${userId}`);
       const showBtn = document.getElementById(`showBtn_${userId}`);
       const hideBtn = document.getElementById(`hideBtn_${userId}`);
+
+      if (!filesContainer || !filesList || !showBtn || !hideBtn) {
+        console.warn('Elementos de archivos de usuario no encontrados:', userId);
+        return;
+      }
       
       // Mostrar contenedor
       filesContainer.style.display = 'block';
@@ -739,8 +1212,7 @@
       
       // Cargar archivos si están vacíos
       if (filesList.innerHTML === '') {
-        const res = await fetch(`/api/admin/files/${userId}`, { headers: { Authorization: 'Bearer ' + token } });
-        const files = await res.json();
+        const files = await apiFetchJSON(`/api/admin/files/${userId}`);
         
         if (files.length === 0) {
           filesList.innerHTML = '<p class="text-center text-gray-500 py-4">Este usuario no ha subido archivos.</p>';
@@ -877,88 +1349,131 @@
       }
     }
 
+    // Almacenamiento de datos global para filtrado
+    let allUsersData = [];
+    let allFilesData = [];
+
     // Cargar usuarios
     async function loadUsers() {
       try {
-        const res = await fetch('/api/admin/users', { headers: { Authorization: 'Bearer ' + token } });
-        console.log('Response status:', res.status);
-        
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        
-        const users = await res.json();
+        const users = await apiFetchJSON('/api/admin/users');
         console.log('Users loaded:', users);
+        allUsersData = users || [];
         
-        const container = document.getElementById('usersList');
-        container.innerHTML = '';
-        
-        if (!users || users.length === 0) {
-          container.innerHTML = '<p class="text-center text-gray-500">No se encontraron usuarios.</p>';
-          return;
-        }
-        
-        users.forEach(user => {
-        const userDiv = document.createElement('div');
-        userDiv.className = 'user-row';
-        userDiv.innerHTML = `
-          <div class="flex justify-between items-center">
-            <div>
-              <h3 class="font-bold text-lg">${user.nombre} ${user.apellido} (${user.username})</h3>
-              <p class="text-gray-600">${user.email}</p>
-              <p class="text-sm text-gray-500">Área: ${user.area_trabajo} | Teléfono: ${user.telefono || 'No especificado'}</p>
-              <p class="text-sm text-gray-500">Nacimiento: ${user.fecha_nacimiento ? new Date(user.fecha_nacimiento).toLocaleDateString() : 'No especificado'}</p>
-              <p class="text-sm text-gray-500">Rol: ${user.role} | Registro: ${new Date(user.created_at).toLocaleDateString()}</p>
-            </div>
-            <div class="flex gap-3">
-              <button onclick="showUserFiles(${user.id}, '${user.username}', this)" id="showBtn_${user.id}" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
-                <span>📁</span> Ver Archivos
-              </button>
-              <button onclick="hideUserFiles(${user.id})" id="hideBtn_${user.id}" style="display: none;" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
-                <span></span> Ocultar Archivos
-              </button>
-              <button onclick="changePassword(${user.id}, '${user.username}')" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
-                <span>🔑</span> Cambiar Contraseña
-              </button>
-            </div>
-          </div>
-          <div id="userFiles_${user.id}" style="display: none;" class="mt-4 bg-gray-50 rounded-xl p-4">
-            <h4 class="text-lg font-bold text-blue-600 mb-3">Archivos de ${user.username}</h4>
-            <div id="filesList_${user.id}"></div>
-          </div>
-        `;
-        container.appendChild(userDiv);
-        });
+        renderUsers(allUsersData);
       } catch (error) {
         console.error('Error loading users:', error);
         const container = document.getElementById('usersList');
         container.innerHTML = '<p class="text-center text-red-500">Error cargando usuarios: ' + error.message + '</p>';
       }
+    }
+
+    function renderUsers(usersToRender) {
+      const container = document.getElementById('usersList');
+      container.innerHTML = '';
+      
+      if (!usersToRender || usersToRender.length === 0) {
+        container.innerHTML = '<p class="text-center text-gray-500 py-8">No se encontraron usuarios.</p>';
+        return;
+      }
+      
+      usersToRender.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.className = 'user-info-card';
+        const filesCount = user.filesCount || 0;
+        const lastActivity = user.last_login ? new Date(user.last_login).toLocaleString() : 'Sin actividad';
+        
+        userDiv.innerHTML = `
+          <div class="user-info-left">
+            <div class="user-info-main">👤 ${user.nombre} ${user.apellido}</div>
+            <div class="user-info-detail"><strong>Usuario:</strong> ${user.username}</div>
+            <div class="user-info-detail"><strong>Email:</strong> ${user.email}</div>
+            <div class="user-info-detail"><strong>Área:</strong> ${user.area_trabajo}</div>
+            <div class="user-info-detail"><strong>Teléfono:</strong> ${user.telefono || 'No especificado'}</div>
+            <div class="user-info-detail"><strong>Registro:</strong> ${new Date(user.created_at).toLocaleDateString()}</div>
+            <div style="margin-top: 0.5rem;">
+              <span class="info-badge">📊 ${filesCount} archivos</span>
+              <span class="info-badge" style="background: #dbeafe; color: #1d4ed8; margin-left: 0.5rem;">⏱️ ${lastActivity}</span>
+            </div>
+          </div>
+          <div class="user-info-actions">
+            <button onclick="showUserFiles(${user.id}, '${user.username}', this)" id="showBtn_${user.id}" class="px-4 py-2 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-600 transition">
+              📁 Ver Archivos
+            </button>
+            <button onclick="hideUserFiles(${user.id})" id="hideBtn_${user.id}" style="display: none;" class="px-4 py-2 rounded-lg bg-red-500 text-white font-bold hover:bg-red-600 transition">
+              ✕ Cerrar
+            </button>
+            <button onclick="changePassword(${user.id}, '${user.username}')" class="px-4 py-2 rounded-lg bg-red-600 text-white font-bold hover:bg-red-700 transition">
+              🔑 Cambiar Pass
+            </button>
+          </div>
+          <div id="userFiles_${user.id}" style="display: none; width: 100%; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+            <div id="filesList_${user.id}"></div>
+          </div>
+        `;
+        container.appendChild(userDiv);
+      });
+    }
+
+    function applyUsersFilters() {
+      const searchTerm = document.getElementById('searchUsers')?.value?.toLowerCase() || '';
+      const areaFilter = document.getElementById('filterAreaUsers')?.value || '';
+      
+      const filtered = allUsersData.filter(user => {
+        const matchesSearch = !searchTerm || user.nombre.toLowerCase().includes(searchTerm) || user.apellido.toLowerCase().includes(searchTerm) || user.email.toLowerCase().includes(searchTerm) || user.username.toLowerCase().includes(searchTerm);
+        const matchesArea = !areaFilter || user.area_trabajo === areaFilter;
+        return matchesSearch && matchesArea;
+      });
+      
+      renderUsers(filtered);
+    }
+
+    function clearUsersFilters() {
+      document.getElementById('searchUsers').value = '';
+      document.getElementById('filterAreaUsers').value = '';
+      renderUsers(allUsersData);
     }    // Cargar todos los archivos
     async function loadAllFiles() {
-      const res = await fetch('/api/admin/files', { headers: { Authorization: 'Bearer ' + token } });
-      const files = await res.json();
+      try {
+        const files = await apiFetchJSON('/api/admin/files');
+        allFilesData = files || [];
+        renderFiles(allFilesData);
+      } catch (error) {
+        console.error('Error loading files:', error);
+        const container = document.getElementById('allFilesList');
+        container.innerHTML = '<p class="text-center text-red-500">Error cargando archivos: ' + error.message + '</p>';
+      }
+    }
+
+    function renderFiles(filesToRender) {
       const container = document.getElementById('allFilesList');
       container.innerHTML = '';
       
-      files.forEach(file => {
+      if (!filesToRender || filesToRender.length === 0) {
+        container.innerHTML = '<p class="text-center text-gray-500 py-8">No se encontraron archivos.</p>';
+        return;
+      }
+      
+      filesToRender.forEach(file => {
         const fileDiv = document.createElement('div');
-        fileDiv.className = 'file-item-admin';
+        fileDiv.className = 'file-info-card';
+        const fileExtension = file.file_name.split('.').pop().toLowerCase();
+        const fileType = `📄 ${fileExtension.toUpperCase()}`;
+        
         fileDiv.innerHTML = `
-          <div class="flex items-center justify-between gap-4">
-            <div class="flex items-center gap-4 flex-1 min-w-0">
-              <div class="admin-file-image">
-                <img src="/uploads/${file.file_path}" alt="${file.file_name}" loading="lazy">
-              </div>
-              <div class="admin-file-content">
-                <h4 class="font-bold text-lg mb-1">${file.file_name}</h4>
-                <p class="text-gray-600 mb-1">${file.comment || 'Sin comentario'}</p>
-                <p class="text-sm text-gray-500">Por: ${file.username} (${file.email})</p>
-                <p class="text-sm text-gray-500">${new Date(file.created_at).toLocaleString()}</p>
-              </div>
+          <div class="file-info-left">
+            <div class="file-info-main">${fileType} ${file.file_name}</div>
+            <div class="file-info-detail"><strong>Usuario:</strong> ${file.username}</div>
+            <div class="file-info-detail"><strong>Email:</strong> ${file.email}</div>
+            <div class="file-info-detail"><strong>Comentario:</strong> ${file.comment || 'Sin comentario'}</div>
+            <div class="file-info-detail"><strong>Subido:</strong> ${new Date(file.created_at).toLocaleString()}</div>
+            <div style="margin-top: 0.5rem;">
+              <span class="info-badge" style="background: #dbeafe; color: #1d4ed8;">${fileExtension.toUpperCase()}</span>
             </div>
-            <button onclick="downloadFile('${file.file_path}')" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2 flex-shrink-0">
-              <span>⬇️</span> Descargar
+          </div>
+          <div class="user-info-actions">
+            <button onclick="downloadFile('${file.file_path}')" class="px-4 py-2 rounded-lg bg-green-500 text-white font-bold hover:bg-green-600 transition">
+              ⬇️ Descargar
             </button>
           </div>
         `;
@@ -966,17 +1481,29 @@
       });
     }
 
+    function applyFilesFilters() {
+      const searchTerm = document.getElementById('searchFiles')?.value?.toLowerCase() || '';
+      const typeFilter = document.getElementById('filterTypeFiles')?.value || '';
+      
+      const filtered = allFilesData.filter(file => {
+        const matchesSearch = !searchTerm || file.file_name.toLowerCase().includes(searchTerm) || file.comment?.toLowerCase().includes(searchTerm);
+        const matchesType = !typeFilter || (typeFilter === 'image' ? /\.(jpg|jpeg|png|gif|webp)$/i.test(file.file_name) : file.file_name.toLowerCase().endsWith(typeFilter));
+        return matchesSearch && matchesType;
+      });
+      
+      renderFiles(filtered);
+    }
+
+    function clearFilesFilters() {
+      document.getElementById('searchFiles').value = '';
+      document.getElementById('filterTypeFiles').value = '';
+      renderFiles(allFilesData);
+    }
+
     // Cargar todos los archivos eliminados
     async function loadDeletedFiles() {
       try {
-        const res = await fetch('/api/admin/deleted-files', { headers: { Authorization: 'Bearer ' + token } });
-        console.log('Deleted files response status:', res.status);
-        
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        
-        const files = await res.json();
+        const files = await apiFetchJSON('/api/admin/deleted-files');
         console.log('Deleted files loaded:', files);
         
         const container = document.getElementById('deletedFilesList');
@@ -1097,14 +1624,49 @@
 
     // 📊 SISTEMA DE REPORTES Y ANALYTICS
     let chartInstances = {}; // Para manejar múltiples gráficos
+    let reportRowsOriginal = [];
+    let reportRowsFiltered = [];
+    let lastDetailedSummary = null;
+
+    function toggleReportSection(sectionId, trigger) {
+      const section = document.getElementById(sectionId);
+      if (!section) {
+        return;
+      }
+
+      const isOpen = section.classList.toggle('is-open');
+      trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+
+      const chevron = trigger.querySelector('[data-chevron]');
+      if (chevron) {
+        chevron.textContent = isOpen ? '▾' : '▸';
+      }
+
+      // Si se abre una sección con gráficos, forzar resize para que se rendericen bien.
+      if (isOpen) {
+        setTimeout(() => {
+          Object.values(chartInstances).forEach((instance) => {
+            if (instance && typeof instance.resize === 'function') {
+              instance.resize();
+            }
+          });
+        }, 180);
+      }
+    }
 
     // Cargar datos de reportes y analytics
     async function loadReportsData() {
       try {
-        await Promise.all([
+        setDefaultReportDateRange();
+
+        const [analyticsData, fileTypeData] = await Promise.all([
           loadAnalyticsData(),
-          loadAreaFilter()
+          loadAreaFilter(),
+          loadUserFilter(),
+          loadFileTypeDistribution()
         ]);
+
+        updateReportKpis(analyticsData, fileTypeData);
       } catch (err) {
         console.error('Error cargando reportes:', err);
         alert('Error cargando datos de reportes');
@@ -1115,16 +1677,7 @@
     async function loadAnalyticsData() {
       try {
         console.log('Cargando datos de analytics...');
-        const res = await fetch('/api/admin/analytics', { 
-          headers: { Authorization: 'Bearer ' + token } 
-        });
-        
-        if (!res.ok) {
-          const errorText = await res.text();
-          throw new Error(`Error ${res.status}: ${errorText}`);
-        }
-        
-        const data = await res.json();
+        const data = await apiFetchJSON('/api/admin/analytics');
         console.log('Datos de analytics recibidos:', data);
         
         // Crear todos los gráficos solo si tenemos datos
@@ -1135,22 +1688,44 @@
         if (data.topUsers) displayTopUsers(data.topUsers);
         
         console.log('Analytics cargados exitosamente');
+        return data;
       } catch (err) {
         console.error('Error cargando analytics:', err);
         alert(`Error cargando datos de analytics: ${err.message}`);
+        return null;
       }
+    }
+
+    function setDefaultReportDateRange() {
+      const startDateInput = document.getElementById('startDate');
+      const endDateInput = document.getElementById('endDate');
+
+      if (!startDateInput || !endDateInput) {
+        return;
+      }
+
+      if (startDateInput.value && endDateInput.value) {
+        return;
+      }
+
+      const end = new Date();
+      const start = new Date();
+      start.setDate(end.getDate() - 30);
+
+      startDateInput.value = start.toISOString().split('T')[0];
+      endDateInput.value = end.toISOString().split('T')[0];
     }
 
     // Cargar filtro de áreas
     async function loadAreaFilter() {
       try {
-        const res = await fetch('/api/admin/users', { 
-          headers: { Authorization: 'Bearer ' + token } 
-        });
-        const users = await res.json();
+        const users = await apiFetchJSON('/api/admin/users');
         
         const areas = [...new Set(users.map(u => u.area_trabajo).filter(a => a))];
         const select = document.getElementById('areaFilter');
+        if (!select) return;
+
+        select.innerHTML = '<option value="all">Todas las áreas</option>';
         
         areas.forEach(area => {
           const option = document.createElement('option');
@@ -1161,6 +1736,65 @@
       } catch (err) {
         console.error('Error cargando áreas:', err);
       }
+    }
+
+    async function loadUserFilter() {
+      try {
+        const users = await apiFetchJSON('/api/admin/users');
+        const select = document.getElementById('userFilter');
+
+        if (!select) return;
+
+        select.innerHTML = '<option value="all">Todos los usuarios</option>';
+
+        users.forEach((user) => {
+          const option = document.createElement('option');
+          option.value = `${user.nombre || ''} ${user.apellido || ''}`.trim().toLowerCase();
+          option.textContent = `${user.nombre || ''} ${user.apellido || ''}`.trim() || user.username || 'Usuario';
+          select.appendChild(option);
+        });
+      } catch (err) {
+        console.error('Error cargando usuarios para filtro:', err);
+      }
+    }
+
+    async function loadFileTypeDistribution() {
+      try {
+        const files = await apiFetchJSON('/api/admin/files');
+        const fileTypeMap = {};
+
+        files.forEach((file) => {
+          const fileName = (file.file_name || '').toLowerCase();
+          const extension = fileName.includes('.') ? fileName.split('.').pop() : 'sin_extension';
+          const normalized = extension || 'sin_extension';
+          fileTypeMap[normalized] = (fileTypeMap[normalized] || 0) + 1;
+        });
+
+        const fileTypeData = Object.entries(fileTypeMap)
+          .map(([extension, total]) => ({ extension, total }))
+          .sort((a, b) => b.total - a.total)
+          .slice(0, 8);
+
+        createFilesByTypeChart(fileTypeData);
+        return fileTypeData;
+      } catch (err) {
+        console.error('Error cargando distribución por tipo:', err);
+        return [];
+      }
+    }
+
+    function updateReportKpis(analyticsData, fileTypeData) {
+      const totalActiveFiles = (analyticsData?.filesByMonth || []).reduce((acc, cur) => acc + (Number(cur.total) || 0), 0);
+      const totalDeletedFiles = (analyticsData?.deletedByMonth || []).reduce((acc, cur) => acc + (Number(cur.total) || 0), 0);
+      const activeUsers = (analyticsData?.topUsers || []).filter((u) => Number(u.total_archivos) > 0).length;
+      const areasWithActivity = (analyticsData?.usersByArea || []).length;
+      const topFileType = fileTypeData?.length ? `${String(fileTypeData[0].extension).toUpperCase()}` : '-';
+
+      setTextSafe('kpiActiveFiles', String(totalActiveFiles));
+      setTextSafe('kpiDeletedFiles', String(totalDeletedFiles));
+      setTextSafe('kpiActiveUsers', String(activeUsers));
+      setTextSafe('kpiAreasWithActivity', String(areasWithActivity));
+      setTextSafe('kpiTopFileType', topFileType);
     }
 
     // Gráfico: Usuarios por Área
@@ -1251,6 +1885,47 @@
           scales: {
             y: {
               beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    function createFilesByTypeChart(data) {
+      const canvas = document.getElementById('filesByTypeChart');
+      if (!canvas) {
+        return;
+      }
+
+      const ctx = canvas.getContext('2d');
+      if (chartInstances.filesByType) {
+        chartInstances.filesByType.destroy();
+      }
+
+      if (!data || data.length === 0) {
+        ctx.font = '16px Arial';
+        ctx.fillStyle = '#666';
+        ctx.textAlign = 'center';
+        ctx.fillText('No hay datos disponibles', canvas.width / 2, canvas.height / 2);
+        return;
+      }
+
+      chartInstances.filesByType = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: data.map((d) => String(d.extension).toUpperCase()),
+          datasets: [{
+            data: data.map((d) => d.total),
+            backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#22c55e', '#f97316'],
+            borderColor: '#ffffff',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom'
             }
           }
         }
@@ -1384,6 +2059,8 @@
       const startDate = document.getElementById('startDate').value;
       const endDate = document.getElementById('endDate').value;
       const area = document.getElementById('areaFilter').value;
+      const userFilter = document.getElementById('userFilter').value;
+      const statusFilter = document.getElementById('statusFilter').value;
       
       if (!startDate || !endDate) {
         alert('Por favor selecciona un rango de fechas válido');
@@ -1398,7 +2075,7 @@
       
       try {
         const params = new URLSearchParams({ startDate, endDate, area });
-        console.log('Generando reporte con parámetros:', { startDate, endDate, area });
+        console.log('Generando reporte con parámetros:', { startDate, endDate, area, userFilter, statusFilter });
         
         const res = await fetch(`/api/admin/reports/detailed?${params}`, {
           headers: { Authorization: 'Bearer ' + token }
@@ -1410,6 +2087,15 @@
         }
         
         const data = await res.json();
+
+        const filteredByUserAndStatus = (data.data || []).filter((item) => {
+          const fullName = `${item.nombre || ''} ${item.apellido || ''}`.trim().toLowerCase();
+          const matchesUser = userFilter === 'all' || fullName === userFilter;
+          const matchesStatus = statusFilter === 'all' || (item.estado || 'N/A') === statusFilter;
+          return matchesUser && matchesStatus;
+        });
+
+        data.data = filteredByUserAndStatus;
         console.log('Datos del reporte recibidos:', data);
         displayDetailedReport(data);
         
@@ -1424,10 +2110,11 @@
       console.log('Mostrando reporte detallado:', reportData);
       
       const section = document.getElementById('detailedReportSection');
+      const detailedContent = document.getElementById('detailedReportContent');
       const summary = document.getElementById('reportSummary');
       const table = document.getElementById('detailedReportTable');
       
-      if (!section || !summary || !table) {
+      if (!section || !summary || !table || !detailedContent) {
         console.error('Elementos del reporte no encontrados');
         alert('Error: No se pudieron encontrar los elementos del reporte');
         return;
@@ -1449,13 +2136,37 @@
         </div>
       `;
       
-      // Mostrar tabla
-      table.innerHTML = '';
+      reportRowsOriginal = Array.isArray(reportData.data) ? reportData.data : [];
+      reportRowsFiltered = [...reportRowsOriginal];
+      lastDetailedSummary = reportData.summary || null;
+
+      renderDetailedReportTable(reportRowsFiltered);
+      applyDetailedTableControls();
       
-      if (!reportData.data || reportData.data.length === 0) {
+      section.classList.remove('hidden');
+      detailedContent.classList.remove('is-open');
+      const detailedToggle = section.querySelector('.report-accordion-btn');
+      if (detailedToggle) {
+        detailedToggle.setAttribute('aria-expanded', 'false');
+      }
+      const detailedChevron = section.querySelector('[data-chevron]');
+      if (detailedChevron) {
+        detailedChevron.textContent = '▸';
+      }
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function renderDetailedReportTable(rows) {
+      const table = document.getElementById('detailedReportTable');
+      const resultsCount = document.getElementById('reportResultsCount');
+      if (!table) return;
+
+      table.innerHTML = '';
+
+      if (!rows || rows.length === 0) {
         table.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">No se encontraron datos para el período seleccionado</td></tr>';
       } else {
-        reportData.data.forEach(item => {
+        rows.forEach(item => {
           const row = document.createElement('tr');
           row.className = 'hover:bg-gray-50';
           row.innerHTML = `
@@ -1464,15 +2175,57 @@
             <td class="px-4 py-2 border">${item.file_name || 'Sin archivos'}</td>
             <td class="px-4 py-2 border">${item.created_at ? new Date(item.created_at).toLocaleDateString('es-ES') : 'N/A'}</td>
             <td class="px-4 py-2 border">
-              <span class="px-2 py-1 rounded text-sm ${item.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${item.estado || 'N/A'}</span>
+              <span class="px-2 py-1 rounded text-sm ${(item.estado || 'N/A') === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${item.estado || 'N/A'}</span>
             </td>
           `;
           table.appendChild(row);
         });
       }
-      
-      section.classList.remove('hidden');
-      section.scrollIntoView({ behavior: 'smooth' });
+
+      if (resultsCount) {
+        resultsCount.textContent = `${rows.length} resultados`;
+      }
+    }
+
+    function applyDetailedTableControls() {
+      const searchInput = document.getElementById('reportSearch');
+      const sortInput = document.getElementById('reportSort');
+      const statusFilter = document.getElementById('statusFilter');
+
+      const searchTerm = (searchInput?.value || '').toLowerCase();
+      const sortValue = sortInput?.value || 'date_desc';
+      const statusValue = statusFilter?.value || 'all';
+
+      let working = [...reportRowsOriginal];
+
+      if (statusValue !== 'all') {
+        working = working.filter((item) => (item.estado || 'N/A') === statusValue);
+      }
+
+      if (searchTerm) {
+        working = working.filter((item) => {
+          const user = `${item.nombre || ''} ${item.apellido || ''}`.toLowerCase();
+          const area = (item.area_trabajo || '').toLowerCase();
+          const fileName = (item.file_name || '').toLowerCase();
+          return user.includes(searchTerm) || area.includes(searchTerm) || fileName.includes(searchTerm);
+        });
+      }
+
+      working.sort((a, b) => {
+        if (sortValue === 'date_asc') {
+          return new Date(a.created_at || 0) - new Date(b.created_at || 0);
+        }
+        if (sortValue === 'user_asc') {
+          return `${a.nombre || ''} ${a.apellido || ''}`.localeCompare(`${b.nombre || ''} ${b.apellido || ''}`);
+        }
+        if (sortValue === 'file_asc') {
+          return (a.file_name || '').localeCompare(b.file_name || '');
+        }
+        return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+      });
+
+      reportRowsFiltered = working;
+      renderDetailedReportTable(reportRowsFiltered);
     }
 
     // Funciones de exportación mejoradas
@@ -1501,6 +2254,7 @@
           <body>
             <h1>Reporte de Datos</h1>
             <p>Generado el: ${new Date().toLocaleString()}</p>
+            <p>Resultados aplicados: ${reportRowsFiltered.length}</p>
             ${printContent}
           </body>
         </html>
@@ -1510,8 +2264,7 @@
     };
 
     document.getElementById('exportExcel').onclick = () => {
-      const table = document.getElementById('detailedReportTable');
-      if (!table || table.children.length === 0) {
+      if (!reportRowsFiltered.length) {
         alert('Primero genera un reporte para poder exportarlo');
         return;
       }
@@ -1519,11 +2272,16 @@
       // Convertir tabla a CSV básico
       let csv = 'Nombre,Área de Trabajo,Archivo,Fecha de Creación,Estado\n';
       
-      Array.from(table.children).forEach(row => {
-        const cells = Array.from(row.children).map(cell => {
-          return '"' + cell.textContent.replace(/"/g, '""') + '"';
-        });
-        csv += cells.join(',') + '\n';
+      reportRowsFiltered.forEach((item) => {
+        const row = [
+          `${item.nombre || 'N/A'} ${item.apellido || ''}`.trim(),
+          item.area_trabajo || 'N/A',
+          item.file_name || 'Sin archivos',
+          item.created_at ? new Date(item.created_at).toLocaleDateString('es-ES') : 'N/A',
+          item.estado || 'N/A'
+        ].map((value) => '"' + String(value).replace(/"/g, '""') + '"');
+
+        csv += row.join(',') + '\n';
       });
       
       // Descargar CSV
@@ -1535,6 +2293,26 @@
       a.click();
       window.URL.revokeObjectURL(url);
     };
+
+    document.getElementById('reportSearch')?.addEventListener('input', applyDetailedTableControls);
+    document.getElementById('reportSort')?.addEventListener('change', applyDetailedTableControls);
+    document.getElementById('statusFilter')?.addEventListener('change', applyDetailedTableControls);
+    document.getElementById('clearReportFilters')?.addEventListener('click', () => {
+      const areaFilter = document.getElementById('areaFilter');
+      const userFilter = document.getElementById('userFilter');
+      const statusFilter = document.getElementById('statusFilter');
+      const reportSearch = document.getElementById('reportSearch');
+      const reportSort = document.getElementById('reportSort');
+
+      if (areaFilter) areaFilter.value = 'all';
+      if (userFilter) userFilter.value = 'all';
+      if (statusFilter) statusFilter.value = 'all';
+      if (reportSearch) reportSearch.value = '';
+      if (reportSort) reportSort.value = 'date_desc';
+
+      reportRowsFiltered = [...reportRowsOriginal];
+      renderDetailedReportTable(reportRowsFiltered);
+    });
   </script>
 
   <!-- Botón de WhatsApp flotante -->

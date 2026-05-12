@@ -5,15 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard</title>
   <link href="/output.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body {
-      font-family: "Inter", sans-serif;
-      background: #f1f5f9;
+      font-family: "Montserrat", sans-serif;
+      background: radial-gradient(circle at 10% 10%, #dcfce7 0%, #ffffff 42%), #f8fafc;
       min-height: 100vh;
       margin: 0;
     }
+    .app-layout { display:flex; min-height:100vh; }
+    .sidebar {
+      width: 270px;
+      background: linear-gradient(180deg,#062e1d 0%,#0b3b2a 55%,#111111 100%);
+      color: #f8fafc;
+      border-right: 1px solid rgba(255,255,255,0.12);
+      padding: 1.2rem 1rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-brand { display:flex;align-items:center;gap:0.8rem;padding:0.7rem 0.7rem 1rem;border-bottom:1px solid rgba(255,255,255,0.12); }
+    .sidebar-logo { width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0b8f52,#0f5f3b);display:flex;align-items:center;justify-content:center;font-size:1.2rem; }
+    .sidebar-title { font-weight:800;font-size:0.92rem;line-height:1.2; }
+    .sidebar-subtitle { font-size:0.72rem;opacity:0.82;margin-top:2px; }
+    .sidebar-menu { padding:1rem 0.4rem 0.3rem;display:flex;flex-direction:column;gap:0.35rem; }
+    .sidebar-link { color:#f1f5f9;text-decoration:none;padding:0.62rem 0.72rem;border-radius:10px;font-size:0.85rem;font-weight:600;display:flex;align-items:center;gap:0.55rem;transition:all 0.18s; }
+    .sidebar-link:hover { background:rgba(255,255,255,0.11);transform:translateX(2px); }
+    .sidebar-link.active { background:linear-gradient(135deg, rgba(22,163,74,0.9), rgba(17,24,39,0.95)); box-shadow:0 8px 16px rgba(0,0,0,0.2); }
+    .sidebar-section-title { margin:1rem 0.65rem 0.4rem;color:#fda4af;font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase; }
+    .sidebar-bottom { margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.12); }
+    .sidebar-actions { display:grid; gap:0.45rem; }
+    .sidebar-action-btn { width:100%;border:1px solid rgba(255,255,255,0.28); background:rgba(255,255,255,0.08); color:#f8fafc; border-radius:10px; padding:0.55rem 0.72rem; text-align:left; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.18s; }
+    .sidebar-action-btn:hover { background:rgba(255,255,255,0.16); }
+    .main-shell { flex:1;min-width:0; }
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: linear-gradient(90deg,#065f46 0%,#0f172a 100%);
+      color:#f8fafc;
+      padding:0.95rem 1.5rem;
+      border-bottom: 2px solid #dc2626;
+      box-shadow:0 8px 24px rgba(0,0,0,0.18);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:1rem;
+    }
+    .header-title { font-size:1.55rem;font-weight:800;line-height:1.08; }
+    .header-subtitle { font-size:0.84rem;opacity:0.9;margin-top:3px; }
+    .header-right { display:flex;align-items:center;gap:0.8rem; }
+    .notification-pill { position:relative;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);border-radius:12px;padding:0.35rem 0.62rem;font-size:1rem;cursor:pointer;user-select:none; }
+    .notification-pill:hover { background:rgba(255,255,255,0.22); }
+    .notification-dot { position:absolute;top:-6px;right:-5px;background:#dc2626;color:white;border-radius:50px;min-width:18px;height:18px;font-size:0.66rem;font-weight:700;display:flex;align-items:center;justify-content:center; }
+    #bellDropdown { display:none;position:absolute;top:calc(100% + 10px);right:0;width:300px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.18);z-index:9999;overflow:hidden; }
+    #bellDropdown.open { display:block; }
+    #bellDropdown .bd-header { background:#166534;color:#fff;padding:0.7rem 1rem;font-weight:700;font-size:0.9rem;display:flex;align-items:center;gap:0.5rem; }
+    #bellDropdown .bd-item { padding:0.65rem 1rem;border-bottom:1px solid #f3f4f6;display:flex;flex-direction:column;gap:2px; }
+    #bellDropdown .bd-item:last-child { border-bottom:none; }
+    #bellDropdown .bd-item-title { font-size:0.88rem;font-weight:600;color:#1f2937; }
+    #bellDropdown .bd-item-meta { font-size:0.76rem;color:#6b7280; }
+    #bellDropdown .bd-footer { padding:0.55rem 1rem;text-align:center;font-size:0.8rem;color:#166534;cursor:pointer;font-weight:600;background:#f0fdf4; }
+    #bellDropdown .bd-footer:hover { background:#dcfce7; }
     .navbar {
       background: #1e293b;
       padding: 0 2rem;
@@ -40,8 +95,8 @@
     .btn-admin:hover { filter:brightness(0.95);transform:translateY(-1px); }
     .btn-logout { background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3); }
     .btn-logout:hover { background:rgba(239,68,68,0.25);color:#fecaca; }
-    .main-container { max-width:1100px;margin:0 auto;padding:2rem 1.5rem 4rem; }
-    .stats-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2rem; }
+    .main-container { max-width:1400px;margin:0 auto;padding:1.2rem 1.2rem 4rem; }
+    .stats-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem; }
     .stat-card { background:white;border-radius:16px;padding:1.5rem;display:flex;align-items:center;gap:1.25rem;box-shadow:0 1px 4px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);border:1px solid #e2e8f0;transition:transform 0.18s,box-shadow 0.18s; }
     .stat-card:hover { transform:translateY(-2px);box-shadow:0 4px 24px rgba(0,0,0,0.1); }
     .stat-icon { width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0; }
@@ -82,7 +137,7 @@
     .chevron { transition:transform 0.2s;display:inline-block; }
     .chevron.open { transform:rotate(180deg); }
     .form-label { display:block;font-size:0.85rem;font-weight:600;color:#374151;margin-bottom:0.45rem; }
-    .form-input { width:100%;padding:0.7rem 1rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.92rem;font-family:"Inter",sans-serif;color:#1e293b;background:#f8fafc;transition:border-color 0.18s,box-shadow 0.18s;outline:none; }
+    .form-input { width:100%;padding:0.7rem 1rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:0.92rem;font-family:"Montserrat",sans-serif;color:#1e293b;background:#f8fafc;transition:border-color 0.18s,box-shadow 0.18s;outline:none; }
     .form-input:focus { border-color:#047857;box-shadow:0 0 0 3px rgba(4,120,87,0.12);background:white; }
     .form-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:1rem; }
     .form-group { margin-bottom:1rem; }
@@ -144,33 +199,227 @@
     .whatsapp-btn:hover { transform:translateY(-3px);box-shadow:0 10px 30px rgba(239,68,68,0.5);color:white;text-decoration:none; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
     .fade-in { animation:fadeIn 0.25s ease; }
-    @media(max-width:640px){ .stats-grid{grid-template-columns:1fr} .form-grid-2{grid-template-columns:1fr} .navbar{padding:0 1rem} .main-container{padding:1rem 1rem 4rem} .attendance-status{flex-direction:column;align-items:flex-start} }
-    @media(max-width:768px){ .stats-grid{grid-template-columns:1fr 1fr} }
+
+    .section-icon { background:#ecfdf5 !important; color:#166534; }
+    .btn-primary, .zone-tag { background:linear-gradient(135deg,#065f46,#111111); box-shadow:0 2px 8px rgba(6,95,70,0.3); }
+    .btn-success, .btn-toggle-green { background:linear-gradient(135deg,#15803d,#065f46); color:white; }
+    .btn-toggle-blue { background:#111111; color:#ffffff; }
+    .btn-toggle-blue:hover { background:#262626; }
+    .btn-toggle-red { background:#fee2e2; color:#b91c1c; }
+    .upload-zone { border-color:#86efac; background:#f0fdf4; }
+    .upload-zone:hover { border-color:#15803d; background:#dcfce7; }
+    .upload-zone-text { color:#166534; }
+    .zone-preset:hover { background:#dcfce7;border-color:#86efac;color:#166534; }
+    .pill-blue { background:#e5e7eb;color:#111111; }
+    .file-item:hover, .work-card:hover { border-color:#86efac; }
+    .stat-icon-blue { background:#e5e7eb; }
+    .stat-value-blue { color:#111111; }
+    .content-grid { display:grid; grid-template-columns:minmax(0,2fr) 340px; gap:1rem; align-items:start; }
+    .aside-stack { display:flex; flex-direction:column; gap:1rem; position:sticky; top:86px; }
+    .aside-card { background:white; border:1px solid #e2e8f0; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04); overflow:hidden; }
+    .aside-head { padding:0.9rem 1rem; border-bottom:1px solid #f1f5f9; font-weight:700; font-size:0.95rem; color:#111827; display:flex; justify-content:space-between; align-items:center; }
+    .aside-body { padding:0.9rem 1rem; }
+    .calendar-month { font-size:0.86rem; font-weight:700; color:#065f46; margin-bottom:0.7rem; text-align:center; }
+    .calendar-toolbar { display:flex; align-items:center; justify-content:center; gap:0.4rem; margin-bottom:0.55rem; }
+    .calendar-nav-btn { border:1px solid #d1d5db; background:#ffffff; color:#111827; border-radius:8px; padding:0.2rem 0.55rem; font-size:0.75rem; font-weight:700; cursor:pointer; }
+    .calendar-nav-btn:hover { background:#f3f4f6; }
+    .calendar-weekdays, .calendar-grid { display:grid; grid-template-columns:repeat(7, 1fr); gap:0.35rem; }
+    .calendar-weekdays div { text-align:center; font-size:0.68rem; font-weight:700; color:#6b7280; text-transform:uppercase; }
+    .calendar-day { text-align:center; padding:0.38rem 0; border-radius:8px; font-size:0.76rem; color:#111827; background:#f8fafc; }
+    .calendar-day.muted { color:#9ca3af; background:#f3f4f6; }
+    .calendar-day.today { background:#065f46; color:white; font-weight:700; box-shadow:0 6px 14px rgba(6,95,70,0.25); }
+    .calendar-day.selected { outline:2px solid #dc2626; }
+    .calendar-day.has-note::after { content:""; display:block; width:5px; height:5px; background:#dc2626; border-radius:50%; margin:2px auto 0; }
+    .calendar-notes { margin-top:0.85rem; border-top:1px solid #e5e7eb; padding-top:0.75rem; }
+    .calendar-notes-title { font-size:0.75rem; font-weight:700; color:#065f46; margin-bottom:0.45rem; }
+    .calendar-note-input { width:100%; border:1px solid #d1d5db; border-radius:8px; padding:0.5rem 0.65rem; font-size:0.8rem; font-family:"Montserrat",sans-serif; margin-top:0.45rem; }
+    .calendar-note-actions { margin-top:0.45rem; display:flex; gap:0.45rem; }
+    .calendar-note-btn { border:none; border-radius:8px; padding:0.38rem 0.65rem; font-size:0.75rem; font-weight:700; cursor:pointer; }
+    .calendar-note-btn.save { background:#065f46; color:white; }
+    .calendar-note-btn.clear { background:#fee2e2; color:#b91c1c; }
+    .calendar-notes-list { display:flex; flex-direction:column; gap:0.35rem; max-height:120px; overflow:auto; }
+    .calendar-note-item { border:1px solid #e5e7eb; border-radius:8px; padding:0.42rem 0.52rem; font-size:0.75rem; background:#fafafa; display:flex; justify-content:space-between; gap:0.4rem; }
+    .calendar-note-remove { border:none; background:#fee2e2; color:#b91c1c; border-radius:6px; font-size:0.67rem; font-weight:700; cursor:pointer; }
+    .mini-list { display:flex; flex-direction:column; gap:0.6rem; }
+    .mini-item { border:1px solid #e5e7eb; border-radius:10px; padding:0.6rem 0.65rem; background:#fafafa; }
+    .mini-item-title { font-size:0.8rem; font-weight:700; color:#111827; }
+    .mini-item-meta { font-size:0.72rem; color:#6b7280; margin-top:2px; }
+    .activities-table-wrap { overflow-x:auto; }
+    .activities-table { width:100%; border-collapse:collapse; min-width:650px; }
+    .activities-table th { text-align:left; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.04em; color:#6b7280; padding:0.65rem 0.55rem; border-bottom:1px solid #e5e7eb; }
+    .activities-table td { font-size:0.83rem; color:#111827; padding:0.7rem 0.55rem; border-bottom:1px solid #f1f5f9; }
+    .table-doc-pill { display:inline-block; background:#ecfdf5; color:#166534; border:1px solid #86efac; font-size:0.68rem; font-weight:700; border-radius:999px; padding:0.18rem 0.5rem; }
+
+    /* ── MODALES (edición y auditoría) ── */
+    .modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1rem; }
+    .modal-overlay.hidden { display:none; }
+    .modal-box { background:white;border-radius:20px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,0.22);animation:fadeIn 0.2s ease; }
+    .modal-header { display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid #e5e7eb; }
+    .modal-title { font-size:1.05rem;font-weight:800;color:#111827; }
+    .modal-subtitle { font-size:0.75rem;color:#6b7280;margin-top:2px; }
+    .modal-close { border:none;background:#f1f5f9;color:#6b7280;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center; }
+    .modal-close:hover { background:#fee2e2;color:#dc2626; }
+    .modal-body { padding:1.5rem; }
+    .modal-footer { display:flex;justify-content:flex-end;gap:0.75rem;padding:1rem 1.5rem;border-top:1px solid #e5e7eb; }
+    .btn-cancel { border:1.5px solid #e2e8f0;background:white;color:#374151;border-radius:10px;padding:0.6rem 1.2rem;font-weight:700;font-size:0.85rem;cursor:pointer; }
+    .btn-cancel:hover { background:#f8fafc; }
+    .btn-save { background:linear-gradient(135deg,#065f46,#111111);color:white;border:none;border-radius:10px;padding:0.6rem 1.4rem;font-weight:700;font-size:0.85rem;cursor:pointer;box-shadow:0 2px 8px rgba(6,95,70,0.3); }
+    .btn-save:hover { opacity:0.9; }
+    .btn-icon-green { background:#dcfce7;color:#15803d; }
+    .btn-icon-green:hover { background:#bbf7d0; }
+    .btn-icon-gray { background:#f1f5f9;color:#374151; }
+    .btn-icon-gray:hover { background:#e2e8f0; }
+    /* Tabla de auditoría */
+    .audit-table { width:100%;border-collapse:collapse; }
+    .audit-table th { font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:#6b7280;padding:0.5rem 0.6rem;border-bottom:2px solid #e5e7eb;text-align:left; }
+    .audit-table td { font-size:0.82rem;padding:0.65rem 0.6rem;border-bottom:1px solid #f1f5f9;vertical-align:top; }
+    .audit-table tr:last-child td { border-bottom:none; }
+    .audit-row-num { display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:#065f46;color:white;border-radius:50%;font-size:0.65rem;font-weight:800; }
+    .audit-field-change { display:flex;flex-direction:column;gap:0.25rem; }
+    .audit-old { color:#dc2626;text-decoration:line-through;font-size:0.78rem; }
+    .audit-new { color:#15803d;font-size:0.78rem;font-weight:600; }
+    .audit-same { color:#6b7280;font-size:0.78rem; }
+    .audit-empty { text-align:center;padding:2rem;color:#9ca3af;font-size:0.85rem; }
+
+    /* ── REPORTES ── */
+    .report-filters { display:flex;flex-wrap:wrap;gap:0.65rem;align-items:flex-end;padding:1rem;background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:1.25rem; }
+    .report-filter-group { display:flex;flex-direction:column;gap:0.3rem; }
+    .report-filter-label { font-size:0.7rem;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em; }
+    .report-filter-input { border:1.5px solid #d1d5db;border-radius:9px;padding:0.42rem 0.75rem;font-size:0.82rem;color:#111827;background:white;min-width:130px; }
+    .report-filter-input:focus { outline:none;border-color:#065f46; }
+    .report-filter-btn { background:linear-gradient(135deg,#065f46,#111111);color:white;border:none;border-radius:9px;padding:0.45rem 1.1rem;font-weight:700;font-size:0.82rem;cursor:pointer;align-self:flex-end; }
+    .report-filter-btn:hover { opacity:0.88; }
+    .report-reset-btn { background:#f1f5f9;color:#374151;border:1.5px solid #d1d5db;border-radius:9px;padding:0.45rem 0.85rem;font-weight:700;font-size:0.82rem;cursor:pointer;align-self:flex-end; }
+    .report-reset-btn:hover { background:#e5e7eb; }
+    .report-kpis { display:grid;grid-template-columns:repeat(4,1fr);gap:0.85rem;margin-bottom:1.25rem; }
+    @media(max-width:900px){ .report-kpis{grid-template-columns:repeat(2,1fr);} }
+    .report-kpi { background:white;border-radius:14px;border:1.5px solid #e2e8f0;padding:1rem 1.15rem;display:flex;flex-direction:column;gap:0.25rem; }
+    .report-kpi-val { font-size:1.8rem;font-weight:800;line-height:1; }
+    .report-kpi-label { font-size:0.75rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.04em; }
+    .report-kpi-sub { font-size:0.75rem;color:#9ca3af; }
+    .report-kpi.kpi-green .report-kpi-val { color:#15803d; }
+    .report-kpi.kpi-blue  .report-kpi-val { color:#1d4ed8; }
+    .report-kpi.kpi-yellow .report-kpi-val { color:#b45309; }
+    .report-kpi.kpi-red   .report-kpi-val { color:#dc2626; }
+    .report-charts { display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem; }
+    @media(max-width:860px){ .report-charts{grid-template-columns:1fr;} }
+    .report-chart-card { background:white;border-radius:14px;border:1.5px solid #e2e8f0;padding:1.1rem 1.25rem; }
+    .report-chart-title { font-size:0.82rem;font-weight:800;color:#374151;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center; }
+    .css-bar-wrap { display:flex;flex-direction:column;gap:0.55rem; }
+    .css-bar-row { display:flex;align-items:center;gap:0.55rem; }
+    .css-bar-label { font-size:0.73rem;font-weight:600;color:#374151;width:90px;flex-shrink:0;text-align:right; }
+    .css-bar-track { flex:1;height:18px;background:#f1f5f9;border-radius:99px;overflow:hidden; }
+    .css-bar-fill { height:100%;border-radius:99px;transition:width 0.4s ease; }
+    .css-bar-val { font-size:0.73rem;font-weight:700;color:#374151;width:28px;flex-shrink:0; }
+    .report-table-wrap { overflow-x:auto;border-radius:12px;border:1.5px solid #e2e8f0; }
+    .report-table { width:100%;border-collapse:collapse;min-width:550px; }
+    .report-table th { text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:#6b7280;padding:0.6rem 0.75rem;border-bottom:2px solid #e5e7eb;background:#f8fafc; }
+    .report-table td { font-size:0.83rem;color:#111827;padding:0.65rem 0.75rem;border-bottom:1px solid #f1f5f9;vertical-align:middle; }
+    .report-table tr:last-child td { border-bottom:none; }
+    .report-table tr:hover td { background:#f0fdf4; }
+    .report-export-btn { background:#ecfdf5;color:#15803d;border:1.5px solid #86efac;border-radius:9px;padding:0.4rem 0.9rem;font-weight:700;font-size:0.78rem;cursor:pointer; }
+    .report-export-btn:hover { background:#dcfce7; }
+    .report-empty { text-align:center;padding:2.5rem;color:#9ca3af;font-size:0.85rem; }
+    .aside-doc-item { display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0;border-bottom:1px solid #f1f5f9; }
+    .aside-doc-item:last-child { border-bottom:none; }
+    .aside-doc-icon { width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;font-weight:700; }
+    .aside-doc-name { flex:1;min-width:0;font-size:0.78rem;font-weight:600;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .aside-doc-date { font-size:0.68rem;color:#9ca3af;margin-top:1px; }
+    .aside-doc-dl { flex-shrink:0;background:#ecfdf5;color:#15803d;border:1px solid #86efac;border-radius:7px;padding:0.2rem 0.45rem;font-size:0.72rem;font-weight:700;text-decoration:none; }
+    .aside-doc-dl:hover { background:#dcfce7; }
+
+    /* ── PERFIL ── */
+    .profile-grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:0.9rem; }
+    .profile-item { background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:0.75rem 0.85rem; }
+    .profile-label { font-size:0.69rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; }
+    .profile-value { font-size:0.86rem; color:#111827; margin-top:0.2rem; font-weight:600; word-break:break-word; }
+    .profile-pill { display:inline-flex; align-items:center; gap:0.35rem; padding:0.22rem 0.65rem; border-radius:999px; font-size:0.73rem; font-weight:700; border:1px solid #86efac; background:#ecfdf5; color:#166534; }
+    .profile-toolbar { display:flex; gap:0.55rem; flex-wrap:wrap; }
+    .profile-msg { margin-top:0.7rem; font-size:0.8rem; font-weight:600; }
+    .profile-msg.ok { color:#15803d; }
+    .profile-msg.err { color:#dc2626; }
+
+    @media(max-width:1080px){
+      .app-layout { display:block; }
+      .sidebar { position:relative;height:auto;width:100%; }
+      .stats-grid { grid-template-columns:repeat(2,1fr); }
+      .top-header { padding:0.95rem 1rem; }
+      .header-title { font-size:1.25rem; }
+      .content-grid { grid-template-columns:1fr; }
+      .aside-stack { position:static; }
+    }
+    @media(max-width:640px){ .stats-grid{grid-template-columns:1fr} .form-grid-2{grid-template-columns:1fr} .main-container{padding:1rem 0.8rem 4rem} .attendance-status{flex-direction:column;align-items:flex-start} .header-right{width:100%;justify-content:space-between} .top-header{display:block} .profile-grid{grid-template-columns:1fr;} }
   </style>
 </head>
 <body>
-
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <div class="navbar-logo">🗂️</div>
-      <span class="navbar-title">Sistema de Archivos</span>
-    </div>
-    <div class="navbar-user">
-      <div class="user-badge">
-        <div class="user-avatar" id="userAvatarLetter">U</div>
-        <div class="user-info-text">
-          <div class="name" id="username">Usuario</div>
-          <div class="email" id="userEmail"></div>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">🏛️</div>
+        <div>
+          <div class="sidebar-title">Municipalidad de Benjamín Aceval</div>
+          <div class="sidebar-subtitle">Panel de Gestión</div>
         </div>
       </div>
-      <button id="adminPanel" class="btn-nav btn-admin hidden">⚙️ Administrador</button>
-      <button id="logout" class="btn-nav btn-logout">Salir →</button>
-    </div>
-  </nav>
 
-  <div class="main-container">
+      <nav class="sidebar-menu">
+        <a class="sidebar-link active" data-nav="inicioSection" href="#inicioSection">🏠 Inicio / Dashboard</a>
+        <a class="sidebar-link" data-nav="asistenciaSection" href="#asistenciaSection">🕘 Control de Asistencia</a>
+        <a class="sidebar-link" data-nav="registroSection" href="#registroSection">📝 Registrar Actividad</a>
+        <a class="sidebar-link" data-nav="actividadesSection" href="#actividadesSection">📋 Mis Actividades</a>
+        <a class="sidebar-link" data-nav="documentalSection" href="#documentalSection">📂 Gestión Documental</a>
+        <a class="sidebar-link" data-nav="calendarSection" href="#calendarSection">📅 Calendario</a>
+        <a class="sidebar-link" data-nav="reportesSection" href="#reportesSection">📊 Reportes</a>
+        <a class="sidebar-link" data-nav="perfilSection" href="#perfilSection">👤 Perfil</a>
+      </nav>
 
-    <div class="stats-grid">
+      <div class="sidebar-bottom">
+        <div class="sidebar-section-title">Acciones rápidas</div>
+        <div class="sidebar-actions">
+          <button type="button" class="sidebar-action-btn" id="quickMarkAttendance">✅ Marcar asistencia</button>
+          <button type="button" class="sidebar-action-btn" id="quickNewActivity">📝 Nueva actividad</button>
+          <button type="button" class="sidebar-action-btn" id="quickUploadFile">📤 Subir documento</button>
+          <button type="button" class="sidebar-action-btn" id="quickViewFiles">📂 Ver mis archivos</button>
+        </div>
+      </div>
+
+      <div id="adminSection" class="sidebar-bottom hidden">
+        <div class="sidebar-section-title">Administración</div>
+        <button id="adminPanel" class="sidebar-link" style="width:100%;border:1px solid rgba(252,165,165,0.35);background:rgba(220,38,38,0.18);">🛠️ Panel Administrador</button>
+      </div>
+
+      <div class="sidebar-bottom">
+        <button id="logout" class="sidebar-link" style="width:100%;border:1px solid rgba(248,113,113,0.45);background:rgba(220,38,38,0.2);">🚪 Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <div class="main-shell">
+      <header class="top-header">
+        <div>
+          <div class="header-title">Municipalidad de Benjamín Aceval</div>
+          <div class="header-subtitle">Sistema de Gestión y Seguimiento de Actividades del Personal</div>
+        </div>
+        <div class="header-right">
+          <div class="notification-pill" id="bellBtn" title="Notificaciones">🔔<span class="notification-dot" id="bellCount">0</span>
+            <div id="bellDropdown">
+              <div class="bd-header">🔔 Notificaciones</div>
+              <div id="bellList"></div>
+              <div class="bd-footer" onclick="document.getElementById('notificationsSection').scrollIntoView({behavior:'smooth'});document.getElementById('bellDropdown').classList.remove('open');">Ver todas →</div>
+            </div>
+          </div>
+          <div class="user-badge" style="background:rgba(255,255,255,0.16);">
+            <div class="user-avatar" id="userAvatarLetter">U</div>
+            <div class="user-info-text">
+              <div class="name" id="username">Usuario</div>
+              <div class="email"><span id="userRole">Funcionario</span> · <span id="userEmail"></span></div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="main-container">
+
+    <div class="stats-grid" id="inicioSection">
       <div class="stat-card">
         <div class="stat-icon stat-icon-green">📁</div>
         <div>
@@ -192,9 +441,19 @@
           <div class="stat-label">Archivos Eliminados</div>
         </div>
       </div>
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-blue">⏳</div>
+        <div>
+          <div class="stat-value stat-value-blue" id="pendingActivitiesCount">0</div>
+          <div class="stat-label">Actividades Pendientes</div>
+        </div>
+      </div>
     </div>
 
-    <div class="section">
+    <div class="content-grid">
+      <div>
+
+    <div class="section" id="asistenciaSection">
       <div class="section-header">
         <div class="section-header-left">
           <div class="section-icon" style="background:#f0fdf4;">🕐</div>
@@ -231,7 +490,7 @@
       </div>
     </div>
 
-    <div class="section">
+    <div class="section" id="documentalSection">
       <div class="section-header">
         <div class="section-header-left">
           <div class="section-icon" style="background:#f0fdf4;">📤</div>
@@ -261,7 +520,7 @@
       </div>
     </div>
 
-    <div class="section">
+    <div class="section" id="registroSection">
       <div class="section-header">
         <div class="section-header-left">
           <div class="section-icon" style="background:#eff6ff;">📋</div>
@@ -345,7 +604,112 @@
       </div>
     </div>
 
-    <div class="section">
+    <div class="section" id="recentActivitiesSection">
+      <div class="section-header">
+        <div class="section-header-left">
+          <div class="section-icon" style="background:#fef2f2;">🧾</div>
+          <div>
+            <div class="section-title">Actividades recientes</div>
+            <div class="section-subtitle">Últimos registros del usuario autenticado</div>
+          </div>
+        </div>
+        <button id="showRecentBtn" class="btn-toggle btn-toggle-blue">Ver actividad ▾</button>
+        <button id="hideRecentBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+      </div>
+      <div id="recentActivitiesContent" class="section-body" style="display:none;">
+        <div class="activities-table-wrap">
+          <table class="activities-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Actividad</th>
+                <th>Ubicación</th>
+                <th>Estado</th>
+                <th>Documento</th>
+              </tr>
+            </thead>
+            <tbody id="recentActivitiesBody">
+              <tr>
+                <td colspan="5" style="text-align:center;color:#94a3b8;padding:1rem;">Sin actividades recientes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="recentActivitiesPlaceholder" style="padding:2rem;text-align:center;color:#94a3b8;font-size:0.85rem;">Haz clic en "Ver actividad" para mostrar tus registros recientes</div>
+    </div>
+
+    <div class="section" id="perfilSection">
+      <div class="section-header">
+        <div class="section-header-left">
+          <div class="section-icon" style="background:#ecfdf5;">👤</div>
+          <div>
+            <div class="section-title">Mi Perfil</div>
+            <div class="section-subtitle">Datos personales y configuración de cuenta</div>
+          </div>
+        </div>
+        <button id="showProfileBtn" class="btn-toggle btn-toggle-blue">Ver perfil ▾</button>
+        <button id="hideProfileBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+        <div class="profile-toolbar">
+          <button id="showProfileEditBtn" class="btn-toggle btn-toggle-blue">✏️ Editar perfil</button>
+          <button id="hideProfileEditBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar edición</button>
+        </div>
+      </div>
+      <div id="profileContent" class="section-body" style="display:none;">
+        <div class="profile-grid">
+          <div class="profile-item"><div class="profile-label">Nombre completo</div><div class="profile-value" id="profileFullName">—</div></div>
+          <div class="profile-item"><div class="profile-label">Usuario</div><div class="profile-value" id="profileUsername">—</div></div>
+          <div class="profile-item"><div class="profile-label">Correo</div><div class="profile-value" id="profileEmail">—</div></div>
+          <div class="profile-item"><div class="profile-label">Rol</div><div class="profile-value"><span id="profileRole" class="profile-pill">—</span></div></div>
+          <div class="profile-item"><div class="profile-label">Fecha de nacimiento</div><div class="profile-value" id="profileBirthdate">—</div></div>
+          <div class="profile-item"><div class="profile-label">Área de trabajo</div><div class="profile-value" id="profileArea">—</div></div>
+          <div class="profile-item"><div class="profile-label">Teléfono</div><div class="profile-value" id="profilePhone">—</div></div>
+          <div class="profile-item"><div class="profile-label">Cuenta creada</div><div class="profile-value" id="profileCreatedAt">—</div></div>
+        </div>
+
+        <div id="profileEditWrap" style="display:none;margin-top:1rem;border-top:1px solid #e2e8f0;padding-top:1rem;">
+          <form id="profileForm">
+            <div class="form-grid-2" style="gap:0.85rem;">
+              <div class="form-group">
+                <label class="form-label">Nombre *</label>
+                <input type="text" id="profileNombreInput" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Apellido *</label>
+                <input type="text" id="profileApellidoInput" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Fecha de nacimiento</label>
+                <input type="date" id="profileBirthInput" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Área de trabajo</label>
+                <select id="profileAreaInput" class="form-input">
+                  <option value="">Selecciona área</option>
+                  <option value="Administrativo">Administrativo</option>
+                  <option value="Recursos Humanos">Recursos Humanos</option>
+                  <option value="Contabilidad - Tesorería">Contabilidad - Tesorería</option>
+                  <option value="Informática">Informática / Sistemas</option>
+                  <option value="Desarrollo Social">Desarrollo Social</option>
+                </select>
+              </div>
+              <div class="form-group" style="grid-column:1/-1;">
+                <label class="form-label">Teléfono</label>
+                <input type="text" id="profilePhoneInput" class="form-input" placeholder="Ej: +595 981 123456">
+              </div>
+            </div>
+            <div style="display:flex;gap:0.75rem;margin-top:0.85rem;">
+              <button type="submit" class="btn-primary" style="flex:1;">💾 Guardar cambios</button>
+              <button type="button" id="cancelProfileEditBtn" class="btn-muted" style="flex:1;">Cancelar</button>
+            </div>
+            <div id="profileMessage" class="profile-msg" style="display:none;"></div>
+          </form>
+        </div>
+      </div>
+      <div id="profilePlaceholder" style="padding:2rem;text-align:center;color:#94a3b8;font-size:0.85rem;">Haz clic en "Ver perfil" para mostrar tus datos personales</div>
+    </div>
+
+    <div class="section" id="documentosSection">
       <div class="section-header">
         <div class="section-header-left">
           <div class="section-icon" style="background:#f0fdf4;">🗂️</div>
@@ -390,7 +754,7 @@
       </div>
     </div>
 
-    <div class="section">
+    <div class="section" id="actividadesSection">
       <div class="section-header">
         <div class="section-header-left">
           <div class="section-icon" style="background:#eff6ff;">📊</div>
@@ -426,6 +790,152 @@
       </div>
     </div>
 
+    <!-- ── REPORTES ── -->
+    <div class="section" id="reportesSection">
+      <div class="section-header">
+        <div class="section-header-left">
+          <div class="section-icon" style="background:#ecfdf5;">📊</div>
+          <div>
+            <div class="section-title">Mis Reportes y Estadísticas</div>
+            <div class="section-subtitle">Análisis de tu actividad registrada</div>
+          </div>
+        </div>
+        <button class="report-export-btn" onclick="exportReportCSV()">⬇️ Exportar CSV</button>
+      </div>
+      <div class="section-body">
+        <!-- Filtros -->
+        <div class="report-filters">
+          <div class="report-filter-group">
+            <span class="report-filter-label">Desde</span>
+            <input type="date" id="rptFrom" class="report-filter-input">
+          </div>
+          <div class="report-filter-group">
+            <span class="report-filter-label">Hasta</span>
+            <input type="date" id="rptTo" class="report-filter-input">
+          </div>
+          <div class="report-filter-group">
+            <span class="report-filter-label">Tipo</span>
+            <select id="rptTipo" class="report-filter-input">
+              <option value="">Todos</option>
+              <option value="Trabajo Exterior">Trabajo Exterior</option>
+              <option value="Trabajo Interior">Trabajo Interior</option>
+              <option value="Mantenimiento">Mantenimiento</option>
+              <option value="Inspección">Inspección</option>
+              <option value="Inspección de Campo">Inspección de Campo</option>
+              <option value="Reunión Técnica">Reunión Técnica</option>
+              <option value="Capacitación">Capacitación</option>
+              <option value="Trabajo Administrativo">Trabajo Administrativo</option>
+              <option value="Supervisión de Obra">Supervisión de Obra</option>
+              <option value="Atención al Ciudadano">Atención al Ciudadano</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+          <div class="report-filter-group">
+            <span class="report-filter-label">Estado</span>
+            <select id="rptEstado" class="report-filter-input">
+              <option value="">Todos</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="en-proceso">En Proceso</option>
+              <option value="culminado">Culminado</option>
+              <option value="postergado">Postergado</option>
+            </select>
+          </div>
+          <button class="report-filter-btn" onclick="generateReport()">🔍 Filtrar</button>
+          <button class="report-reset-btn" onclick="resetReport()">✕ Limpiar</button>
+        </div>
+
+        <!-- KPIs -->
+        <div class="report-kpis" id="reportKpis">
+          <div class="report-kpi kpi-green"><div class="report-kpi-val" id="kpiTotal">—</div><div class="report-kpi-label">Total Actividades</div><div class="report-kpi-sub">en el período seleccionado</div></div>
+          <div class="report-kpi kpi-blue"><div class="report-kpi-val" id="kpiMes">—</div><div class="report-kpi-label">Este Mes</div><div class="report-kpi-sub" id="kpiMesLabel">actividades registradas</div></div>
+          <div class="report-kpi kpi-yellow"><div class="report-kpi-val" id="kpiCulminadas">—</div><div class="report-kpi-label">Culminadas</div><div class="report-kpi-sub" id="kpiCulminadasPct">del total</div></div>
+          <div class="report-kpi kpi-red"><div class="report-kpi-val" id="kpiPendientes">—</div><div class="report-kpi-label">Pendientes</div><div class="report-kpi-sub">requieren acción</div></div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="report-charts">
+          <div class="report-chart-card">
+            <div class="report-chart-title">Actividades por Estado <span id="chartEstadoTotal" style="font-size:0.72rem;color:#9ca3af;"></span></div>
+            <div class="css-bar-wrap" id="chartEstado"></div>
+          </div>
+          <div class="report-chart-card">
+            <div class="report-chart-title">Últimos 6 Meses <span style="font-size:0.72rem;color:#9ca3af;">registros</span></div>
+            <div class="css-bar-wrap" id="chartMeses"></div>
+          </div>
+        </div>
+
+        <!-- Tabla -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+          <div style="font-size:0.82rem;font-weight:700;color:#374151;">Detalle de actividades <span id="reportTableCount" style="color:#065f46;"></span></div>
+        </div>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Fecha Inicio</th>
+                <th>Tipo</th>
+                <th>Zonas</th>
+                <th>Duración</th>
+                <th>Estado</th>
+                <th>Descripción</th>
+              </tr>
+            </thead>
+            <tbody id="reportTableBody">
+              <tr><td colspan="6" class="report-empty">Cargando datos...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+      </div>
+
+      <aside class="aside-stack">
+        <div class="aside-card" id="calendarSection">
+          <div class="aside-head">📅 Calendario <span id="calendarNowLabel" style="font-size:0.72rem;color:#6b7280;"></span></div>
+          <div class="aside-body">
+            <div class="calendar-toolbar">
+              <button type="button" id="calPrevMonth" class="calendar-nav-btn">◀</button>
+              <button type="button" id="calToday" class="calendar-nav-btn">Hoy</button>
+              <button type="button" id="calNextMonth" class="calendar-nav-btn">▶</button>
+            </div>
+            <div class="calendar-month" id="calendarMonthLabel">Mes</div>
+            <div class="calendar-weekdays">
+              <div>Lu</div><div>Ma</div><div>Mi</div><div>Ju</div><div>Vi</div><div>Sa</div><div>Do</div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid" style="margin-top:0.4rem;"></div>
+            <div class="calendar-notes">
+              <div class="calendar-notes-title" id="calendarSelectedDateLabel">Selecciona un día para notas</div>
+              <div id="calendarNotesList" class="calendar-notes-list">
+                <div class="mini-item-meta">No hay notas para esta fecha</div>
+              </div>
+              <input id="calendarNoteInput" class="calendar-note-input" type="text" maxlength="140" placeholder="Escribe una nota para esta fecha...">
+              <div class="calendar-note-actions">
+                <button type="button" id="calendarSaveNote" class="calendar-note-btn save">Guardar nota</button>
+                <button type="button" id="calendarClearNotes" class="calendar-note-btn clear">Limpiar día</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="aside-card" id="notificationsSection">
+          <div class="aside-head">🔔 Notificaciones</div>
+          <div class="aside-body mini-list" id="notificationsList">
+            <div class="mini-item"><div class="mini-item-title">Sin notificaciones</div><div class="mini-item-meta">Se mostrarán aquí eventos recientes.</div></div>
+          </div>
+        </div>
+
+        <div class="aside-card" id="documentalAsideSection">
+          <div class="aside-head">📂 Gestión Documental</div>
+          <div class="aside-body mini-list" id="asideDocumentsList">
+            <div class="mini-item"><div class="mini-item-title">Sin documentos</div><div class="mini-item-meta">Sube archivos para verlos aquí.</div></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+      </div>
+    </div>
   </div>
 
   <template id="fileTemplate">
@@ -443,6 +953,103 @@
     </div>
   </template>
 
+  <!-- ── MODAL: EDITAR ACTIVIDAD ── -->
+  <div id="editWorkModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">✏️ Editar Actividad</div>
+          <div class="modal-subtitle" id="editModalSubtitle">Modifique los datos de la actividad registrada</div>
+        </div>
+        <button class="modal-close" onclick="closeEditModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="editWorkForm">
+          <input type="hidden" id="editWorkId">
+          <div class="form-group">
+            <label class="form-label">Tipo de Actividad *</label>
+            <select id="editWorkType" class="form-control" required>
+              <option value="">Seleccionar...</option>
+              <option value="Inspección de Campo">Inspección de Campo</option>
+              <option value="Reunión Técnica">Reunión Técnica</option>
+              <option value="Capacitación">Capacitación</option>
+              <option value="Trabajo Administrativo">Trabajo Administrativo</option>
+              <option value="Supervisión de Obra">Supervisión de Obra</option>
+              <option value="Atención al Ciudadano">Atención al Ciudadano</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+          <div class="form-grid-2" style="gap:0.85rem;margin-top:0.85rem;">
+            <div class="form-group">
+              <label class="form-label">Fecha Inicio *</label>
+              <input type="date" id="editStartDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fecha Fin *</label>
+              <input type="date" id="editEndDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hora Inicio *</label>
+              <input type="time" id="editStartTime" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hora Fin *</label>
+              <input type="time" id="editEndTime" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:0.85rem;">
+            <label class="form-label">Estado *</label>
+            <select id="editWorkStatus" class="form-control" required>
+              <option value="pendiente">⏳ Pendiente</option>
+              <option value="en-proceso">🔄 En Proceso</option>
+              <option value="culminado">✅ Culminado</option>
+              <option value="postergado">⏸️ Postergado</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-top:0.85rem;">
+            <label class="form-label">Zonas</label>
+            <div id="editZonesContainer" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.5rem;"></div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
+              <button type="button" class="zone-preset" onclick="addEditZone('Zona Norte')">+ Norte</button>
+              <button type="button" class="zone-preset" onclick="addEditZone('Zona Sur')">+ Sur</button>
+              <button type="button" class="zone-preset" onclick="addEditZone('Zona Este')">+ Este</button>
+              <button type="button" class="zone-preset" onclick="addEditZone('Zona Oeste')">+ Oeste</button>
+              <button type="button" class="zone-preset" onclick="addEditZone('Centro')">+ Centro</button>
+              <button type="button" class="zone-preset" onclick="addEditZone('Periurbano')">+ Periurbano</button>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:0.85rem;">
+            <label class="form-label">Descripción</label>
+            <textarea id="editDescription" class="form-control" rows="3" placeholder="Detalle adicional (opcional)..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
+        <button class="btn-save" onclick="submitEditWork()">💾 Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MODAL: HISTORIAL DE EDICIONES ── -->
+  <div id="historialModal" class="modal-overlay hidden">
+    <div class="modal-box" style="max-width:700px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">🕐 Historial de Ediciones</div>
+          <div class="modal-subtitle" id="historialModalSubtitle">Registro de auditoría de modificaciones</div>
+        </div>
+        <button class="modal-close" onclick="closeHistorialModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="historialContent"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeHistorialModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
   <a href="https://wa.me/595983159658?text=Hola,%20necesito%20ayuda%20con%20el%20sistema%20de%20archivos."
      class="whatsapp-btn" target="_blank" title="Soporte WhatsApp">
     <span>❓</span><span>¿Necesitas Ayuda?</span>
@@ -455,10 +1062,13 @@
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
       const name = payload.username || payload.email || "Usuario";
+      const roleLabel = payload.role === "admin" ? "Administrador" : "Funcionario";
       document.getElementById("username").textContent = name;
       document.getElementById("userEmail").textContent = payload.email || "";
+      document.getElementById("userRole").textContent = roleLabel;
       document.getElementById("userAvatarLetter").textContent = name.charAt(0).toUpperCase();
       if (payload.role === "admin") {
+        document.getElementById("adminSection").classList.remove("hidden");
         document.getElementById("adminPanel").classList.remove("hidden");
         document.getElementById("adminPanel").onclick = () => { window.location.href = "/admin.html"; };
       }
@@ -469,11 +1079,444 @@
       window.location.href = "/login.html";
     });
 
+    document.querySelectorAll(".sidebar-link[data-nav]").forEach(link => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const sectionId = link.dataset.nav;
+        if (!sectionId) return;
+        scrollToSection(sectionId);
+      });
+    });
+
+    document.getElementById("quickMarkAttendance").addEventListener("click", () => {
+      scrollToSection("asistenciaSection");
+      document.getElementById("btnMarcar").focus();
+    });
+
+    document.getElementById("quickNewActivity").addEventListener("click", () => {
+      scrollToSection("registroSection");
+      const showBtn = document.getElementById("showRegisterBtn");
+      if (showBtn && showBtn.style.display !== "none") showBtn.click();
+    });
+
+    document.getElementById("quickUploadFile").addEventListener("click", () => {
+      scrollToSection("documentalSection");
+      const showBtn = document.getElementById("showUploadBtn");
+      if (showBtn && showBtn.style.display !== "none") showBtn.click();
+    });
+
+    document.getElementById("quickViewFiles").addEventListener("click", () => {
+      scrollToSection("documentosSection");
+      const showBtn = document.getElementById("showFilesBtn");
+      if (showBtn && showBtn.style.display !== "none") showBtn.click();
+    });
+
+    document.getElementById("calPrevMonth").addEventListener("click", () => {
+      calendarViewDate = new Date(calendarViewDate.getFullYear(), calendarViewDate.getMonth() - 1, 1);
+      renderCalendar();
+    });
+
+    document.getElementById("calNextMonth").addEventListener("click", () => {
+      calendarViewDate = new Date(calendarViewDate.getFullYear(), calendarViewDate.getMonth() + 1, 1);
+      renderCalendar();
+    });
+
+    document.getElementById("calToday").addEventListener("click", () => {
+      const now = new Date();
+      calendarViewDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      selectedCalendarDate = formatDateKey(now);
+      renderCalendar();
+    });
+
+    document.getElementById("calendarSaveNote").addEventListener("click", () => {
+      if (!selectedCalendarDate) return;
+      const input = document.getElementById("calendarNoteInput");
+      const note = (input.value || "").trim();
+      if (!note) return;
+      const notesMap = getCalendarNotesMap();
+      const current = Array.isArray(notesMap[selectedCalendarDate]) ? notesMap[selectedCalendarDate] : [];
+      current.unshift(note);
+      notesMap[selectedCalendarDate] = current.slice(0, 20);
+      setCalendarNotesMap(notesMap);
+      renderCalendar();
+      renderDashboardWidgets();
+    });
+
+    document.getElementById("calendarClearNotes").addEventListener("click", () => {
+      if (!selectedCalendarDate) return;
+      const notesMap = getCalendarNotesMap();
+      delete notesMap[selectedCalendarDate];
+      setCalendarNotesMap(notesMap);
+      renderCalendar();
+      renderDashboardWidgets();
+    });
+
+    document.getElementById("calendarNotesList").addEventListener("click", (e) => {
+      const target = e.target;
+      if (!(target instanceof HTMLElement)) return;
+      const index = target.dataset.noteIndex;
+      if (index === undefined || !selectedCalendarDate) return;
+      const notesMap = getCalendarNotesMap();
+      const notes = notesMap[selectedCalendarDate] || [];
+      notes.splice(Number(index), 1);
+      if (notes.length) notesMap[selectedCalendarDate] = notes;
+      else delete notesMap[selectedCalendarDate];
+      setCalendarNotesMap(notesMap);
+      renderCalendar();
+      renderDashboardWidgets();
+    });
+
     function formatDate(d) { return new Date(d).toLocaleDateString("es-ES",{day:"2-digit",month:"2-digit",year:"numeric"}); }
     function formatDateTime(d) { return new Date(d).toLocaleString("es-ES",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}); }
     function formatTime(d) { return new Date(d).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"}); }
 
+    let dashboardTrabajos = [];
+    let dashboardFiles = [];
+    let calendarViewDate = new Date();
+    let selectedCalendarDate = null;
+    const CALENDAR_NOTES_KEY = "municipal_dashboard_calendar_notes_v1";
+
+    function getCalendarNotesMap() {
+      try {
+        const raw = localStorage.getItem(CALENDAR_NOTES_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch {
+        return {};
+      }
+    }
+
+    function setCalendarNotesMap(map) {
+      localStorage.setItem(CALENDAR_NOTES_KEY, JSON.stringify(map));
+    }
+
+    function formatDateKey(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function setSidebarActive(sectionId) {
+      document.querySelectorAll(".sidebar-link[data-nav]").forEach(link => {
+        if (link.dataset.nav === sectionId) link.classList.add("active");
+        else link.classList.remove("active");
+      });
+    }
+
+    function scrollToSection(sectionId) {
+      const target = document.getElementById(sectionId);
+      if (!target) return;
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      setSidebarActive(sectionId);
+    }
+
+    let userProfile = null;
+
+    function fullNameFromProfile(profile) {
+      const nombre = (profile?.nombre || "").trim();
+      const apellido = (profile?.apellido || "").trim();
+      const full = `${nombre} ${apellido}`.trim();
+      return full || profile?.username || "Usuario";
+    }
+
+    function renderProfileSection(profile) {
+      if (!profile) return;
+      document.getElementById("profileFullName").textContent = fullNameFromProfile(profile);
+      document.getElementById("profileUsername").textContent = profile.username || "—";
+      document.getElementById("profileEmail").textContent = profile.email || "—";
+      document.getElementById("profileRole").textContent = profile.role === "admin" ? "Administrador" : "Funcionario";
+      document.getElementById("profileBirthdate").textContent = profile.fecha_nacimiento ? formatDate(profile.fecha_nacimiento) : "—";
+      document.getElementById("profileArea").textContent = profile.area_trabajo || "—";
+      document.getElementById("profilePhone").textContent = profile.telefono || "—";
+      document.getElementById("profileCreatedAt").textContent = profile.created_at ? formatDateTime(profile.created_at) : "—";
+
+      document.getElementById("profileNombreInput").value = profile.nombre || "";
+      document.getElementById("profileApellidoInput").value = profile.apellido || "";
+      document.getElementById("profileBirthInput").value = profile.fecha_nacimiento ? String(profile.fecha_nacimiento).substring(0, 10) : "";
+      document.getElementById("profileAreaInput").value = profile.area_trabajo || "";
+      document.getElementById("profilePhoneInput").value = profile.telefono || "";
+
+      // Refrescar cabecera con datos reales del perfil
+      const displayName = fullNameFromProfile(profile);
+      document.getElementById("username").textContent = displayName;
+      document.getElementById("userEmail").textContent = profile.email || "";
+      document.getElementById("userAvatarLetter").textContent = displayName.charAt(0).toUpperCase();
+    }
+
+    async function loadUserProfile() {
+      try {
+        const res = await fetch("/api/auth/me", { headers: { Authorization: "Bearer " + token } });
+        if (!res.ok) throw new Error("No se pudo cargar el perfil");
+        userProfile = await res.json();
+        renderProfileSection(userProfile);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function setProfileMessage(message, ok = true) {
+      const el = document.getElementById("profileMessage");
+      el.style.display = "block";
+      el.className = `profile-msg ${ok ? "ok" : "err"}`;
+      el.textContent = message;
+    }
+
+    function openProfileEdit() {
+      document.getElementById("profileEditWrap").style.display = "block";
+      document.getElementById("showProfileEditBtn").style.display = "none";
+      document.getElementById("hideProfileEditBtn").style.display = "inline-flex";
+      document.getElementById("profileMessage").style.display = "none";
+    }
+
+    function closeProfileEdit() {
+      document.getElementById("profileEditWrap").style.display = "none";
+      const profileOpen = document.getElementById("profileContent").style.display !== "none";
+      document.getElementById("showProfileEditBtn").style.display = profileOpen ? "inline-flex" : "none";
+      document.getElementById("hideProfileEditBtn").style.display = "none";
+      if (userProfile) renderProfileSection(userProfile);
+    }
+
+    function renderSelectedDayNotes() {
+      const notesMap = getCalendarNotesMap();
+      const label = document.getElementById("calendarSelectedDateLabel");
+      const list = document.getElementById("calendarNotesList");
+      const input = document.getElementById("calendarNoteInput");
+
+      if (!selectedCalendarDate) {
+        label.textContent = "Selecciona un día para notas";
+        list.innerHTML = '<div class="mini-item-meta">No hay notas para esta fecha</div>';
+        input.value = "";
+        return;
+      }
+
+      const notes = notesMap[selectedCalendarDate] || [];
+      label.textContent = `Notas del ${selectedCalendarDate}`;
+      if (!notes.length) {
+        list.innerHTML = '<div class="mini-item-meta">No hay notas para esta fecha</div>';
+      } else {
+        list.innerHTML = "";
+        notes.forEach((note, idx) => {
+          const row = document.createElement("div");
+          row.className = "calendar-note-item";
+          row.innerHTML = `<span>${note}</span><button type="button" class="calendar-note-remove" data-note-index="${idx}">Quitar</button>`;
+          list.appendChild(row);
+        });
+      }
+      input.value = "";
+    }
+
+    document.getElementById("showProfileEditBtn").addEventListener("click", openProfileEdit);
+    document.getElementById("hideProfileEditBtn").addEventListener("click", closeProfileEdit);
+    document.getElementById("cancelProfileEditBtn").addEventListener("click", closeProfileEdit);
+    document.getElementById("profileForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = {
+        nombre: document.getElementById("profileNombreInput").value.trim(),
+        apellido: document.getElementById("profileApellidoInput").value.trim(),
+        fecha_nacimiento: document.getElementById("profileBirthInput").value || null,
+        area_trabajo: document.getElementById("profileAreaInput").value || null,
+        telefono: document.getElementById("profilePhoneInput").value.trim()
+      };
+
+      if (!payload.nombre || !payload.apellido) {
+        setProfileMessage("Nombre y apellido son obligatorios.", false);
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/auth/me", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (!res.ok) {
+          setProfileMessage(json.message || "No se pudo actualizar el perfil.", false);
+          return;
+        }
+
+        userProfile = json.user;
+        renderProfileSection(userProfile);
+        setProfileMessage("Perfil actualizado correctamente.", true);
+      } catch (err) {
+        console.error(err);
+        setProfileMessage("Error al guardar cambios. Intente nuevamente.", false);
+      }
+    });
+
+    function renderCalendar() {
+      const now = new Date();
+      const year = calendarViewDate.getFullYear();
+      const month = calendarViewDate.getMonth();
+      const notesMap = getCalendarNotesMap();
+      const monthNames = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+
+      document.getElementById("calendarMonthLabel").textContent = `${monthNames[month]} ${year}`;
+      document.getElementById("calendarNowLabel").textContent = now.toLocaleDateString("es-ES", { day:"2-digit", month:"2-digit" });
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const prevLastDay = new Date(year, month, 0).getDate();
+      const offset = (firstDay.getDay() + 6) % 7;
+
+      const days = [];
+      for (let i = offset; i > 0; i--) {
+        days.push({ day: prevLastDay - i + 1, muted: true });
+      }
+      for (let d = 1; d <= lastDay.getDate(); d++) {
+        const currentDate = new Date(year, month, d);
+        const key = formatDateKey(currentDate);
+        days.push({
+          day: d,
+          key,
+          today: d === now.getDate() && month === now.getMonth() && year === now.getFullYear(),
+          hasNote: Array.isArray(notesMap[key]) && notesMap[key].length > 0
+        });
+      }
+      while (days.length % 7 !== 0) {
+        days.push({ day: days.length % 7 + 1, muted: true });
+      }
+
+      const grid = document.getElementById("calendarGrid");
+      grid.innerHTML = "";
+      days.forEach(item => {
+        const el = document.createElement("div");
+        el.className = `calendar-day${item.muted ? " muted" : ""}${item.today ? " today" : ""}${item.hasNote ? " has-note" : ""}${selectedCalendarDate === item.key ? " selected" : ""}`;
+        el.textContent = item.day;
+        if (!item.muted && item.key) {
+          el.style.cursor = "pointer";
+          el.onclick = () => {
+            selectedCalendarDate = item.key;
+            renderCalendar();
+            renderSelectedDayNotes();
+          };
+        }
+        grid.appendChild(el);
+      });
+
+      if (!selectedCalendarDate) {
+        selectedCalendarDate = formatDateKey(now);
+      }
+      renderSelectedDayNotes();
+    }
+
+    function renderDashboardWidgets() {
+      const pending = dashboardTrabajos.filter(t => ["pendiente","en-proceso","postergado"].includes((t.estado || "").toLowerCase())).length;
+      document.getElementById("pendingActivitiesCount").textContent = pending;
+
+      const recentBody = document.getElementById("recentActivitiesBody");
+      if (!dashboardTrabajos.length) {
+        recentBody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:1rem;">Sin actividades recientes</td></tr>`;
+      } else {
+        recentBody.innerHTML = "";
+        dashboardTrabajos.slice(0, 6).forEach(t => {
+          const tr = document.createElement("tr");
+          const ubicacion = Array.isArray(t.zonas) ? t.zonas.join(", ") : (t.zonas || "N/D");
+          const estadoTxt = (t.estado || "-").replace("-", " ");
+          tr.innerHTML = `
+            <td>${t.fechaInicio ? formatDate(t.fechaInicio) : "-"}</td>
+            <td>${t.tipo || "Actividad"}</td>
+            <td>${ubicacion || "N/D"}</td>
+            <td><span class="table-doc-pill">${estadoTxt}</span></td>
+            <td><span class="table-doc-pill">Sin adjunto</span></td>
+          `;
+          recentBody.appendChild(tr);
+        });
+      }
+
+      const docs = document.getElementById("asideDocumentsList");
+      const fileTypeIcon = name => {
+        const ext = (name || "").split(".").pop().toLowerCase();
+        if (["pdf"].includes(ext)) return { icon:"PDF", bg:"#fff1f2", color:"#dc2626" };
+        if (["doc","docx"].includes(ext)) return { icon:"DOC", bg:"#eff6ff", color:"#2563eb" };
+        if (["xls","xlsx"].includes(ext)) return { icon:"XLS", bg:"#f0fdf4", color:"#16a34a" };
+        if (["ppt","pptx"].includes(ext)) return { icon:"PPT", bg:"#fff7ed", color:"#ea580c" };
+        if (["jpg","jpeg","png","gif","webp","svg"].includes(ext)) return { icon:"IMG", bg:"#fdf4ff", color:"#9333ea" };
+        return { icon:"FILE", bg:"#f8fafc", color:"#64748b" };
+      };
+      if (!dashboardFiles.length) {
+        docs.innerHTML = `<div style="text-align:center;padding:1rem;color:#9ca3af;font-size:0.78rem;">Sube archivos para verlos aquí.</div>`;
+      } else {
+        docs.innerHTML = "";
+        dashboardFiles.slice(0, 5).forEach(f => {
+          const fi = fileTypeIcon(f.file_name);
+          const item = document.createElement("div");
+          item.className = "aside-doc-item";
+          item.innerHTML = `
+            <div class="aside-doc-icon" style="background:${fi.bg};color:${fi.color};font-size:0.6rem;">${fi.icon}</div>
+            <div style="flex:1;min-width:0;">
+              <div class="aside-doc-name" title="${f.file_name}">${f.file_name}</div>
+              <div class="aside-doc-date">${new Date(f.created_at || f.uploaded_at).toLocaleDateString("es-ES")}</div>
+            </div>
+            <a href="/uploads/${f.file_path}" download="${f.file_name}" class="aside-doc-dl" title="Descargar">⬇</a>`;
+          docs.appendChild(item);
+        });
+        if (dashboardFiles.length > 5) {
+          const more = document.createElement("div");
+          more.style.cssText = "text-align:center;padding:0.45rem 0 0;font-size:0.73rem;color:#065f46;font-weight:700;cursor:pointer;";
+          more.textContent = `Ver todos (${dashboardFiles.length}) →`;
+          more.onclick = () => { document.getElementById("documentosSection").scrollIntoView({behavior:"smooth"}); document.getElementById("showFilesBtn").click(); };
+          docs.appendChild(more);
+        }
+      }
+
+      const noti = document.getElementById("notificationsList");
+      const notifications = [];
+      if (pending > 0) notifications.push({ title: `${pending} actividades pendientes`, meta: "Requieren seguimiento", icon: "⚠️" });
+      if (dashboardFiles.length > 0) notifications.push({ title: `${dashboardFiles.length} documentos subidos`, meta: "Documentación actualizada", icon: "📄" });
+      const notesMap = getCalendarNotesMap();
+      const todayKey = formatDateKey(new Date());
+      const todayNotes = notesMap[todayKey] || [];
+      if (todayNotes.length > 0) notifications.push({ title: `${todayNotes.length} nota(s) para hoy`, meta: "Calendario personal", icon: "📅" });
+      if (!notifications.length) notifications.push({ title: "Sin notificaciones", meta: "No hay eventos nuevos por ahora", icon: "✅" });
+
+      // Actualizar dot en la campana
+      const dot = document.getElementById("bellCount");
+      const realCount = notifications.filter(n => n.icon !== "✅").length;
+      if (dot) {
+        dot.textContent = realCount > 0 ? String(realCount) : "0";
+        dot.style.display = realCount > 0 ? "flex" : "none";
+      }
+
+      // Poblar dropdown de la campana
+      const bellList = document.getElementById("bellList");
+      if (bellList) {
+        bellList.innerHTML = "";
+        notifications.slice(0, 5).forEach(n => {
+          const d = document.createElement("div");
+          d.className = "bd-item";
+          d.innerHTML = `<div class="bd-item-title">${n.icon} ${n.title}</div><div class="bd-item-meta">${n.meta}</div>`;
+          bellList.appendChild(d);
+        });
+      }
+
+      noti.innerHTML = "";
+      notifications.slice(0, 4).forEach(n => {
+        const item = document.createElement("div");
+        item.className = "mini-item";
+        item.innerHTML = `<div class="mini-item-title">${n.icon} ${n.title}</div><div class="mini-item-meta">${n.meta}</div>`;
+        noti.appendChild(item);
+      });
+      // Actualizar reportes automáticamente cuando se recargan datos
+      if (typeof generateReport === "function") generateReport();
+    }
+
     // ── REGISTRO DE TRABAJO ──
+    // ── CAMPANA: abrir/cerrar dropdown ──
+    const bellBtn = document.getElementById("bellBtn");
+    const bellDropdown = document.getElementById("bellDropdown");
+    if (bellBtn && bellDropdown) {
+      bellBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        bellDropdown.classList.toggle("open");
+      });
+      document.addEventListener("click", (e) => {
+        if (!bellBtn.contains(e.target)) {
+          bellDropdown.classList.remove("open");
+        }
+      });
+    }
+
     let selectedZones = [];
 
     document.getElementById("showRegisterBtn").addEventListener("click", () => {
@@ -493,6 +1536,39 @@
       document.getElementById("registerPlaceholder").style.display = "block";
       document.getElementById("showRegisterBtn").style.display = "block";
       document.getElementById("hideRegisterBtn").style.display = "none";
+    });
+
+    document.getElementById("showRecentBtn").addEventListener("click", () => {
+      document.getElementById("recentActivitiesContent").style.display = "block";
+      document.getElementById("recentActivitiesPlaceholder").style.display = "none";
+      document.getElementById("showRecentBtn").style.display = "none";
+      document.getElementById("hideRecentBtn").style.display = "block";
+    });
+
+    document.getElementById("hideRecentBtn").addEventListener("click", () => {
+      document.getElementById("recentActivitiesContent").style.display = "none";
+      document.getElementById("recentActivitiesPlaceholder").style.display = "block";
+      document.getElementById("showRecentBtn").style.display = "block";
+      document.getElementById("hideRecentBtn").style.display = "none";
+    });
+
+    document.getElementById("showProfileBtn").addEventListener("click", () => {
+      document.getElementById("profileContent").style.display = "block";
+      document.getElementById("profilePlaceholder").style.display = "none";
+      document.getElementById("showProfileBtn").style.display = "none";
+      document.getElementById("hideProfileBtn").style.display = "block";
+      document.getElementById("showProfileEditBtn").style.display = "inline-flex";
+      document.getElementById("hideProfileEditBtn").style.display = "none";
+    });
+
+    document.getElementById("hideProfileBtn").addEventListener("click", () => {
+      document.getElementById("profileContent").style.display = "none";
+      document.getElementById("profilePlaceholder").style.display = "block";
+      document.getElementById("showProfileBtn").style.display = "block";
+      document.getElementById("hideProfileBtn").style.display = "none";
+      document.getElementById("showProfileEditBtn").style.display = "none";
+      document.getElementById("hideProfileEditBtn").style.display = "none";
+      closeProfileEdit();
     });
 
     document.getElementById("cancelWorkBtn").addEventListener("click", () => {
@@ -586,7 +1662,12 @@
     async function updateWorkCount() {
       try {
         const res = await fetch("/api/trabajos", { headers: { Authorization: "Bearer " + token } });
-        if (res.ok) { const t = await res.json(); document.getElementById("workCount").textContent = t.length; }
+        if (res.ok) {
+          const t = await res.json();
+          dashboardTrabajos = t;
+          document.getElementById("workCount").textContent = t.length;
+          renderDashboardWidgets();
+        }
       } catch(e) { console.error(e); }
     }
 
@@ -611,6 +1692,8 @@
                 <span class="work-title">${t.tipo}</span>
                 <div style="display:flex;align-items:center;gap:0.5rem;flex-shrink:0;">
                   <span class="pill ${sc[t.estado]||"pill-blue"}">${si[t.estado]} ${sn[t.estado]}</span>
+                  <button onclick="editWork(${t.id})" class="btn-icon btn-icon-green" title="Editar actividad">✏️</button>
+                  <button onclick="showHistorial(${t.id}, '${t.tipo.replace(/'/g,"&#39;")}')" class="btn-icon btn-icon-gray" title="Ver historial de ediciones">🕐</button>
                   <button onclick="deleteWork(${t.id})" class="btn-icon btn-icon-red" title="Eliminar">🗑️</button>
                 </div>
               </div>
@@ -653,6 +1736,307 @@
         } else { alert(json.message || "Error al eliminar"); }
       } catch(e) { console.error(e); alert("Error al eliminar el trabajo"); }
     }
+
+    // ── EDICIÓN CON AUDITORÍA ──
+    let editZones = [];
+
+    window.editWork = async function(id) {
+      try {
+        const res = await fetch("/api/trabajos", { headers: { Authorization: "Bearer " + token } });
+        if (!res.ok) throw new Error();
+        const lista = await res.json();
+        const t = lista.find(x => x.id === id);
+        if (!t) { alert("Actividad no encontrada"); return; }
+
+        document.getElementById("editWorkId").value = t.id;
+        document.getElementById("editWorkType").value = t.tipo;
+        // Dates: strip time component (dates come as ISO strings)
+        document.getElementById("editStartDate").value = t.fechaInicio ? t.fechaInicio.substring(0,10) : "";
+        document.getElementById("editEndDate").value = t.fechaFin ? t.fechaFin.substring(0,10) : "";
+        document.getElementById("editStartTime").value = t.horaInicio ? t.horaInicio.substring(0,5) : "";
+        document.getElementById("editEndTime").value = t.horaFin ? t.horaFin.substring(0,5) : "";
+        document.getElementById("editWorkStatus").value = t.estado;
+        document.getElementById("editDescription").value = t.descripcion || "";
+        document.getElementById("editModalSubtitle").textContent = `Editando: ${t.tipo} — Creado el ${formatDate(t.createdAt)}`;
+
+        editZones = t.zonas ? [...t.zonas] : [];
+        renderEditZones();
+
+        document.getElementById("editWorkModal").classList.remove("hidden");
+      } catch(e) { console.error(e); alert("Error al cargar la actividad"); }
+    };
+
+    function renderEditZones() {
+      const container = document.getElementById("editZonesContainer");
+      container.innerHTML = editZones.map((z, i) =>
+        `<span class="zone-tag">${z}<button type="button" onclick="removeEditZone(${i})">×</button></span>`
+      ).join("");
+    }
+
+    window.addEditZone = function(zone) {
+      if (!editZones.includes(zone)) { editZones.push(zone); renderEditZones(); }
+    };
+
+    window.removeEditZone = function(i) {
+      editZones.splice(i, 1); renderEditZones();
+    };
+
+    window.closeEditModal = function() {
+      document.getElementById("editWorkModal").classList.add("hidden");
+    };
+
+    window.submitEditWork = async function() {
+      const id = document.getElementById("editWorkId").value;
+      const tipo = document.getElementById("editWorkType").value;
+      const fechaInicio = document.getElementById("editStartDate").value;
+      const fechaFin = document.getElementById("editEndDate").value;
+      const horaInicio = document.getElementById("editStartTime").value;
+      const horaFin = document.getElementById("editEndTime").value;
+      const estado = document.getElementById("editWorkStatus").value;
+      const descripcion = document.getElementById("editDescription").value;
+
+      if (!tipo || !fechaInicio || !fechaFin || !horaInicio || !horaFin || !estado) {
+        alert("Complete todos los campos obligatorios."); return;
+      }
+      if (new Date(fechaInicio) > new Date(fechaFin)) {
+        alert("La fecha de inicio no puede ser posterior a la fecha de fin."); return;
+      }
+
+      try {
+        const res = await fetch(`/api/trabajos/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+          body: JSON.stringify({ tipo, fechaInicio, fechaFin, horaInicio, horaFin, zonas: editZones, estado, descripcion })
+        });
+        const json = await res.json();
+        if (res.ok) {
+          closeEditModal();
+          updateWorkCount();
+          if (document.getElementById("workListContent").style.display === "block") document.getElementById("showWorkBtn").click();
+        } else { alert(json.message || "Error al guardar los cambios"); }
+      } catch(e) { console.error(e); alert("Error al guardar los cambios"); }
+    };
+
+    // ── HISTORIAL DE AUDITORÍA ──
+    const FIELD_LABELS = { tipo:"Tipo", fecha_inicio:"Fecha Inicio", fecha_fin:"Fecha Fin", hora_inicio:"Hora Inicio", hora_fin:"Hora Fin", zonas:"Zonas", estado:"Estado", descripcion:"Descripción" };
+
+    window.showHistorial = async function(id, titulo) {
+      document.getElementById("historialModalSubtitle").textContent = `Actividad: ${titulo}`;
+      document.getElementById("historialContent").innerHTML = `<div style="text-align:center;padding:2rem;color:#6b7280;">Cargando historial...</div>`;
+      document.getElementById("historialModal").classList.remove("hidden");
+
+      try {
+        const res = await fetch(`/api/trabajos/${id}/historial`, { headers: { Authorization: "Bearer " + token } });
+        if (!res.ok) throw new Error();
+        const historial = await res.json();
+
+        if (!historial.length) {
+          document.getElementById("historialContent").innerHTML = `<div class="audit-empty">📋 Esta actividad aún no ha sido editada.<br><small>Cada vez que edites una actividad, el historial de cambios quedará registrado aquí.</small></div>`;
+          return;
+        }
+
+        // Get current values to compare with last version
+        const worksRes = await fetch("/api/trabajos", { headers: { Authorization: "Bearer " + token } });
+        const works = await worksRes.json();
+        const current = works.find(w => w.id === id);
+
+        let html = `<table class="audit-table"><thead><tr><th>#</th><th>Fecha y Hora</th><th>Campo</th><th>Valor Anterior → Actual</th></tr></thead><tbody>`;
+
+        historial.forEach((entry, idx) => {
+          const snap = typeof entry.snapshot_anterior === "string" ? JSON.parse(entry.snapshot_anterior) : entry.snapshot_anterior;
+          const fechaHora = new Date(entry.modificado_en);
+          const fechaStr = fechaHora.toLocaleDateString("es-ES", {day:"2-digit",month:"2-digit",year:"numeric"});
+          const horaStr = fechaHora.toLocaleTimeString("es-ES", {hour:"2-digit",minute:"2-digit",second:"2-digit"});
+
+          // Compare with next version (or current if first)
+          const nextSnap = idx === 0 && current ? {
+            tipo: current.tipo,
+            fecha_inicio: current.fechaInicio,
+            fecha_fin: current.fechaFin,
+            hora_inicio: current.horaInicio,
+            hora_fin: current.horaFin,
+            zonas: Array.isArray(current.zonas) ? current.zonas.join(", ") : current.zonas,
+            estado: current.estado,
+            descripcion: current.descripcion
+          } : (historial[idx-1] ? (typeof historial[idx-1].snapshot_anterior === "string" ? JSON.parse(historial[idx-1].snapshot_anterior) : historial[idx-1].snapshot_anterior) : null);
+
+          const fields = Object.keys(FIELD_LABELS);
+          const changedFields = fields.filter(f => {
+            const oldVal = snap[f] != null ? String(snap[f]).trim() : "";
+            const newVal = nextSnap && nextSnap[f] != null ? String(nextSnap[f]).trim() : "";
+            return oldVal !== newVal;
+          });
+
+          const rowspan = Math.max(changedFields.length, 1);
+          if (changedFields.length === 0) {
+            html += `<tr>
+              <td><span class="audit-row-num">${historial.length - idx}</span></td>
+              <td><strong>${fechaStr}</strong><br><small style="color:#6b7280">${horaStr}</small></td>
+              <td colspan="2" style="color:#9ca3af;font-style:italic;font-size:0.78rem;">Sin cambios detectables</td>
+            </tr>`;
+          } else {
+            changedFields.forEach((f, fi) => {
+              const oldVal = snap[f] != null ? String(snap[f]) : "—";
+              const newVal = nextSnap && nextSnap[f] != null ? String(nextSnap[f]) : "—";
+              // Format dates
+              const fmtVal = v => { if (f.startsWith("fecha_") && v !== "—") { try { return formatDate(v); } catch(e){return v;} } return v; };
+              html += `<tr>
+                ${fi===0 ? `<td rowspan="${rowspan}"><span class="audit-row-num">${historial.length - idx}</span></td><td rowspan="${rowspan}"><strong>${fechaStr}</strong><br><small style="color:#6b7280">${horaStr}</small></td>` : ""}
+                <td style="font-weight:600;color:#374151;font-size:0.78rem;">${FIELD_LABELS[f]}</td>
+                <td class="audit-field-change"><span class="audit-old">❌ ${fmtVal(oldVal)}</span><span class="audit-new">✅ ${fmtVal(newVal)}</span></td>
+              </tr>`;
+            });
+          }
+        });
+
+        html += `</tbody></table>`;
+        document.getElementById("historialContent").innerHTML = html;
+      } catch(e) { console.error(e); document.getElementById("historialContent").innerHTML = `<div class="audit-empty">Error al cargar el historial.</div>`; }
+    };
+
+    window.closeHistorialModal = function() {
+      document.getElementById("historialModal").classList.add("hidden");
+    };
+
+    // Cerrar modales con Escape
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") { closeEditModal(); closeHistorialModal(); }
+    });
+
+    // ── REPORTES Y ESTADÍSTICAS ──
+    const ESTADO_META = {
+      "pendiente":   { label:"Pendiente",   color:"#fbbf24", bg:"#fef9c3" },
+      "en-proceso":  { label:"En Proceso",  color:"#3b82f6", bg:"#dbeafe" },
+      "culminado":   { label:"Culminado",   color:"#22c55e", bg:"#dcfce7" },
+      "postergado":  { label:"Postergado",  color:"#f87171", bg:"#fee2e2" }
+    };
+
+    function getFilteredTrabajos() {
+      const from  = document.getElementById("rptFrom").value;
+      const to    = document.getElementById("rptTo").value;
+      const tipo  = document.getElementById("rptTipo").value;
+      const estado = document.getElementById("rptEstado").value;
+      return dashboardTrabajos.filter(t => {
+        const date = (t.fechaInicio || "").substring(0, 10);
+        if (from  && date < from)  return false;
+        if (to    && date > to)    return false;
+        if (tipo  && t.tipo !== tipo) return false;
+        if (estado && t.estado !== estado) return false;
+        return true;
+      });
+    }
+
+    function renderCssBar(container, items, maxVal, colorFn) {
+      // items: [{label, value, color}]
+      container.innerHTML = "";
+      items.forEach(item => {
+        const pct = maxVal > 0 ? Math.round((item.value / maxVal) * 100) : 0;
+        const row = document.createElement("div");
+        row.className = "css-bar-row";
+        row.innerHTML = `
+          <span class="css-bar-label">${item.label}</span>
+          <div class="css-bar-track"><div class="css-bar-fill" style="width:${pct}%;background:${item.color};"></div></div>
+          <span class="css-bar-val">${item.value}</span>`;
+        container.appendChild(row);
+      });
+      if (!items.length || items.every(i => i.value === 0)) {
+        container.innerHTML = `<div style="text-align:center;color:#9ca3af;font-size:0.78rem;padding:0.75rem 0;">Sin datos para mostrar</div>`;
+      }
+    }
+
+    window.generateReport = function() {
+      const lista = getFilteredTrabajos();
+
+      // KPIs
+      const now = new Date();
+      const mesActual = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`;
+      const esMes = lista.filter(t => (t.fechaInicio||"").substring(0,7) === mesActual).length;
+      const culminadas = lista.filter(t => t.estado === "culminado").length;
+      const pendientes = lista.filter(t => t.estado === "pendiente" || t.estado === "en-proceso").length;
+      const pct = lista.length > 0 ? Math.round((culminadas / lista.length) * 100) : 0;
+
+      document.getElementById("kpiTotal").textContent = lista.length;
+      document.getElementById("kpiMes").textContent = esMes;
+      document.getElementById("kpiCulminadas").textContent = `${pct}%`;
+      document.getElementById("kpiCulminadasPct").textContent = `${culminadas} de ${lista.length} culminadas`;
+      document.getElementById("kpiPendientes").textContent = pendientes;
+      document.getElementById("reportTableCount").textContent = `(${lista.length})`;
+
+      // Chart: por estado
+      const porEstado = Object.entries(ESTADO_META).map(([k, v]) => ({
+        label: v.label, value: lista.filter(t => t.estado === k).length, color: v.color
+      }));
+      const maxEstado = Math.max(...porEstado.map(i => i.value), 1);
+      renderCssBar(document.getElementById("chartEstado"), porEstado, maxEstado);
+      document.getElementById("chartEstadoTotal").textContent = `${lista.length} total`;
+
+      // Chart: últimos 6 meses (todos los trabajos, sin filtro de fecha)
+      const monthNames6 = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+      const last6 = [];
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+        last6.push({ label: `${monthNames6[d.getMonth()]} ${d.getFullYear().toString().slice(2)}`, key });
+      }
+      const porMes = last6.map(m => ({
+        label: m.label,
+        value: dashboardTrabajos.filter(t => (t.fechaInicio||"").substring(0,7) === m.key).length,
+        color: "#065f46"
+      }));
+      const maxMes = Math.max(...porMes.map(i => i.value), 1);
+      renderCssBar(document.getElementById("chartMeses"), porMes, maxMes);
+
+      // Tabla detalle
+      const body = document.getElementById("reportTableBody");
+      if (!lista.length) {
+        body.innerHTML = `<tr><td colspan="6" class="report-empty">No hay actividades que coincidan con los filtros.</td></tr>`;
+        return;
+      }
+      const sc = ESTADO_META;
+      body.innerHTML = "";
+      lista.forEach(t => {
+        const tr = document.createElement("tr");
+        // Calcular duración en días
+        const ms = new Date(t.fechaFin) - new Date(t.fechaInicio);
+        const dias = Math.max(0, Math.round(ms / 86400000)) + 1;
+        const em = sc[t.estado] || { label: t.estado, color:"#6b7280", bg:"#f1f5f9" };
+        tr.innerHTML = `
+          <td>${formatDate(t.fechaInicio)}</td>
+          <td style="font-weight:600;">${t.tipo}</td>
+          <td>${(t.zonas||[]).join(", ") || "—"}</td>
+          <td style="text-align:center;">${dias}d</td>
+          <td><span style="display:inline-block;background:${em.bg};color:${em.color};border-radius:99px;padding:0.18rem 0.6rem;font-size:0.73rem;font-weight:700;">${em.label}</span></td>
+          <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.descripcion || "—"}</td>`;
+        body.appendChild(tr);
+      });
+    };
+
+    window.resetReport = function() {
+      document.getElementById("rptFrom").value = "";
+      document.getElementById("rptTo").value = "";
+      document.getElementById("rptTipo").value = "";
+      document.getElementById("rptEstado").value = "";
+      generateReport();
+    };
+
+    window.exportReportCSV = function() {
+      const lista = getFilteredTrabajos();
+      if (!lista.length) { alert("No hay datos para exportar con los filtros actuales."); return; }
+      const headers = ["ID","Tipo","Fecha Inicio","Fecha Fin","Hora Inicio","Hora Fin","Zonas","Estado","Descripcion"];
+      const rows = lista.map(t => [
+        t.id, `"${t.tipo}"`,
+        (t.fechaInicio||"").substring(0,10), (t.fechaFin||"").substring(0,10),
+        t.horaInicio, t.horaFin,
+        `"${(t.zonas||[]).join("; ")}"`,
+        t.estado, `"${(t.descripcion||"").replace(/"/g,'""')}"`
+      ]);
+      const csv = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+      const blob = new Blob(["\uFEFF" + csv], { type:"text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = `reporte_actividades_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click(); URL.revokeObjectURL(url);
+    };
 
     // ── SUBIDA DE ARCHIVOS ──
     document.getElementById("showUploadBtn").addEventListener("click", () => {
@@ -698,6 +2082,7 @@
     async function fetchFiles() {
       const res = await fetch("/api/files", { headers:{ Authorization:"Bearer "+token } });
       const files = await res.json();
+      dashboardFiles = files;
       document.getElementById("filesCount2").textContent = files.length;
       const container = document.getElementById("filesList");
       const template = document.getElementById("fileTemplate");
@@ -734,6 +2119,7 @@
       const dRes = await fetch("/api/files/deleted", { headers:{ Authorization:"Bearer "+token } });
       const deletedFiles = await dRes.json();
       document.getElementById("deletedFilesCount").textContent = deletedFiles.length;
+      renderDashboardWidgets();
 
       document.getElementById("showDeletedBtn").onclick = () => {
         const list = document.getElementById("deletedFilesList");
@@ -928,7 +2314,9 @@
 
     fetchFiles();
     updateWorkCount();
+    loadUserProfile();
     cargarEstadoMarcacion();
+    renderCalendar();
     setInterval(cargarEstadoMarcacion, 30000);
   </script>
 </body>

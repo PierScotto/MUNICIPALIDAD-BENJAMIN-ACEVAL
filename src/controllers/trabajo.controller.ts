@@ -73,22 +73,40 @@ export const getTrabajos = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// Actualizar trabajo
+// Actualizar trabajo (con auditoría)
 export const updateTrabajo = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { tipo, fechaInicio, fechaFin, horaInicio, horaFin, zonas, estado, descripcion } = req.body;
     const userId = req.user?.id;
 
-    // Verificar que el trabajo pertenece al usuario
+    // Leer valores actuales antes de editar (para el registro de auditoría)
     const [existing] = await pool.query(
-      'SELECT id FROM trabajos_registrados WHERE id = ? AND user_id = ? AND deleted_at IS NULL',
+      `SELECT tipo, fecha_inicio, fecha_fin, hora_inicio, hora_fin, zonas, estado, descripcion
+       FROM trabajos_registrados WHERE id = ? AND user_id = ? AND deleted_at IS NULL`,
       [id, userId]
     );
 
     if (!(existing as any[]).length) {
       return res.status(404).json({ message: 'Trabajo no encontrado' });
     }
+
+    const anterior = (existing as any[])[0];
+
+    // Guardar snapshot de los valores anteriores en la tabla de auditoría
+    await pool.query(
+      `INSERT INTO trabajos_historial (trabajo_id, user_id, snapshot_anterior) VALUES (?, ?, ?)`,
+      [id, userId, JSON.stringify({
+        tipo: anterior.tipo,
+        fecha_inicio: anterior.fecha_inicio,
+        fecha_fin: anterior.fecha_fin,
+        hora_inicio: anterior.hora_inicio,
+        hora_fin: anterior.hora_fin,
+        zonas: anterior.zonas,
+        estado: anterior.estado,
+        descripcion: anterior.descripcion
+      })]
+    );
 
     const zonasString = Array.isArray(zonas) ? zonas.join(', ') : zonas;
 
@@ -103,6 +121,37 @@ export const updateTrabajo = async (req: AuthRequest, res: Response) => {
     res.json({ message: 'Trabajo actualizado exitosamente' });
   } catch (error) {
     console.error('Error al actualizar trabajo:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+// Obtener historial de ediciones de un trabajo
+export const getTrabajoHistorial = async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user?.id;
+
+    // Verificar que el trabajo pertenece al usuario
+    const [existing] = await pool.query(
+      'SELECT id FROM trabajos_registrados WHERE id = ? AND user_id = ? AND deleted_at IS NULL',
+      [id, userId]
+    );
+
+    if (!(existing as any[]).length) {
+      return res.status(404).json({ message: 'Trabajo no encontrado' });
+    }
+
+    const [rows] = await pool.query(
+      `SELECT id, snapshot_anterior, modificado_en
+       FROM trabajos_historial
+       WHERE trabajo_id = ?
+       ORDER BY modificado_en DESC`,
+      [id]
+    );
+
+    res.json(rows);
+  } catch (error) {
+    console.error('Error al obtener historial:', error);
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 };

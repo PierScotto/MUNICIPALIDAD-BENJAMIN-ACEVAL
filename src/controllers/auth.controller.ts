@@ -8,6 +8,15 @@ import jwt from 'jsonwebtoken';
 
 const SALT_ROUNDS = 10;
 
+interface AuthRequest extends Request {
+  user?: {
+    id: number;
+    email: string;
+    username: string;
+    role: string;
+  };
+}
+
 export async function register(req: Request, res: Response) {
   try {
     const { username, email, password, nombre, apellido, fecha_nacimiento, area_trabajo, telefono } = req.body;
@@ -70,6 +79,86 @@ export async function login(req: Request, res: Response) {
   const token = jwt.sign({ id: user.id, email: user.email, username: user.username, role: user.role }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
 
   res.json({ token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
+}
+
+export async function getMyProfile(req: AuthRequest, res: Response) {
+  try {
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: 'No autorizado' });
+
+    const [rows] = await pool.query(
+      `SELECT id, username, email, role, nombre, apellido, fecha_nacimiento, area_trabajo, telefono, created_at
+       FROM users WHERE id = ? LIMIT 1`,
+      [userId]
+    );
+
+    const user = (rows as any[])[0];
+    if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+
+    res.json({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      nombre: user.nombre,
+      apellido: user.apellido,
+      fecha_nacimiento: user.fecha_nacimiento,
+      area_trabajo: user.area_trabajo,
+      telefono: user.telefono,
+      created_at: user.created_at
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
+}
+
+export async function updateMyProfile(req: AuthRequest, res: Response) {
+  try {
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: 'No autorizado' });
+
+    const allowedFields = ['nombre', 'apellido', 'fecha_nacimiento', 'area_trabajo', 'telefono'];
+    const updates: Record<string, any> = {};
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) updates[field] = req.body[field];
+    });
+
+    if (!Object.keys(updates).length) {
+      return res.status(400).json({ message: 'No hay campos para actualizar' });
+    }
+
+    if (updates.telefono !== undefined) {
+      const phone = String(updates.telefono || '').trim();
+      const phoneRegex = /^\+?[0-9\s\-().]{7,20}$/;
+      if (!phoneRegex.test(phone)) {
+        return res.status(400).json({ message: 'Número de teléfono inválido' });
+      }
+      updates.telefono = phone;
+    }
+
+    const sets: string[] = [];
+    const params: any[] = [];
+    Object.entries(updates).forEach(([key, value]) => {
+      sets.push(`${key} = ?`);
+      params.push(value);
+    });
+    params.push(userId);
+
+    await pool.query(`UPDATE users SET ${sets.join(', ')} WHERE id = ?`, params);
+
+    const [rows] = await pool.query(
+      `SELECT id, username, email, role, nombre, apellido, fecha_nacimiento, area_trabajo, telefono, created_at
+       FROM users WHERE id = ? LIMIT 1`,
+      [userId]
+    );
+    const user = (rows as any[])[0];
+
+    res.json({ message: 'Perfil actualizado correctamente', user });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error del servidor' });

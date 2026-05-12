@@ -5,7 +5,8 @@ import {
   getTrabajos, 
   updateTrabajo, 
   deleteTrabajo, 
-  getTrabajosEliminados 
+  getTrabajosEliminados,
+  getTrabajoHistorial
 } from '../controllers/trabajo.controller';
 
 const router = Router();
@@ -21,6 +22,9 @@ router.get('/', getTrabajos);
 
 // GET /api/trabajos/deleted - Obtener trabajos eliminados
 router.get('/deleted', getTrabajosEliminados);
+
+// GET /api/trabajos/:id/historial - Obtener historial de ediciones
+router.get('/:id/historial', getTrabajoHistorial);
 
 // PUT /api/trabajos/:id - Actualizar trabajo
 router.put('/:id', updateTrabajo);

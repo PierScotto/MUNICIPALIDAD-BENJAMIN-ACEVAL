@@ -38,5 +38,17 @@ export async function initDB() {
     ) ENGINE=InnoDB;
   `);
 
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS trabajos_historial (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      trabajo_id INT NOT NULL,
+      user_id INT NOT NULL,
+      snapshot_anterior JSON NOT NULL,
+      modificado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_th_trabajo (trabajo_id),
+      INDEX idx_th_user (user_id)
+    ) ENGINE=InnoDB;
+  `);
+
   console.log('DB initialized');
 }
