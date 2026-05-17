@@ -297,6 +297,389 @@ export async function getDetailedReport(req: Request, res: Response) {
   }
 }
 
+type MarcacionRow = {
+  id: number;
+  user_id: number;
+  fecha_hora: string;
+  tipo: 'entrada' | 'salida';
+  username?: string;
+  nombre?: string;
+  apellido?: string;
+  area_trabajo?: string;
+};
+
+function calcularHorasPorDia(rows: MarcacionRow[]): Record<string, number> {
+  const porDia: Record<string, Array<{ dt: Date; tipo: string }>> = {};
+
+  rows
+    .slice()
+    .sort((a, b) => new Date(a.fecha_hora).getTime() - new Date(b.fecha_hora).getTime())
+    .forEach((m) => {
+      const key = String(m.fecha_hora || '').substring(0, 10);
+      if (!porDia[key]) porDia[key] = [];
+      porDia[key].push({ dt: new Date(m.fecha_hora), tipo: m.tipo });
+    });
+
+  const now = new Date();
+  const out: Record<string, number> = {};
+  Object.entries(porDia).forEach(([fecha, registros]) => {
+    let totalMs = 0;
+    let entradaActivaTs: number | null = null;
+
+    registros.forEach((r) => {
+      if (r.tipo === 'entrada') {
+        entradaActivaTs = r.dt.getTime();
+      } else if (r.tipo === 'salida' && entradaActivaTs !== null) {
+        totalMs += r.dt.getTime() - entradaActivaTs;
+        entradaActivaTs = null;
+      }
+    });
+
+    if (entradaActivaTs !== null && fecha === now.toISOString().substring(0, 10)) {
+      totalMs += now.getTime() - entradaActivaTs;
+    }
+
+    out[fecha] = totalMs / 3600000;
+  });
+
+  return out;
+}
+
+function nombreCompleto(row?: Partial<MarcacionRow>) {
+  const nombre = String(row?.nombre || '').trim();
+  const apellido = String(row?.apellido || '').trim();
+  return `${nombre} ${apellido}`.trim() || row?.username || 'Usuario';
+}
+
+// Reporte admin de marcaciones y horas por usuario
+export async function getAdminMarcacionesReport(req: Request, res: Response) {
+  try {
+    const userIdRaw = String(req.query.userId || 'all');
+    const from = String(req.query.from || '');
+    const to = String(req.query.to || '');
+    const tipo = String(req.query.tipo || 'all');
+    const limitRaw = parseInt(String(req.query.limit || '10000'), 10);
+    const limit = Number.isNaN(limitRaw) ? 10000 : Math.max(1, Math.min(limitRaw, 30000));
+
+    const whereBase: string[] = ['1=1'];
+    const paramsBase: Array<string | number> = [];
+
+    if (from) {
+      whereBase.push('DATE(m.fecha_hora) >= DATE(?)');
+      paramsBase.push(from);
+    }
+    if (to) {
+      whereBase.push('DATE(m.fecha_hora) <= DATE(?)');
+      paramsBase.push(to);
+    }
+    if (userIdRaw !== 'all') {
+      whereBase.push('m.user_id = ?');
+      paramsBase.push(parseInt(userIdRaw, 10));
+    }
+
+    const baseSql = `
+      SELECT m.id, m.user_id, m.fecha_hora, m.tipo,
+             u.username, u.nombre, u.apellido, u.area_trabajo
+      FROM marcaciones m
+      JOIN users u ON u.id = m.user_id
+      WHERE ${whereBase.join(' AND ')}
+      ORDER BY m.fecha_hora DESC
+      LIMIT ?`;
+
+    const [baseRowsRaw] = await pool.query(baseSql, [...paramsBase, limit]);
+    const baseRows = asRows<MarcacionRow>(baseRowsRaw);
+
+    const whereFiltered = [...whereBase];
+    const paramsFiltered = [...paramsBase];
+    if (tipo !== 'all') {
+      whereFiltered.push('m.tipo = ?');
+      paramsFiltered.push(tipo);
+    }
+
+    const filteredSql = `
+      SELECT m.id, m.user_id, m.fecha_hora, m.tipo,
+             u.username, u.nombre, u.apellido, u.area_trabajo
+      FROM marcaciones m
+      JOIN users u ON u.id = m.user_id
+      WHERE ${whereFiltered.join(' AND ')}
+      ORDER BY m.fecha_hora DESC
+      LIMIT ?`;
+
+    const [filteredRowsRaw] = await pool.query(filteredSql, [...paramsFiltered, limit]);
+    const filteredRows = asRows<MarcacionRow>(filteredRowsRaw);
+
+    const baseByUser = new Map<number, MarcacionRow[]>();
+    baseRows.forEach((r) => {
+      if (!baseByUser.has(r.user_id)) baseByUser.set(r.user_id, []);
+      baseByUser.get(r.user_id)?.push(r);
+    });
+
+    const resumenPorUsuario = Array.from(baseByUser.entries()).map(([uid, rows]) => {
+      const horasDia = calcularHorasPorDia(rows);
+      const diasConTrabajo = Object.entries(horasDia).filter(([, h]) => h > 0);
+      const horasTotales = diasConTrabajo.reduce((acc, [, h]) => acc + h, 0);
+      const promedioDiario = diasConTrabajo.length ? horasTotales / diasConTrabajo.length : 0;
+      const first = rows[0] || {};
+
+      return {
+        userId: uid,
+        username: first.username || '',
+        nombreCompleto: nombreCompleto(first),
+        area: first.area_trabajo || 'Sin área',
+        diasTrabajados: diasConTrabajo.length,
+        horasTotales,
+        promedioDiario,
+        totalRegistros: rows.length
+      };
+    }).sort((a, b) => b.horasTotales - a.horasTotales);
+
+    let detalleUsuario: any = null;
+    if (userIdRaw !== 'all') {
+      const userId = parseInt(userIdRaw, 10);
+      const baseUserRows = baseRows.filter((r) => r.user_id === userId);
+      const filteredUserRows = filteredRows.filter((r) => r.user_id === userId);
+      const horasDia = calcularHorasPorDia(baseUserRows);
+      const diasConTrabajo = Object.entries(horasDia).filter(([, h]) => h > 0);
+      const horasTotales = diasConTrabajo.reduce((acc, [, h]) => acc + h, 0);
+      const promedioDiario = diasConTrabajo.length ? horasTotales / diasConTrabajo.length : 0;
+      const first = baseUserRows[0] || filteredUserRows[0];
+
+      detalleUsuario = {
+        userId,
+        username: first?.username || '',
+        nombreCompleto: nombreCompleto(first),
+        area: first?.area_trabajo || 'Sin área',
+        kpis: {
+          horasTotales,
+          diasTrabajados: diasConTrabajo.length,
+          promedioDiario,
+          totalRegistros: filteredUserRows.length
+        },
+        horasPorDia: horasDia,
+        marcaciones: filteredUserRows
+      };
+    }
+
+    res.json({
+      filters: { userId: userIdRaw, from, to, tipo },
+      totals: {
+        registrosBase: baseRows.length,
+        registrosFiltrados: filteredRows.length,
+        usuarios: resumenPorUsuario.length
+      },
+      resumenPorUsuario,
+      detalleUsuario
+    });
+  } catch (err) {
+    console.error('Error en getAdminMarcacionesReport:', err);
+    res.status(500).json({
+      message: 'Error del servidor',
+      error: process.env.NODE_ENV === 'development' ? getErrorMessage(err) : undefined
+    });
+  }
+}
+
+// Reporte ejecutivo consolidado para PDF
+export async function getExecutiveReport(req: Request, res: Response) {
+  try {
+    const period = String(req.query.period || 'month');
+    const from = String(req.query.from || '');
+    const to = String(req.query.to || '');
+
+    // Calcular rango de fechas según el período
+    let dateFrom: string;
+    let dateTo: string;
+    const now = new Date();
+
+    if (from && to) {
+      dateFrom = from;
+      dateTo = to;
+    } else if (period === 'week') {
+      const start = new Date(now);
+      start.setDate(now.getDate() - now.getDay() + 1);
+      dateFrom = start.toISOString().substring(0, 10);
+      dateTo = now.toISOString().substring(0, 10);
+    } else if (period === 'year') {
+      dateFrom = `${now.getFullYear()}-01-01`;
+      dateTo = now.toISOString().substring(0, 10);
+    } else {
+      // mes actual por defecto
+      dateFrom = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`;
+      dateTo = now.toISOString().substring(0, 10);
+    }
+
+    // Período anterior (mismo largo, hacia atrás)
+    const msRange = new Date(dateTo).getTime() - new Date(dateFrom).getTime() + 86400000;
+    const prevTo = new Date(new Date(dateFrom).getTime() - 86400000).toISOString().substring(0, 10);
+    const prevFrom = new Date(new Date(dateFrom).getTime() - msRange).toISOString().substring(0, 10);
+
+    // KPIs principales
+    const [[usersActive]] = await pool.query(
+      `SELECT COUNT(DISTINCT user_id) as total FROM marcaciones WHERE DATE(fecha_hora) BETWEEN DATE(?) AND DATE(?)`,
+      [dateFrom, dateTo]
+    ) as any[];
+
+    const [[usersActivePrev]] = await pool.query(
+      `SELECT COUNT(DISTINCT user_id) as total FROM marcaciones WHERE DATE(fecha_hora) BETWEEN DATE(?) AND DATE(?)`,
+      [prevFrom, prevTo]
+    ) as any[];
+
+    const [[filesUploaded]] = await pool.query(
+      `SELECT COUNT(*) as total FROM files WHERE DATE(created_at) BETWEEN DATE(?) AND DATE(?)`,
+      [dateFrom, dateTo]
+    ) as any[];
+
+    const [[filesUploadedPrev]] = await pool.query(
+      `SELECT COUNT(*) as total FROM files WHERE DATE(created_at) BETWEEN DATE(?) AND DATE(?)`,
+      [prevFrom, prevTo]
+    ) as any[];
+
+    const [[filesDeleted]] = await pool.query(
+      `SELECT COUNT(*) as total FROM deleted_files WHERE DATE(deleted_at) BETWEEN DATE(?) AND DATE(?)`,
+      [dateFrom, dateTo]
+    ) as any[];
+
+    const [[totalUsers]] = await pool.query(`SELECT COUNT(*) as total FROM users`) as any[];
+
+    // Trabajos (actividades)
+    let trabajosCulminados = 0;
+    let trabajosPendientes = 0;
+    let trabajosTotalPeriod = 0;
+    let trabajosCulminadosPrev = 0;
+    try {
+      const [[tc]] = await pool.query(
+        `SELECT COUNT(*) as total FROM trabajos_historial WHERE estado='culminado' AND DATE(created_at) BETWEEN DATE(?) AND DATE(?)`,
+        [dateFrom, dateTo]
+      ) as any[];
+      const [[tp]] = await pool.query(
+        `SELECT COUNT(*) as total FROM trabajos_historial WHERE estado='pendiente' AND DATE(created_at) BETWEEN DATE(?) AND DATE(?)`,
+        [dateFrom, dateTo]
+      ) as any[];
+      const [[tt]] = await pool.query(
+        `SELECT COUNT(*) as total FROM trabajos_historial WHERE DATE(created_at) BETWEEN DATE(?) AND DATE(?)`,
+        [dateFrom, dateTo]
+      ) as any[];
+      const [[tcp]] = await pool.query(
+        `SELECT COUNT(*) as total FROM trabajos_historial WHERE estado='culminado' AND DATE(created_at) BETWEEN DATE(?) AND DATE(?)`,
+        [prevFrom, prevTo]
+      ) as any[];
+      trabajosCulminados = tc?.total || 0;
+      trabajosPendientes = tp?.total || 0;
+      trabajosTotalPeriod = tt?.total || 0;
+      trabajosCulminadosPrev = tcp?.total || 0;
+    } catch (_) { /* tabla puede no existir */ }
+
+    // Horas trabajadas totales (cálculo en JS)
+    const [marcRows] = await pool.query(
+      `SELECT m.user_id, m.fecha_hora, m.tipo, u.nombre, u.apellido, u.area_trabajo
+       FROM marcaciones m JOIN users u ON u.id = m.user_id
+       WHERE DATE(m.fecha_hora) BETWEEN DATE(?) AND DATE(?)
+       ORDER BY m.fecha_hora ASC`,
+      [dateFrom, dateTo]
+    ) as any[];
+
+    const [marcRowsPrev] = await pool.query(
+      `SELECT user_id, fecha_hora, tipo FROM marcaciones
+       WHERE DATE(fecha_hora) BETWEEN DATE(?) AND DATE(?)
+       ORDER BY fecha_hora ASC`,
+      [prevFrom, prevTo]
+    ) as any[];
+
+    function calcHoras(rows: any[]): number {
+      const byUser: Record<number, any[]> = {};
+      rows.forEach((r: any) => {
+        if (!byUser[r.user_id]) byUser[r.user_id] = [];
+        byUser[r.user_id].push(r);
+      });
+      let totalMs = 0;
+      Object.values(byUser).forEach((urows) => {
+        let entrada: number | null = null;
+        urows.forEach((r: any) => {
+          if (r.tipo === 'entrada') { entrada = new Date(r.fecha_hora).getTime(); }
+          else if (r.tipo === 'salida' && entrada !== null) {
+            totalMs += new Date(r.fecha_hora).getTime() - entrada;
+            entrada = null;
+          }
+        });
+      });
+      return totalMs / 3600000;
+    }
+
+    const horasTotales = calcHoras(marcRows);
+    const horasTotalesPrev = calcHoras(marcRowsPrev);
+
+    // Top usuarios por horas
+    const byUser: Record<number, any> = {};
+    (marcRows as any[]).forEach((r: any) => {
+      if (!byUser[r.user_id]) byUser[r.user_id] = { nombre: `${r.nombre || ''} ${r.apellido || ''}`.trim(), area: r.area_trabajo || 'Sin área', rows: [] };
+      byUser[r.user_id].rows.push(r);
+    });
+    const topUsuarios = Object.values(byUser)
+      .map((u: any) => ({ nombre: u.nombre, area: u.area, horas: calcHoras(u.rows), registros: u.rows.length }))
+      .sort((a: any, b: any) => b.horas - a.horas)
+      .slice(0, 10);
+
+    // Resumen por área
+    const areaMap: Record<string, { horas: number; usuarios: Set<number>; registros: number }> = {};
+    (marcRows as any[]).forEach((r: any) => {
+      const area = r.area_trabajo || 'Sin área';
+      if (!areaMap[area]) areaMap[area] = { horas: 0, usuarios: new Set(), registros: 0 };
+      areaMap[area].registros++;
+      areaMap[area].usuarios.add(r.user_id);
+    });
+    Object.values(byUser).forEach((u: any) => {
+      const area = u.area;
+      if (areaMap[area]) areaMap[area].horas += calcHoras(u.rows);
+    });
+    const resumenPorArea = Object.entries(areaMap)
+      .map(([area, d]) => ({ area, horas: d.horas, usuarios: d.usuarios.size, registros: d.registros }))
+      .sort((a, b) => b.horas - a.horas);
+
+    // Archivos subidos por área
+    const [filesByArea] = await pool.query(
+      `SELECT COALESCE(u.area_trabajo,'Sin área') as area, COUNT(f.id) as total
+       FROM files f JOIN users u ON u.id = f.user_id
+       WHERE DATE(f.created_at) BETWEEN DATE(?) AND DATE(?)
+       GROUP BY u.area_trabajo ORDER BY total DESC`,
+      [dateFrom, dateTo]
+    ) as any[];
+
+    // Marcaciones por día (para gráfica)
+    const [marcByDay] = await pool.query(
+      `SELECT DATE(fecha_hora) as fecha, COUNT(*) as total FROM marcaciones
+       WHERE DATE(fecha_hora) BETWEEN DATE(?) AND DATE(?)
+       GROUP BY DATE(fecha_hora) ORDER BY fecha ASC`,
+      [dateFrom, dateTo]
+    ) as any[];
+
+    function pctChange(current: number, prev: number): number {
+      if (prev === 0) return current > 0 ? 100 : 0;
+      return Math.round(((current - prev) / prev) * 100);
+    }
+
+    res.json({
+      meta: { generadoEn: new Date().toISOString(), period, dateFrom, dateTo, prevFrom, prevTo },
+      kpis: {
+        usuariosActivos: { valor: usersActive?.total || 0, anterior: usersActivePrev?.total || 0, cambio: pctChange(usersActive?.total || 0, usersActivePrev?.total || 0) },
+        horasTrabajadas: { valor: Math.round(horasTotales * 10) / 10, anterior: Math.round(horasTotalesPrev * 10) / 10, cambio: pctChange(horasTotales, horasTotalesPrev) },
+        archivosSubidos: { valor: filesUploaded?.total || 0, anterior: filesUploadedPrev?.total || 0, cambio: pctChange(filesUploaded?.total || 0, filesUploadedPrev?.total || 0) },
+        archivosEliminados: { valor: filesDeleted?.total || 0 },
+        totalUsuarios: { valor: totalUsers?.total || 0 },
+        trabajosCulminados: { valor: trabajosCulminados, anterior: trabajosCulminadosPrev, cambio: pctChange(trabajosCulminados, trabajosCulminadosPrev) },
+        trabajosPendientes: { valor: trabajosPendientes },
+        trabajosTotal: { valor: trabajosTotalPeriod }
+      },
+      topUsuarios,
+      resumenPorArea,
+      filesByArea,
+      marcByDay
+    });
+  } catch (err) {
+    console.error('Error en getExecutiveReport:', err);
+    res.status(500).json({ message: 'Error del servidor', error: process.env.NODE_ENV === 'development' ? getErrorMessage(err) : undefined });
+  }
+}
+
 // Obtener todos los archivos eliminados para el admin
 export async function getDeletedFiles(req: Request, res: Response) {
   try {

@@ -71,7 +71,23 @@ export async function uploadFile(req: Request, res: Response) {
     const fileName = req.file.originalname;
     const filePath = req.file.filename; // stored filename
 
-    await pool.query('INSERT INTO files (user_id, file_name, file_path) VALUES (?, ?, ?)', [userId, fileName, filePath]);
+    const commentBase = String(req.body?.comment || '').trim();
+    const category = String(req.body?.category || '').trim();
+    const priority = String(req.body?.priority || 'normal').trim();
+    const dueDate = String(req.body?.dueDate || '').trim();
+    const visibility = String(req.body?.visibility || 'interno').trim();
+    const tags = String(req.body?.tags || '').trim();
+
+    const detailParts: string[] = [];
+    if (category) detailParts.push(`Categoria: ${category}`);
+    if (priority) detailParts.push(`Prioridad: ${priority}`);
+    if (dueDate) detailParts.push(`Vence: ${dueDate}`);
+    if (visibility) detailParts.push(`Visible: ${visibility}`);
+    if (tags) detailParts.push(`Etiquetas: ${tags}`);
+
+    const finalComment = [commentBase, ...detailParts].filter(Boolean).join(' | ').slice(0, 1000);
+
+    await pool.query('INSERT INTO files (user_id, file_name, file_path, comment) VALUES (?, ?, ?, ?)', [userId, fileName, filePath, finalComment || null]);
 
     res.json({ message: 'Archivo subido' });
   } catch (err) {

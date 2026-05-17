@@ -10,7 +10,7 @@
     * { box-sizing: border-box; }
     body {
       font-family: "Montserrat", sans-serif;
-      background: radial-gradient(circle at 10% 10%, #dcfce7 0%, #ffffff 42%), #f8fafc;
+      background: linear-gradient(180deg, #dcfce7 0%, #bbf7d0 100%);
       min-height: 100vh;
       margin: 0;
     }
@@ -57,8 +57,8 @@
     .header-title { font-size:1.55rem;font-weight:800;line-height:1.08; }
     .header-subtitle { font-size:0.84rem;opacity:0.9;margin-top:3px; }
     .header-right { display:flex;align-items:center;gap:0.8rem; }
-    .notification-pill { position:relative;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);border-radius:12px;padding:0.35rem 0.62rem;font-size:1rem;cursor:pointer;user-select:none; }
-    .notification-pill:hover { background:rgba(255,255,255,0.22); }
+    .notification-pill { position:relative;background:linear-gradient(135deg,#facc15,#f59e0b);border:1px solid #fbbf24;border-radius:12px;padding:0.35rem 0.62rem;font-size:0.86rem;font-weight:700;color:#1f2937;cursor:pointer;user-select:none; }
+    .notification-pill:hover { background:linear-gradient(135deg,#fbbf24,#d97706); }
     .notification-dot { position:absolute;top:-6px;right:-5px;background:#dc2626;color:white;border-radius:50px;min-width:18px;height:18px;font-size:0.66rem;font-weight:700;display:flex;align-items:center;justify-content:center; }
     #bellDropdown { display:none;position:absolute;top:calc(100% + 10px);right:0;width:300px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.18);z-index:9999;overflow:hidden; }
     #bellDropdown.open { display:block; }
@@ -95,26 +95,26 @@
     .btn-admin:hover { filter:brightness(0.95);transform:translateY(-1px); }
     .btn-logout { background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3); }
     .btn-logout:hover { background:rgba(239,68,68,0.25);color:#fecaca; }
-    .main-container { max-width:1400px;margin:0 auto;padding:1.2rem 1.2rem 4rem; }
-    .stats-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem; }
-    .stat-card { background:white;border-radius:16px;padding:1.5rem;display:flex;align-items:center;gap:1.25rem;box-shadow:0 1px 4px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);border:1px solid #e2e8f0;transition:transform 0.18s,box-shadow 0.18s; }
+    .main-container { max-width:1600px;margin:0 auto;padding:2rem 2.5rem 5rem; }
+    .stats-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:2rem; }
+    .stat-card { background:white;border-radius:18px;padding:1.75rem 2rem;display:flex;align-items:center;justify-content:center;gap:1.5rem;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);border:1px solid #e2e8f0;transition:transform 0.18s,box-shadow 0.18s; }
     .stat-card:hover { transform:translateY(-2px);box-shadow:0 4px 24px rgba(0,0,0,0.1); }
-    .stat-icon { width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0; }
+    .stat-icon { width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0; }
     .stat-icon-green { background:#dcfce7; }
     .stat-icon-blue  { background:#dbeafe; }
     .stat-icon-red   { background:#fee2e2; }
-    .stat-value { font-size:2.2rem;font-weight:800;line-height:1;letter-spacing:-0.02em; }
+    .stat-value { font-size:2.5rem;font-weight:800;line-height:1;letter-spacing:-0.02em; }
     .stat-value-green { color:#16a34a; }
     .stat-value-blue  { color:#2563eb; }
     .stat-value-red   { color:#dc2626; }
     .stat-label { font-size:0.82rem;color:#64748b;font-weight:500;margin-top:2px; }
-    .section { background:white;border-radius:18px;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);border:1px solid #e2e8f0;overflow:hidden; }
-    .section-header { display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.75rem;border-bottom:1px solid #f1f5f9; }
+    .section { background:white;border-radius:20px;margin-bottom:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.06),0 6px 20px rgba(0,0,0,0.05);border:1px solid #e2e8f0;overflow:hidden; }
+    .section-header { display:flex;align-items:center;justify-content:space-between;padding:1.35rem 2rem;border-bottom:1px solid #f1f5f9; }
     .section-header-left { display:flex;align-items:center;gap:0.85rem; }
-    .section-icon { width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem; }
-    .section-title { font-weight:700;font-size:1.05rem;color:#1e293b; }
+    .section-icon { width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.3rem; }
+    .section-title { font-weight:700;font-size:1.08rem;color:#1e293b; }
     .section-subtitle { font-size:0.78rem;color:#94a3b8; }
-    .section-body { padding:1.5rem 1.75rem; }
+    .section-body { padding:1.75rem 2rem; }
     .attendance-status { display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem; }
     .status-badge { display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1.25rem;border-radius:50px;font-weight:600;font-size:0.9rem; }
     .status-badge-active   { background:#dcfce7;color:#15803d; }
@@ -128,12 +128,16 @@
     .btn-toggle { display:inline-flex;align-items:center;gap:0.5rem;padding:0.55rem 1.2rem;border-radius:9px;font-weight:600;font-size:0.85rem;cursor:pointer;border:none;transition:all 0.18s; }
     .btn-toggle-green { background:#dcfce7;color:#16a34a; }
     .btn-toggle-green:hover { background:#bbf7d0; }
-    .btn-toggle-blue  { background:#dbeafe;color:#2563eb; }
-    .btn-toggle-blue:hover  { background:#bfdbfe; }
+    .btn-toggle-blue  { background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#ffffff; }
+    .btn-toggle-blue:hover  { background:linear-gradient(135deg,#1d4ed8,#1e40af); }
     .btn-toggle-red   { background:#fee2e2;color:#dc2626; }
     .btn-toggle-red:hover   { background:#fecaca; }
     .btn-toggle-gray  { background:#f1f5f9;color:#475569; }
     .btn-toggle-gray:hover  { background:#e2e8f0; }
+    .btn-toggle-yellow { background:#fef9c3;color:#854d0e; }
+    .btn-toggle-yellow:hover { background:#fef08a; }
+    .btn-toggle-lila { background:#ede9fe;color:#6d28d9; }
+    .btn-toggle-lila:hover { background:#ddd6fe; }
     .chevron { transition:transform 0.2s;display:inline-block; }
     .chevron.open { transform:rotate(180deg); }
     .form-label { display:block;font-size:0.85rem;font-weight:600;color:#374151;margin-bottom:0.45rem; }
@@ -189,7 +193,7 @@
     .work-detail-label { font-size:0.72rem;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em; }
     .work-detail-value { font-size:0.85rem;color:#374151;margin-top:1px; }
     .deleted-card { background:#fff5f5;border:1.5px solid #fecaca;border-radius:12px;padding:0.9rem 1.1rem;margin-bottom:0.6rem; }
-    .deleted-name { font-weight:700;font-size:0.92rem;color:#b91c1c; }
+    .deleted-name { font-weight:700;font-size:0.92rem;color:#b91c1c;word-break:break-all;overflow-wrap:break-word; }
     .deleted-date { font-size:0.78rem;color:#ef4444;margin-top:3px; }
     .history-item { display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.75rem;border-radius:8px;font-size:0.82rem;font-weight:600;margin-bottom:0.3rem; }
     .history-entry { background:#f0fdf4;color:#15803d; }
@@ -214,7 +218,7 @@
     .file-item:hover, .work-card:hover { border-color:#86efac; }
     .stat-icon-blue { background:#e5e7eb; }
     .stat-value-blue { color:#111111; }
-    .content-grid { display:grid; grid-template-columns:minmax(0,2fr) 340px; gap:1rem; align-items:start; }
+    .content-grid { display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:1.5rem; align-items:start; }
     .aside-stack { display:flex; flex-direction:column; gap:1rem; position:sticky; top:86px; }
     .aside-card { background:white; border:1px solid #e2e8f0; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04); overflow:hidden; }
     .aside-head { padding:0.9rem 1rem; border-bottom:1px solid #f1f5f9; font-weight:700; font-size:0.95rem; color:#111827; display:flex; justify-content:space-between; align-items:center; }
@@ -339,6 +343,10 @@
     .profile-msg.ok { color:#15803d; }
     .profile-msg.err { color:#dc2626; }
 
+    .sections-2col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:stretch; }
+    .sections-2col .section { margin-bottom:0; display:flex; flex-direction:column; }
+    .sections-2col .section .section-body { flex:1; }
+    .sections-2col .section[style*="grid-column"] { display:block; }
     @media(max-width:1080px){
       .app-layout { display:block; }
       .sidebar { position:relative;height:auto;width:100%; }
@@ -347,6 +355,8 @@
       .header-title { font-size:1.25rem; }
       .content-grid { grid-template-columns:1fr; }
       .aside-stack { position:static; }
+      .sections-2col { grid-template-columns:1fr; }
+      .main-container { padding:1.5rem 1.5rem 4rem; }
     }
     @media(max-width:640px){ .stats-grid{grid-template-columns:1fr} .form-grid-2{grid-template-columns:1fr} .main-container{padding:1rem 0.8rem 4rem} .attendance-status{flex-direction:column;align-items:flex-start} .header-right{width:100%;justify-content:space-between} .top-header{display:block} .profile-grid{grid-template-columns:1fr;} }
   </style>
@@ -355,7 +365,6 @@
   <div class="app-layout">
     <aside class="sidebar">
       <div class="sidebar-brand">
-        <div class="sidebar-logo">🏛️</div>
         <div>
           <div class="sidebar-title">Municipalidad de Benjamín Aceval</div>
           <div class="sidebar-subtitle">Panel de Gestión</div>
@@ -363,33 +372,33 @@
       </div>
 
       <nav class="sidebar-menu">
-        <a class="sidebar-link active" data-nav="inicioSection" href="#inicioSection">🏠 Inicio / Dashboard</a>
-        <a class="sidebar-link" data-nav="asistenciaSection" href="#asistenciaSection">🕘 Control de Asistencia</a>
-        <a class="sidebar-link" data-nav="registroSection" href="#registroSection">📝 Registrar Actividad</a>
-        <a class="sidebar-link" data-nav="actividadesSection" href="#actividadesSection">📋 Mis Actividades</a>
-        <a class="sidebar-link" data-nav="documentalSection" href="#documentalSection">📂 Gestión Documental</a>
-        <a class="sidebar-link" data-nav="calendarSection" href="#calendarSection">📅 Calendario</a>
-        <a class="sidebar-link" data-nav="reportesSection" href="#reportesSection">📊 Reportes</a>
-        <a class="sidebar-link" data-nav="perfilSection" href="#perfilSection">👤 Perfil</a>
+        <a class="sidebar-link active" data-nav="inicioSection" href="#inicioSection"> Inicio / Dashboard</a>
+        <a class="sidebar-link" data-nav="asistenciaSection" href="#asistenciaSection"> Control de Asistencia</a>
+        <a class="sidebar-link" data-nav="registroSection" href="#registroSection"> Registrar Actividad</a>
+        <a class="sidebar-link" data-nav="actividadesSection" href="#actividadesSection"> Mis Actividades</a>
+        <a class="sidebar-link" data-nav="documentalSection" href="#documentalSection"> Gestión Documental</a>
+        <a class="sidebar-link" data-nav="calendarSection" href="#calendarSection"> Calendario</a>
+        <a class="sidebar-link" data-nav="reportesSection" href="#reportesSection"> Reportes</a>
+        <a class="sidebar-link" data-nav="perfilSection" href="#perfilSection"> Perfil</a>
       </nav>
 
       <div class="sidebar-bottom">
         <div class="sidebar-section-title">Acciones rápidas</div>
         <div class="sidebar-actions">
-          <button type="button" class="sidebar-action-btn" id="quickMarkAttendance">✅ Marcar asistencia</button>
-          <button type="button" class="sidebar-action-btn" id="quickNewActivity">📝 Nueva actividad</button>
-          <button type="button" class="sidebar-action-btn" id="quickUploadFile">📤 Subir documento</button>
-          <button type="button" class="sidebar-action-btn" id="quickViewFiles">📂 Ver mis archivos</button>
+          <button type="button" class="sidebar-action-btn" id="quickMarkAttendance"> Marcar asistencia</button>
+          <button type="button" class="sidebar-action-btn" id="quickNewActivity"> Nueva actividad</button>
+          <button type="button" class="sidebar-action-btn" id="quickUploadFile"> Subir documento</button>
+          <button type="button" class="sidebar-action-btn" id="quickViewFiles"> Ver mis archivos</button>
         </div>
       </div>
 
       <div id="adminSection" class="sidebar-bottom hidden">
         <div class="sidebar-section-title">Administración</div>
-        <button id="adminPanel" class="sidebar-link" style="width:100%;border:1px solid rgba(252,165,165,0.35);background:rgba(220,38,38,0.18);">🛠️ Panel Administrador</button>
+        <button id="adminPanel" class="sidebar-link" style="width:100%;border:1px solid rgba(250,204,21,0.55);background:rgba(250,204,21,0.2);color:#fef08a;"> Panel Administrador</button>
       </div>
 
       <div class="sidebar-bottom">
-        <button id="logout" class="sidebar-link" style="width:100%;border:1px solid rgba(248,113,113,0.45);background:rgba(220,38,38,0.2);">🚪 Cerrar sesión</button>
+        <button id="logout" class="sidebar-link" style="width:100%;border:1px solid rgba(248,113,113,0.45);background:rgba(220,38,38,0.2);"> Cerrar sesión</button>
       </div>
     </aside>
 
@@ -400,9 +409,9 @@
           <div class="header-subtitle">Sistema de Gestión y Seguimiento de Actividades del Personal</div>
         </div>
         <div class="header-right">
-          <div class="notification-pill" id="bellBtn" title="Notificaciones">🔔<span class="notification-dot" id="bellCount">0</span>
+          <div class="notification-pill" id="bellBtn" title="Notificaciones">Notificaciones<span class="notification-dot" id="bellCount">0</span>
             <div id="bellDropdown">
-              <div class="bd-header">🔔 Notificaciones</div>
+              <div class="bd-header"> Notificaciones</div>
               <div id="bellList"></div>
               <div class="bd-footer" onclick="document.getElementById('notificationsSection').scrollIntoView({behavior:'smooth'});document.getElementById('bellDropdown').classList.remove('open');">Ver todas →</div>
             </div>
@@ -421,28 +430,24 @@
 
     <div class="stats-grid" id="inicioSection">
       <div class="stat-card">
-        <div class="stat-icon stat-icon-green">📁</div>
         <div>
-          <div class="stat-value stat-value-green" id="filesCount2">0</div>
+          <div class="stat-value" id="filesCount2" style="color:#111111;">0</div>
           <div class="stat-label">Archivos Subidos</div>
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon stat-icon-blue">📋</div>
         <div>
           <div class="stat-value stat-value-blue" id="workCount">0</div>
           <div class="stat-label">Trabajos Registrados</div>
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon stat-icon-red">🗑️</div>
         <div>
           <div class="stat-value stat-value-red" id="deletedFilesCount">0</div>
           <div class="stat-label">Archivos Eliminados</div>
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon stat-icon-blue">⏳</div>
         <div>
           <div class="stat-value stat-value-blue" id="pendingActivitiesCount">0</div>
           <div class="stat-label">Actividades Pendientes</div>
@@ -451,26 +456,24 @@
     </div>
 
     <div class="content-grid">
-      <div>
+      <div class="sections-2col">
 
     <div class="section" id="asistenciaSection">
       <div class="section-header">
         <div class="section-header-left">
-          <div class="section-icon" style="background:#f0fdf4;">🕐</div>
           <div>
             <div class="section-title">Control de Asistencia</div>
             <div class="section-subtitle">Marca tu entrada y salida</div>
           </div>
         </div>
-        <button id="btnHistorial" class="btn-toggle btn-toggle-gray">
-          📅 Historial de Hoy <span class="chevron" id="historialChevron">▾</span>
+          <button id="btnHistorial" class="btn-toggle btn-toggle-green">
+           Historial de Hoy
         </button>
       </div>
       <div class="section-body">
         <div class="attendance-status">
           <div>
             <div class="status-badge status-badge-inactive" id="estadoActual">
-              <span id="estadoIcon">🔴</span>
               <span id="estadoTexto">Inactivo</span>
             </div>
             <div class="attendance-info" id="infoMarcacion">
@@ -479,7 +482,7 @@
             </div>
           </div>
           <button id="btnMarcar" class="btn-mark btn-mark-entry">
-            <span id="btnTexto">▶ Marcar Entrada</span>
+            <span id="btnTexto">Marcar Entrada</span>
           </button>
         </div>
         <div id="historialHoy" style="display:none;" class="fade-in">
@@ -493,27 +496,88 @@
     <div class="section" id="documentalSection">
       <div class="section-header">
         <div class="section-header-left">
-          <div class="section-icon" style="background:#f0fdf4;">📤</div>
           <div>
             <div class="section-title">Publicar Archivo</div>
             <div class="section-subtitle">Sube documentos e imágenes</div>
           </div>
         </div>
         <button id="showUploadBtn" class="btn-toggle btn-toggle-green">+ Subir ▾</button>
-        <button id="hideUploadBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+        <button id="hideUploadBtn" style="display:none;" class="btn-toggle btn-toggle-blue">Cerrar ▴</button>
       </div>
+      <div id="uploadTextPlaceholder" style="padding:2rem;text-align:center;color:#94a3b8;font-size:0.85rem;">Haz clic en "+ Subir" para subir un documento o imagen</div>
       <div id="uploadContent" style="display:none;" class="section-body fade-in">
         <form id="uploadForm">
           <div class="upload-zone">
             <input id="fileInput" type="file" name="file" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" required />
             <div id="filePlaceholder">
-              <div class="upload-zone-icon">☁️</div>
+              <div class="upload-zone-icon"></div>
               <div class="upload-zone-text">Arrastra tu archivo o haz clic para seleccionar</div>
               <div class="upload-zone-hint">Imágenes, PDF, Word, Excel, PowerPoint</div>
             </div>
           </div>
+
+          <div class="form-grid-2 form-group" style="margin-top:1rem;">
+            <div>
+              <label class="form-label">Categoría del Documento</label>
+              <select id="uploadCategory" name="category" class="form-input">
+                <option value="">Sin categoría</option>
+                <option value="Acta">Acta</option>
+                <option value="Informe">Informe</option>
+                <option value="Memorándum">Memorándum</option>
+                <option value="Solicitud">Solicitud</option>
+                <option value="Comprobante">Comprobante</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Prioridad</label>
+              <select id="uploadPriority" name="priority" class="form-input">
+                <option value="normal" selected>Normal</option>
+                <option value="alta">Alta</option>
+                <option value="urgente">Urgente</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2 form-group">
+            <div>
+              <label class="form-label">Fecha límite <span style="color:#94a3b8;font-weight:400;">(Opcional)</span></label>
+              <input id="uploadDueDate" name="dueDate" type="date" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">Visible para</label>
+              <select id="uploadVisibility" name="visibility" class="form-input">
+                <option value="interno" selected>Equipo interno</option>
+                <option value="administracion">Solo administración</option>
+                <option value="publico">Uso público</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Etiquetas <span style="color:#94a3b8;font-weight:400;">(Opcional)</span></label>
+            <div style="display:flex;gap:0.6rem;margin-bottom:0.6rem;">
+              <input type="text" id="uploadTagInput" class="form-input" maxlength="20" placeholder="Ej: agua, alumbrado, inspección" style="flex:1;">
+              <button type="button" id="addUploadTagBtn" class="btn-primary" style="padding:0.7rem 1rem;white-space:nowrap;">+ Agregar</button>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.5rem;">
+              <button type="button" class="zone-preset upload-tag-preset" data-tag="urgente">urgente</button>
+              <button type="button" class="zone-preset upload-tag-preset" data-tag="pendiente">pendiente</button>
+              <button type="button" class="zone-preset upload-tag-preset" data-tag="archivo">archivo</button>
+              <button type="button" class="zone-preset upload-tag-preset" data-tag="seguimiento">seguimiento</button>
+            </div>
+            <div id="uploadTagsSelected" style="display:flex;flex-wrap:wrap;gap:0.45rem;"></div>
+            <input type="hidden" id="uploadTagsHidden" name="tags">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Comentario / Contexto</label>
+            <textarea id="uploadComment" name="comment" class="form-input" rows="3" maxlength="240" style="resize:vertical;" placeholder="Describe el documento: qué contiene, para qué área es, qué acción requiere..."></textarea>
+            <div style="font-size:0.73rem;color:#94a3b8;text-align:right;margin-top:0.35rem;"><span id="uploadCommentCount">0</span>/240</div>
+          </div>
+
           <div style="margin-top:1.25rem;">
-            <button type="submit" class="btn-success" style="width:100%;font-size:1rem;padding:0.85rem;">📤 Publicar Archivo</button>
+            <button type="submit" class="btn-success" style="width:100%;font-size:1rem;padding:0.85rem;"> Publicar Archivo</button>
           </div>
         </form>
         <div id="uploadPlaceholder" style="display:none;"></div>
@@ -523,15 +587,15 @@
     <div class="section" id="registroSection">
       <div class="section-header">
         <div class="section-header-left">
-          <div class="section-icon" style="background:#eff6ff;">📋</div>
           <div>
             <div class="section-title">Registrar Actividad</div>
             <div class="section-subtitle">Documenta el trabajo realizado</div>
           </div>
         </div>
-        <button id="showRegisterBtn" class="btn-toggle btn-toggle-blue">+ Registrar ▾</button>
-        <button id="hideRegisterBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+        <button id="showRegisterBtn" class="btn-toggle btn-toggle-green">+ Registrar ▾</button>
+        <button id="hideRegisterBtn" style="display:none;" class="btn-toggle btn-toggle-blue">Cerrar ▴</button>
       </div>
+      <div id="registerTextPlaceholder" style="padding:2rem;text-align:center;color:#94a3b8;font-size:0.85rem;">Haz clic en "+ Registrar" para documentar una actividad realizada</div>
       <div id="registerContent" style="display:none;" class="section-body fade-in">
         <form id="workForm">
           <div class="form-group">
@@ -585,10 +649,10 @@
             <label class="form-label">Estado de la Acción</label>
             <select id="workStatus" class="form-input" required>
               <option value="">Selecciona el estado</option>
-              <option value="en-proceso">🔄 En Proceso</option>
-              <option value="culminado">✅ Culminado</option>
-              <option value="pendiente">⏳ Pendiente</option>
-              <option value="postergado">⏸️ Postergado</option>
+              <option value="en-proceso">En Proceso</option>
+              <option value="culminado">Culminado</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="postergado">Postergado</option>
             </select>
           </div>
           <div class="form-group">
@@ -596,7 +660,7 @@
             <textarea id="workDescription" class="form-input" rows="3" style="resize:vertical;" placeholder="Agrega detalles adicionales..."></textarea>
           </div>
           <div style="display:flex;gap:0.75rem;padding-top:0.5rem;">
-            <button type="submit" class="btn-primary" style="flex:1;padding:0.85rem;">💾 Guardar Registro</button>
+            <button type="submit" class="btn-primary" style="flex:1;padding:0.85rem;"> Guardar Registro</button>
             <button type="button" id="cancelWorkBtn" class="btn-muted" style="flex:1;padding:0.85rem;">Cancelar</button>
           </div>
         </form>
@@ -607,14 +671,13 @@
     <div class="section" id="recentActivitiesSection">
       <div class="section-header">
         <div class="section-header-left">
-          <div class="section-icon" style="background:#fef2f2;">🧾</div>
           <div>
             <div class="section-title">Actividades recientes</div>
             <div class="section-subtitle">Últimos registros del usuario autenticado</div>
           </div>
         </div>
-        <button id="showRecentBtn" class="btn-toggle btn-toggle-blue">Ver actividad ▾</button>
-        <button id="hideRecentBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+        <button id="showRecentBtn" class="btn-toggle btn-toggle-green">Ver actividad ▾</button>
+        <button id="hideRecentBtn" style="display:none;" class="btn-toggle btn-toggle-blue">Cerrar ▴</button>
       </div>
       <div id="recentActivitiesContent" class="section-body" style="display:none;">
         <div class="activities-table-wrap">
@@ -642,17 +705,16 @@
     <div class="section" id="perfilSection">
       <div class="section-header">
         <div class="section-header-left">
-          <div class="section-icon" style="background:#ecfdf5;">👤</div>
           <div>
             <div class="section-title">Mi Perfil</div>
             <div class="section-subtitle">Datos personales y configuración de cuenta</div>
           </div>
         </div>
-        <button id="showProfileBtn" class="btn-toggle btn-toggle-blue">Ver perfil ▾</button>
-        <button id="hideProfileBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+        <button id="showProfileBtn" class="btn-toggle btn-toggle-green">Ver perfil ▾</button>
+        <button id="hideProfileBtn" style="display:none;" class="btn-toggle btn-toggle-blue">Cerrar ▴</button>
         <div class="profile-toolbar">
-          <button id="showProfileEditBtn" class="btn-toggle btn-toggle-blue">✏️ Editar perfil</button>
-          <button id="hideProfileEditBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar edición</button>
+          <button id="showProfileEditBtn" class="btn-toggle btn-toggle-lila"> Editar perfil</button>
+          <button id="hideProfileEditBtn" style="display:none;" class="btn-toggle btn-toggle-blue">Cerrar edición</button>
         </div>
       </div>
       <div id="profileContent" class="section-body" style="display:none;">
@@ -699,7 +761,7 @@
               </div>
             </div>
             <div style="display:flex;gap:0.75rem;margin-top:0.85rem;">
-              <button type="submit" class="btn-primary" style="flex:1;">💾 Guardar cambios</button>
+              <button type="submit" class="btn-primary" style="flex:1;"> Guardar cambios</button>
               <button type="button" id="cancelProfileEditBtn" class="btn-muted" style="flex:1;">Cancelar</button>
             </div>
             <div id="profileMessage" class="profile-msg" style="display:none;"></div>
@@ -712,14 +774,13 @@
     <div class="section" id="documentosSection">
       <div class="section-header">
         <div class="section-header-left">
-          <div class="section-icon" style="background:#f0fdf4;">🗂️</div>
           <div>
             <div class="section-title">Mis Archivos Subidos</div>
             <div class="section-subtitle">Gestiona tus documentos</div>
           </div>
         </div>
         <button id="showFilesBtn" class="btn-toggle btn-toggle-green">Ver archivos ▾</button>
-        <button id="hideFilesBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+        <button id="hideFilesBtn" style="display:none;" class="btn-toggle btn-toggle-blue">Cerrar ▴</button>
       </div>
       <div class="section-body" style="padding-top:0;padding-bottom:0;">
         <div class="file-list" id="filesList" style="display:none;padding-top:1.25rem;"></div>
@@ -728,11 +789,11 @@
       <div id="editSection" style="display:none;border-top:1px solid #f1f5f9;">
         <div class="section-header" style="background:#f8fafc;">
           <div class="section-header-left">
-            <div class="section-icon" style="background:#dbeafe;font-size:1rem;">✏️</div>
+            <div class="section-icon" style="background:#dbeafe;font-size:1rem;"></div>
             <div class="section-title" style="font-size:0.95rem;">Editar Archivo</div>
           </div>
           <button id="showEditBtn" style="display:none;" class="btn-toggle btn-toggle-blue">Ver ▾</button>
-          <button id="hideEditBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+          <button id="hideEditBtn" style="display:none;" class="btn-toggle btn-toggle-blue">Cerrar ▴</button>
         </div>
         <div id="editContent" style="display:none;" class="section-body">
           <form id="editForm">
@@ -745,7 +806,7 @@
               <textarea id="editComment" class="form-input" rows="3" placeholder="Comentario opcional..."></textarea>
             </div>
             <div style="display:flex;gap:0.75rem;">
-              <button type="submit" class="btn-primary" style="flex:1;">✅ Guardar</button>
+              <button type="submit" class="btn-primary" style="flex:1;"> Guardar</button>
               <button type="button" id="cancelEdit" class="btn-muted" style="flex:1;">Cancelar</button>
             </div>
           </form>
@@ -757,14 +818,13 @@
     <div class="section" id="actividadesSection">
       <div class="section-header">
         <div class="section-header-left">
-          <div class="section-icon" style="background:#eff6ff;">📊</div>
           <div>
             <div class="section-title">Trabajos Registrados</div>
             <div class="section-subtitle">Historial de actividades</div>
           </div>
         </div>
-        <button id="showWorkBtn" class="btn-toggle btn-toggle-blue">Ver trabajos ▾</button>
-        <button id="hideWorkBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+        <button id="showWorkBtn" class="btn-toggle btn-toggle-green">Ver trabajos ▾</button>
+        <button id="hideWorkBtn" style="display:none;" class="btn-toggle btn-toggle-blue">Cerrar ▴</button>
       </div>
       <div class="section-body" style="padding-top:0;padding-bottom:0;">
         <div id="workListContent" style="display:none;padding-top:1.25rem;"></div>
@@ -775,14 +835,13 @@
     <div class="section">
       <div class="section-header">
         <div class="section-header-left">
-          <div class="section-icon" style="background:#fff1f2;">🗑️</div>
           <div>
             <div class="section-title">Archivos Eliminados</div>
             <div class="section-subtitle">Registro de archivos borrados</div>
           </div>
         </div>
         <button id="showDeletedBtn" class="btn-toggle btn-toggle-red">Ver eliminados ▾</button>
-        <button id="hideDeletedBtn" style="display:none;" class="btn-toggle btn-toggle-gray">Cerrar ▴</button>
+        <button id="hideDeletedBtn" style="display:none;" class="btn-toggle btn-toggle-blue">Cerrar ▴</button>
       </div>
       <div class="section-body" style="padding-top:0;padding-bottom:0;">
         <div id="deletedFilesList" style="display:none;padding-top:1.25rem;"></div>
@@ -791,16 +850,15 @@
     </div>
 
     <!-- ── REPORTES ── -->
-    <div class="section" id="reportesSection">
+    <div class="section" id="reportesSection" style="grid-column:1/-1;">
       <div class="section-header">
         <div class="section-header-left">
-          <div class="section-icon" style="background:#ecfdf5;">📊</div>
           <div>
             <div class="section-title">Mis Reportes y Estadísticas</div>
             <div class="section-subtitle">Análisis de tu actividad registrada</div>
           </div>
         </div>
-        <button class="report-export-btn" onclick="exportReportCSV()">⬇️ Exportar CSV</button>
+        <button class="report-export-btn" onclick="exportReportPDF()">⬇ Exportar PDF</button>
       </div>
       <div class="section-body">
         <!-- Filtros -->
@@ -840,8 +898,8 @@
               <option value="postergado">Postergado</option>
             </select>
           </div>
-          <button class="report-filter-btn" onclick="generateReport()">🔍 Filtrar</button>
-          <button class="report-reset-btn" onclick="resetReport()">✕ Limpiar</button>
+          <button class="report-filter-btn" onclick="generateReport()"> Filtrar</button>
+          <button class="report-reset-btn" onclick="resetReport()"> Limpiar</button>
         </div>
 
         <!-- KPIs -->
@@ -867,7 +925,11 @@
         <!-- Tabla -->
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
           <div style="font-size:0.82rem;font-weight:700;color:#374151;">Detalle de actividades <span id="reportTableCount" style="color:#065f46;"></span></div>
+          <button type="button" id="actTableToggleBtn" onclick="toggleActTable()" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.75rem;border-radius:9999px;border:1.5px solid #d1fae5;background:#f0fdf4;color:#065f46;font-size:0.75rem;font-weight:700;cursor:pointer;transition:background 0.15s;">
+            <span id="actTableToggleIcon">▸</span> <span id="actTableToggleText">Ver detalle</span>
+          </button>
         </div>
+        <div id="actTableWrap" style="display:none;">
         <div class="report-table-wrap">
           <table class="report-table">
             <thead>
@@ -885,6 +947,89 @@
             </tbody>
           </table>
         </div>
+        </div>
+
+        <!-- ── MARCACIONES ── -->
+        <div style="margin-top:2rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+            <div style="font-weight:800;font-size:1rem;color:#1e293b;"> Historial de Marcaciones y Horas Trabajadas</div>
+            <button class="report-export-btn" onclick="exportMarcacionesPDF()">⬇ Exportar PDF</button>
+          </div>
+
+          <!-- Filtros marcaciones -->
+          <div class="report-filters" style="margin-bottom:1rem;">
+            <div class="report-filter-group">
+              <span class="report-filter-label">Período</span>
+              <select id="mrcPeriodo" class="report-filter-input" onchange="aplicarPeriodoMarcaciones()">
+                <option value="">Personalizado</option>
+                <option value="hoy">Hoy</option>
+                <option value="semana">Esta semana</option>
+                <option value="mes" selected>Este mes</option>
+                <option value="anio">Este año</option>
+              </select>
+            </div>
+            <div class="report-filter-group">
+              <span class="report-filter-label">Desde</span>
+              <input type="date" id="mrcFrom" class="report-filter-input">
+            </div>
+            <div class="report-filter-group">
+              <span class="report-filter-label">Hasta</span>
+              <input type="date" id="mrcTo" class="report-filter-input">
+            </div>
+            <div class="report-filter-group">
+              <span class="report-filter-label">Tipo</span>
+              <select id="mrcTipo" class="report-filter-input">
+                <option value="">Todos</option>
+                <option value="entrada">Entrada</option>
+                <option value="salida">Salida</option>
+              </select>
+            </div>
+            <button class="report-filter-btn" onclick="filterMarcaciones()"> Filtrar</button>
+            <button class="report-reset-btn" onclick="resetMarcaciones()"> Limpiar</button>
+          </div>
+
+          <!-- KPIs marcaciones -->
+          <div class="report-kpis" style="margin-bottom:1rem;grid-template-columns:repeat(4,1fr);">
+            <div class="report-kpi kpi-green"><div class="report-kpi-val" id="mrcKpiHoras">—</div><div class="report-kpi-label">Horas trabajadas</div><div class="report-kpi-sub" id="mrcKpiHorasSub">en el período</div></div>
+            <div class="report-kpi kpi-blue"><div class="report-kpi-val" id="mrcKpiDias">—</div><div class="report-kpi-label">Días trabajados</div><div class="report-kpi-sub">en el período</div></div>
+            <div class="report-kpi kpi-yellow"><div class="report-kpi-val" id="mrcKpiPromedio">—</div><div class="report-kpi-label">Promedio diario</div><div class="report-kpi-sub">horas por día</div></div>
+            <div class="report-kpi kpi-red"><div class="report-kpi-val" id="mrcKpiTotal">—</div><div class="report-kpi-label">Total registros</div><div class="report-kpi-sub" id="mrcKpiTotalSub">entradas + salidas</div></div>
+          </div>
+
+          <!-- Gráfico horas por día -->
+          <div class="report-chart-card" style="margin-bottom:1rem;">
+            <div class="report-chart-title">⏱ Horas trabajadas por día <span id="mrcChartLabel" style="font-size:0.72rem;color:#9ca3af;"></span></div>
+            <div class="css-bar-wrap" id="mrcChartHoras"></div>
+          </div>
+
+          <!-- Tabla marcaciones -->
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.82rem;font-weight:700;color:#374151;margin-bottom:0.6rem;">
+            <span>Detalle de marcaciones <span id="mrcTableCount" style="color:#065f46;"></span></span>
+            <button type="button" id="mrcTableToggleBtn" onclick="toggleMrcTable()" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.75rem;border-radius:9999px;border:1.5px solid #d1fae5;background:#f0fdf4;color:#065f46;font-size:0.75rem;font-weight:700;cursor:pointer;transition:background 0.15s;">
+              <span id="mrcTableToggleIcon">▸</span> <span id="mrcTableToggleText">Ver detalle</span>
+            </button>
+          </div>
+          <div id="mrcTableWrap" style="display:none;">
+          <div class="report-table-wrap">
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Fecha</th>
+                  <th>Día</th>
+                  <th>Hora</th>
+                  <th>Tipo</th>
+                  <th>Horas trabajadas ese día</th>
+                </tr>
+              </thead>
+              <tbody id="mrcTableBody">
+                <tr><td colspan="6" class="report-empty">Cargando marcaciones...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -892,7 +1037,7 @@
 
       <aside class="aside-stack">
         <div class="aside-card" id="calendarSection">
-          <div class="aside-head">📅 Calendario <span id="calendarNowLabel" style="font-size:0.72rem;color:#6b7280;"></span></div>
+          <div class="aside-head"> Calendario <span id="calendarNowLabel" style="font-size:0.72rem;color:#6b7280;"></span></div>
           <div class="aside-body">
             <div class="calendar-toolbar">
               <button type="button" id="calPrevMonth" class="calendar-nav-btn">◀</button>
@@ -919,14 +1064,14 @@
         </div>
 
         <div class="aside-card" id="notificationsSection">
-          <div class="aside-head">🔔 Notificaciones</div>
+          <div class="aside-head"> Notificaciones</div>
           <div class="aside-body mini-list" id="notificationsList">
             <div class="mini-item"><div class="mini-item-title">Sin notificaciones</div><div class="mini-item-meta">Se mostrarán aquí eventos recientes.</div></div>
           </div>
         </div>
 
         <div class="aside-card" id="documentalAsideSection">
-          <div class="aside-head">📂 Gestión Documental</div>
+          <div class="aside-head"> Gestión Documental</div>
           <div class="aside-body mini-list" id="asideDocumentsList">
             <div class="mini-item"><div class="mini-item-title">Sin documentos</div><div class="mini-item-meta">Sube archivos para verlos aquí.</div></div>
           </div>
@@ -947,8 +1092,8 @@
         <div class="file-date"></div>
       </div>
       <div style="display:flex;gap:0.4rem;flex-shrink:0;">
-        <button class="btn-icon btn-icon-blue edit-btn" title="Editar">✏️</button>
-        <button class="btn-icon btn-icon-red delete-btn" title="Eliminar">🗑️</button>
+        <button class="btn-icon btn-icon-blue edit-btn" style="width:auto;padding:0 0.7rem;font-size:0.75rem;font-weight:700;" title="Editar">Editar</button>
+        <button class="btn-icon btn-icon-red delete-btn" style="width:auto;padding:0 0.7rem;font-size:0.75rem;font-weight:700;" title="Eliminar">Eliminar</button>
       </div>
     </div>
   </template>
@@ -958,10 +1103,10 @@
     <div class="modal-box">
       <div class="modal-header">
         <div>
-          <div class="modal-title">✏️ Editar Actividad</div>
+          <div class="modal-title"> Editar Actividad</div>
           <div class="modal-subtitle" id="editModalSubtitle">Modifique los datos de la actividad registrada</div>
         </div>
-        <button class="modal-close" onclick="closeEditModal()">✕</button>
+        <button class="modal-close" onclick="closeEditModal()"></button>
       </div>
       <div class="modal-body">
         <form id="editWorkForm">
@@ -1000,10 +1145,10 @@
           <div class="form-group" style="margin-top:0.85rem;">
             <label class="form-label">Estado *</label>
             <select id="editWorkStatus" class="form-control" required>
-              <option value="pendiente">⏳ Pendiente</option>
-              <option value="en-proceso">🔄 En Proceso</option>
-              <option value="culminado">✅ Culminado</option>
-              <option value="postergado">⏸️ Postergado</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="en-proceso">En Proceso</option>
+              <option value="culminado">Culminado</option>
+              <option value="postergado">Postergado</option>
             </select>
           </div>
           <div class="form-group" style="margin-top:0.85rem;">
@@ -1026,7 +1171,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
-        <button class="btn-save" onclick="submitEditWork()">💾 Guardar Cambios</button>
+        <button class="btn-save" onclick="submitEditWork()"> Guardar Cambios</button>
       </div>
     </div>
   </div>
@@ -1036,10 +1181,10 @@
     <div class="modal-box" style="max-width:700px;">
       <div class="modal-header">
         <div>
-          <div class="modal-title">🕐 Historial de Ediciones</div>
+          <div class="modal-title"> Historial de Ediciones</div>
           <div class="modal-subtitle" id="historialModalSubtitle">Registro de auditoría de modificaciones</div>
         </div>
-        <button class="modal-close" onclick="closeHistorialModal()">✕</button>
+        <button class="modal-close" onclick="closeHistorialModal()"></button>
       </div>
       <div class="modal-body">
         <div id="historialContent"></div>
@@ -1052,7 +1197,7 @@
 
   <a href="https://wa.me/595983159658?text=Hola,%20necesito%20ayuda%20con%20el%20sistema%20de%20archivos."
      class="whatsapp-btn" target="_blank" title="Soporte WhatsApp">
-    <span>❓</span><span>¿Necesitas Ayuda?</span>
+    <span></span><span>¿Necesitas Ayuda?</span>
   </a>
 
   <script>
@@ -1462,17 +1607,17 @@
 
       const noti = document.getElementById("notificationsList");
       const notifications = [];
-      if (pending > 0) notifications.push({ title: `${pending} actividades pendientes`, meta: "Requieren seguimiento", icon: "⚠️" });
-      if (dashboardFiles.length > 0) notifications.push({ title: `${dashboardFiles.length} documentos subidos`, meta: "Documentación actualizada", icon: "📄" });
+      if (pending > 0) notifications.push({ title: `${pending} actividades pendientes`, meta: "Requieren seguimiento", icon: "" });
+      if (dashboardFiles.length > 0) notifications.push({ title: `${dashboardFiles.length} documentos subidos`, meta: "Documentación actualizada", icon: "" });
       const notesMap = getCalendarNotesMap();
       const todayKey = formatDateKey(new Date());
       const todayNotes = notesMap[todayKey] || [];
-      if (todayNotes.length > 0) notifications.push({ title: `${todayNotes.length} nota(s) para hoy`, meta: "Calendario personal", icon: "📅" });
-      if (!notifications.length) notifications.push({ title: "Sin notificaciones", meta: "No hay eventos nuevos por ahora", icon: "✅" });
+      if (todayNotes.length > 0) notifications.push({ title: `${todayNotes.length} nota(s) para hoy`, meta: "Calendario personal", icon: "" });
+      if (!notifications.length) notifications.push({ title: "Sin notificaciones", meta: "No hay eventos nuevos por ahora", icon: "" });
 
       // Actualizar dot en la campana
       const dot = document.getElementById("bellCount");
-      const realCount = notifications.filter(n => n.icon !== "✅").length;
+      const realCount = notifications.filter(n => n.icon !== "").length;
       if (dot) {
         dot.textContent = realCount > 0 ? String(realCount) : "0";
         dot.style.display = realCount > 0 ? "flex" : "none";
@@ -1499,6 +1644,7 @@
       });
       // Actualizar reportes automáticamente cuando se recargan datos
       if (typeof generateReport === "function") generateReport();
+      if (typeof fetchMarcaciones === "function") fetchMarcaciones();
     }
 
     // ── REGISTRO DE TRABAJO ──
@@ -1521,7 +1667,7 @@
 
     document.getElementById("showRegisterBtn").addEventListener("click", () => {
       document.getElementById("registerContent").style.display = "block";
-      document.getElementById("registerPlaceholder").style.display = "none";
+      document.getElementById("registerTextPlaceholder").style.display = "none";
       document.getElementById("showRegisterBtn").style.display = "none";
       document.getElementById("hideRegisterBtn").style.display = "block";
       const today = new Date().toISOString().split("T")[0];
@@ -1533,7 +1679,7 @@
 
     document.getElementById("hideRegisterBtn").addEventListener("click", () => {
       document.getElementById("registerContent").style.display = "none";
-      document.getElementById("registerPlaceholder").style.display = "block";
+      document.getElementById("registerTextPlaceholder").style.display = "block";
       document.getElementById("showRegisterBtn").style.display = "block";
       document.getElementById("hideRegisterBtn").style.display = "none";
     });
@@ -1572,6 +1718,10 @@
     });
 
     document.getElementById("cancelWorkBtn").addEventListener("click", () => {
+      document.getElementById("registerContent").style.display = "none";
+      document.getElementById("registerTextPlaceholder").style.display = "block";
+      document.getElementById("showRegisterBtn").style.display = "block";
+      document.getElementById("hideRegisterBtn").style.display = "none";
       document.getElementById("workForm").reset();
       selectedZones = [];
       updateSelectedZonesDisplay();
@@ -1600,7 +1750,7 @@
       selectedZones.forEach((zone, i) => {
         const t = document.createElement("div");
         t.className = "zone-tag";
-        t.innerHTML = `<span>📍 ${zone}</span><button type="button" onclick="removeZone(${i})" title="Eliminar">×</button>`;
+        t.innerHTML = `<span> ${zone}</span><button type="button" onclick="removeZone(${i})" title="Eliminar">×</button>`;
         c.appendChild(t);
       });
       document.getElementById("zonesHidden").value = selectedZones.join(", ");
@@ -1630,9 +1780,9 @@
         });
         const json = await res.json();
         if (res.ok) {
-          alert("¡Trabajo registrado exitosamente! 🎉");
+          alert("¡Trabajo registrado exitosamente! ");
           document.getElementById("registerContent").style.display = "none";
-          document.getElementById("registerPlaceholder").style.display = "block";
+          document.getElementById("registerTextPlaceholder").style.display = "block";
           document.getElementById("showRegisterBtn").style.display = "block";
           document.getElementById("hideRegisterBtn").style.display = "none";
           document.getElementById("workForm").reset();
@@ -1679,7 +1829,6 @@
         const content = document.getElementById("workListContent");
         content.innerHTML = "";
         const sc = { "en-proceso":"pill-yellow","culminado":"pill-green","pendiente":"pill-blue","postergado":"pill-red" };
-        const si = { "en-proceso":"🔄","culminado":"✅","pendiente":"⏳","postergado":"⏸️" };
         const sn = { "en-proceso":"En Proceso","culminado":"Culminado","pendiente":"Pendiente","postergado":"Postergado" };
         if (!lista.length) {
           content.innerHTML = "<div style=\"text-align:center;color:#94a3b8;padding:1.5rem;background:#f8fafc;border-radius:12px;font-size:0.85rem;\">No hay trabajos registrados.</div>";
@@ -1691,21 +1840,21 @@
               <div class="work-card-header">
                 <span class="work-title">${t.tipo}</span>
                 <div style="display:flex;align-items:center;gap:0.5rem;flex-shrink:0;">
-                  <span class="pill ${sc[t.estado]||"pill-blue"}">${si[t.estado]} ${sn[t.estado]}</span>
-                  <button onclick="editWork(${t.id})" class="btn-icon btn-icon-green" title="Editar actividad">✏️</button>
-                  <button onclick="showHistorial(${t.id}, '${t.tipo.replace(/'/g,"&#39;")}')" class="btn-icon btn-icon-gray" title="Ver historial de ediciones">🕐</button>
-                  <button onclick="deleteWork(${t.id})" class="btn-icon btn-icon-red" title="Eliminar">🗑️</button>
+                  <span class="pill ${sc[t.estado]||"pill-blue"}">${sn[t.estado] || "Pendiente"}</span>
+                  <button onclick="editWork(${t.id})" class="btn-icon btn-icon-green" style="width:auto;padding:0 0.7rem;font-size:0.75rem;font-weight:700;" title="Editar actividad">Editar</button>
+                  <button onclick="showHistorial(${t.id}, '${t.tipo.replace(/'/g,"&#39;")}')" class="btn-icon btn-icon-gray" style="width:auto;padding:0 0.7rem;font-size:0.75rem;font-weight:700;" title="Ver historial de ediciones">Historial</button>
+                  <button onclick="deleteWork(${t.id})" class="btn-icon btn-icon-red" style="width:auto;padding:0 0.7rem;font-size:0.75rem;font-weight:700;" title="Eliminar">Eliminar</button>
                 </div>
               </div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
-                <div><div class="work-detail-label">📅 Período</div><div class="work-detail-value">${formatDate(t.fechaInicio)} → ${formatDate(t.fechaFin)}</div></div>
-                <div><div class="work-detail-label">🕐 Horario</div><div class="work-detail-value">${t.horaInicio} – ${t.horaFin}</div></div>
+                <div><div class="work-detail-label"> Período</div><div class="work-detail-value">${formatDate(t.fechaInicio)} → ${formatDate(t.fechaFin)}</div></div>
+                <div><div class="work-detail-label"> Horario</div><div class="work-detail-value">${t.horaInicio} – ${t.horaFin}</div></div>
               </div>
               <div style="margin-bottom:${t.descripcion?"0.75rem":"0"};">
-                <div class="work-detail-label">📍 Zonas</div>
+                <div class="work-detail-label"> Zonas</div>
                 <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.35rem;">${t.zonas.map(z=>`<span class="pill pill-blue">${z}</span>`).join("")}</div>
               </div>
-              ${t.descripcion?`<div><div class="work-detail-label">📝 Descripción</div><div class="work-detail-value" style="margin-top:0.25rem;">${t.descripcion}</div></div>`:""}
+              ${t.descripcion?`<div><div class="work-detail-label"> Descripción</div><div class="work-detail-value" style="margin-top:0.25rem;">${t.descripcion}</div></div>`:""}
               <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #e2e8f0;font-size:0.72rem;color:#94a3b8;">Registrado: ${formatDateTime(t.fechaRegistro)}</div>`;
             content.appendChild(card);
           });
@@ -1831,7 +1980,7 @@
         const historial = await res.json();
 
         if (!historial.length) {
-          document.getElementById("historialContent").innerHTML = `<div class="audit-empty">📋 Esta actividad aún no ha sido editada.<br><small>Cada vez que edites una actividad, el historial de cambios quedará registrado aquí.</small></div>`;
+          document.getElementById("historialContent").innerHTML = `<div class="audit-empty"> Esta actividad aún no ha sido editada.<br><small>Cada vez que edites una actividad, el historial de cambios quedará registrado aquí.</small></div>`;
           return;
         }
 
@@ -1883,7 +2032,7 @@
               html += `<tr>
                 ${fi===0 ? `<td rowspan="${rowspan}"><span class="audit-row-num">${historial.length - idx}</span></td><td rowspan="${rowspan}"><strong>${fechaStr}</strong><br><small style="color:#6b7280">${horaStr}</small></td>` : ""}
                 <td style="font-weight:600;color:#374151;font-size:0.78rem;">${FIELD_LABELS[f]}</td>
-                <td class="audit-field-change"><span class="audit-old">❌ ${fmtVal(oldVal)}</span><span class="audit-new">✅ ${fmtVal(newVal)}</span></td>
+                <td class="audit-field-change"><span class="audit-old"> ${fmtVal(oldVal)}</span><span class="audit-new"> ${fmtVal(newVal)}</span></td>
               </tr>`;
             });
           }
@@ -2019,47 +2168,524 @@
       generateReport();
     };
 
-    window.exportReportCSV = function() {
+    async function ensureJsPdfLoaded() {
+      if (window.jspdf && window.jspdf.jsPDF) return;
+      await new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+      if (!window.jspdf || !window.jspdf.jsPDF) throw new Error("No se pudo cargar jsPDF");
+    }
+
+    function drawPdfHeader(doc, title, subtitle) {
+      doc.setFillColor(22, 101, 52);
+      doc.rect(0, 0, 210, 26, "F");
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(15);
+      doc.text("MUNICIPALIDAD DE BENJAMIN ACEVAL", 105, 10, { align: "center" });
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(title, 105, 16, { align: "center" });
+      doc.text(subtitle, 105, 21, { align: "center" });
+      doc.setTextColor(55, 65, 81);
+    }
+
+    function drawKpiCard(doc, x, y, w, h, label, value, color) {
+      doc.setFillColor(color[0], color[1], color[2]);
+      doc.roundedRect(x, y, w, h, 2, 2, "F");
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(7);
+      doc.text(String(label).toUpperCase(), x + 3, y + 5);
+      doc.setFontSize(13);
+      doc.text(String(value), x + 3, y + 12);
+      doc.setTextColor(55, 65, 81);
+    }
+
+    window.exportReportPDF = async function() {
       const lista = getFilteredTrabajos();
       if (!lista.length) { alert("No hay datos para exportar con los filtros actuales."); return; }
-      const headers = ["ID","Tipo","Fecha Inicio","Fecha Fin","Hora Inicio","Hora Fin","Zonas","Estado","Descripcion"];
-      const rows = lista.map(t => [
-        t.id, `"${t.tipo}"`,
-        (t.fechaInicio||"").substring(0,10), (t.fechaFin||"").substring(0,10),
-        t.horaInicio, t.horaFin,
-        `"${(t.zonas||[]).join("; ")}"`,
-        t.estado, `"${(t.descripcion||"").replace(/"/g,'""')}"`
-      ]);
-      const csv = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
-      const blob = new Blob(["\uFEFF" + csv], { type:"text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url; a.download = `reporte_actividades_${new Date().toISOString().slice(0,10)}.csv`;
-      a.click(); URL.revokeObjectURL(url);
+      await ensureJsPdfLoaded();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+
+      const hoy = new Date().toLocaleString("es-PY");
+      const from = document.getElementById("rptFrom").value || "(sin filtro)";
+      const to = document.getElementById("rptTo").value || "(sin filtro)";
+      drawPdfHeader(doc, "Reporte de Actividades", `Generado: ${hoy}`);
+
+      let y = 34;
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Rango: ${from} a ${to}`, 14, y);
+      y += 5;
+
+      const total = lista.length;
+      const culminadas = lista.filter(t => (t.estado || "").toLowerCase() === "culminado").length;
+      const pendientes = lista.filter(t => ["pendiente", "en-proceso", "postergado"].includes((t.estado || "").toLowerCase())).length;
+      const tiposUnicos = new Set(lista.map(t => t.tipo || "Sin tipo")).size;
+
+      drawKpiCard(doc, 14, y, 43, 15, "Total", total, [22, 163, 74]);
+      drawKpiCard(doc, 60, y, 43, 15, "Culminadas", culminadas, [37, 99, 235]);
+      drawKpiCard(doc, 106, y, 43, 15, "Pendientes", pendientes, [245, 158, 11]);
+      drawKpiCard(doc, 152, y, 43, 15, "Tipos", tiposUnicos, [239, 68, 68]);
+      y += 22;
+
+      const estadoCounts = {
+        culminado: lista.filter(t => (t.estado || "").toLowerCase() === "culminado").length,
+        pendiente: lista.filter(t => (t.estado || "").toLowerCase() === "pendiente").length,
+        "en-proceso": lista.filter(t => (t.estado || "").toLowerCase() === "en-proceso").length,
+        postergado: lista.filter(t => (t.estado || "").toLowerCase() === "postergado").length
+      };
+      const maxEstado = Math.max(...Object.values(estadoCounts), 1);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.text("Distribucion por estado", 14, y);
+      y += 5;
+      Object.entries(estadoCounts).forEach(([estado, value]) => {
+        const barW = Math.round((value / maxEstado) * 110);
+        const color = estado === "culminado" ? [34, 197, 94] : estado === "pendiente" ? [251, 191, 36] : estado === "en-proceso" ? [59, 130, 246] : [248, 113, 113];
+        doc.setFillColor(color[0], color[1], color[2]);
+        doc.rect(14, y, barW, 5, "F");
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8);
+        doc.setTextColor(55, 65, 81);
+        doc.text(`${estado}: ${value}`, 128, y + 3.8);
+        y += 7;
+      });
+
+      y += 2;
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.text("Detalle de actividades", 14, y);
+      y += 5;
+
+      const drawTableHeader = () => {
+        doc.setFillColor(240, 253, 244);
+        doc.rect(14, y, 182, 7, "F");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(7);
+        doc.text("FECHA", 16, y + 4.5);
+        doc.text("TIPO", 36, y + 4.5);
+        doc.text("ZONAS", 82, y + 4.5);
+        doc.text("ESTADO", 140, y + 4.5);
+        doc.text("DIAS", 165, y + 4.5);
+        doc.text("DESC", 178, y + 4.5);
+        y += 7;
+      };
+
+      drawTableHeader();
+      lista.forEach((t, idx) => {
+        if (y > 280) {
+          doc.addPage();
+          y = 16;
+          drawTableHeader();
+        }
+        if (idx % 2 === 0) {
+          doc.setFillColor(249, 250, 251);
+          doc.rect(14, y, 182, 6.2, "F");
+        }
+        const fi = (t.fechaInicio || "").substring(0, 10);
+        const ff = (t.fechaFin || "").substring(0, 10);
+        const dias = fi && ff ? Math.max(1, Math.round((new Date(ff) - new Date(fi)) / 86400000) + 1) : 1;
+        const tipo = String(t.tipo || "-").substring(0, 24);
+        const zonas = String((t.zonas || []).join("; ") || "-").substring(0, 38);
+        const estado = String(t.estado || "-").substring(0, 14);
+        const desc = String(t.descripcion || "-").substring(0, 14);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7);
+        doc.text(fi || "-", 16, y + 4.2);
+        doc.text(tipo, 36, y + 4.2);
+        doc.text(zonas, 82, y + 4.2);
+        doc.text(estado, 140, y + 4.2);
+        doc.text(String(dias), 166, y + 4.2);
+        doc.text(desc, 178, y + 4.2);
+        y += 6.2;
+      });
+
+      doc.setFontSize(7);
+      doc.setTextColor(107, 114, 128);
+      doc.text("Documento generado automaticamente desde el Dashboard", 14, 292);
+      doc.text(`Paginas: ${doc.getNumberOfPages()}`, 196, 292, { align: "right" });
+      doc.save(`reporte_actividades_${new Date().toISOString().slice(0,10)}.pdf`);
+    };
+
+    // ── MARCACIONES ──
+    let dashboardMarcaciones = [];
+
+    async function fetchMarcaciones() {
+      try {
+        const res = await fetch("/api/marcaciones/historial?limite=1000", { headers: { Authorization: "Bearer " + token } });
+        dashboardMarcaciones = await res.json();
+      } catch(e) { dashboardMarcaciones = []; }
+      aplicarPeriodoMarcaciones();
+    }
+
+    // Empareja entradas con salidas por día y calcula horas trabajadas
+    function calcularHorasPorDia(todasMarcaciones) {
+      const porDia = {};
+      todasMarcaciones
+        .slice()
+        .sort((a, b) => new Date(a.fecha_hora) - new Date(b.fecha_hora))
+        .forEach(m => {
+          const key = (m.fecha_hora || "").substring(0, 10);
+          if (!porDia[key]) porDia[key] = [];
+          porDia[key].push({ dt: new Date(m.fecha_hora), tipo: m.tipo });
+        });
+      const resultado = {};
+      const now = new Date();
+      Object.entries(porDia).forEach(([fecha, registros]) => {
+        let totalMs = 0;
+        let entradaActiva = null;
+        registros.forEach(r => {
+          if (r.tipo === "entrada") { entradaActiva = r.dt; }
+          else if (r.tipo === "salida" && entradaActiva) { totalMs += r.dt - entradaActiva; entradaActiva = null; }
+        });
+        if (entradaActiva && fecha === now.toISOString().substring(0, 10)) totalMs += now - entradaActiva;
+        resultado[fecha] = totalMs / 3600000;
+      });
+      return resultado;
+    }
+
+    function formatHoras(h) {
+      if (!h || h <= 0) return "0h";
+      const hh = Math.floor(h);
+      const mm = Math.round((h - hh) * 60);
+      return mm > 0 ? `${hh}h ${mm}m` : `${hh}h`;
+    }
+
+    window.toggleMrcTable = function() {
+      const wrap = document.getElementById('mrcTableWrap');
+      const icon = document.getElementById('mrcTableToggleIcon');
+      const text = document.getElementById('mrcTableToggleText');
+      const visible = wrap.style.display !== 'none';
+      wrap.style.display = visible ? 'none' : 'block';
+      icon.textContent = visible ? '▸' : '▾';
+      text.textContent = visible ? 'Ver detalle' : 'Ocultar detalle';
+    };
+
+    window.toggleActTable = function() {
+      const wrap = document.getElementById('actTableWrap');
+      const icon = document.getElementById('actTableToggleIcon');
+      const text = document.getElementById('actTableToggleText');
+      const visible = wrap.style.display !== 'none';
+      wrap.style.display = visible ? 'none' : 'block';
+      icon.textContent = visible ? '▸' : '▾';
+      text.textContent = visible ? 'Ver detalle' : 'Ocultar detalle';
+    };
+
+    window.aplicarPeriodoMarcaciones = function() {
+      const periodo = document.getElementById("mrcPeriodo").value;
+      const now = new Date();
+      let from = "", to = "";
+      if (periodo === "hoy") {
+        from = to = now.toISOString().substring(0, 10);
+      } else if (periodo === "semana") {
+        const day = now.getDay() || 7;
+        const lunes = new Date(now); lunes.setDate(now.getDate() - day + 1);
+        const domingo = new Date(lunes); domingo.setDate(lunes.getDate() + 6);
+        from = lunes.toISOString().substring(0, 10);
+        to   = domingo.toISOString().substring(0, 10);
+      } else if (periodo === "mes") {
+        from = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-01`;
+        to   = now.toISOString().substring(0, 10);
+      } else if (periodo === "anio") {
+        from = `${now.getFullYear()}-01-01`;
+        to   = now.toISOString().substring(0, 10);
+      }
+      if (periodo) {
+        document.getElementById("mrcFrom").value = from;
+        document.getElementById("mrcTo").value   = to;
+      }
+      renderMarcaciones(getFilteredMarcaciones());
+    };
+
+    function getFilteredMarcaciones() {
+      const from = document.getElementById("mrcFrom").value;
+      const to   = document.getElementById("mrcTo").value;
+      const tipo = document.getElementById("mrcTipo").value;
+      return dashboardMarcaciones.filter(m => {
+        const fecha = (m.fecha_hora || "").substring(0, 10);
+        if (from && fecha < from) return false;
+        if (to   && fecha > to)   return false;
+        if (tipo && m.tipo !== tipo) return false;
+        return true;
+      });
+    }
+
+    function getMarcacionesPeriodo() {
+      const from = document.getElementById("mrcFrom").value;
+      const to   = document.getElementById("mrcTo").value;
+      return dashboardMarcaciones.filter(m => {
+        const fecha = (m.fecha_hora || "").substring(0, 10);
+        if (from && fecha < from) return false;
+        if (to   && fecha > to)   return false;
+        return true;
+      });
+    }
+
+    function renderMarcaciones(listaFiltrada) {
+      const horasPorDia = calcularHorasPorDia(getMarcacionesPeriodo());
+      const diasConTrabajo = Object.entries(horasPorDia).filter(([, h]) => h > 0);
+      const totalHoras     = diasConTrabajo.reduce((s, [, h]) => s + h, 0);
+      const promedio       = diasConTrabajo.length > 0 ? totalHoras / diasConTrabajo.length : 0;
+
+      document.getElementById("mrcKpiHoras").textContent    = formatHoras(totalHoras);
+      document.getElementById("mrcKpiDias").textContent     = diasConTrabajo.length;
+      document.getElementById("mrcKpiPromedio").textContent = formatHoras(promedio);
+      document.getElementById("mrcKpiTotal").textContent    = listaFiltrada.length;
+      document.getElementById("mrcTableCount").textContent  = `(${listaFiltrada.length})`;
+
+      // Gráfico barras: horas por día (últimos 14 días con actividad)
+      const chartEl = document.getElementById("mrcChartHoras");
+      const diasOrdenados = diasConTrabajo.sort(([a], [b]) => a.localeCompare(b)).slice(-14);
+      document.getElementById("mrcChartLabel").textContent = `${diasOrdenados.length} días con actividad`;
+      const maxH = Math.max(...diasOrdenados.map(([, h]) => h), 1);
+      const DIAS_S = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+      if (!diasOrdenados.length) {
+        chartEl.innerHTML = `<div style="color:#9ca3af;font-size:0.82rem;text-align:center;padding:1rem;">Sin datos de horas para este período</div>`;
+      } else {
+        chartEl.innerHTML = diasOrdenados.map(([fecha, h]) => {
+          const d = new Date(fecha + "T12:00:00");
+          const label = `${DIAS_S[d.getDay()]} ${d.getDate()}/${d.getMonth()+1}`;
+          const pct   = Math.round((h / maxH) * 100);
+          const color = h >= 8 ? "#15803d" : h >= 6 ? "#065f46" : h >= 4 ? "#f59e0b" : "#ef4444";
+          return `<div class="css-bar-row">
+            <div class="css-bar-label">${label}</div>
+            <div class="css-bar-track"><div class="css-bar-fill" style="width:${pct}%;background:${color};"></div></div>
+            <div class="css-bar-val" style="width:55px;color:${color};">${formatHoras(h)}</div>
+          </div>`;
+        }).join("");
+      }
+
+      // Tabla detalle
+      const DIAS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+      const body = document.getElementById("mrcTableBody");
+      if (!listaFiltrada.length) {
+        body.innerHTML = `<tr><td colspan="6" class="report-empty">No hay marcaciones que coincidan con los filtros.</td></tr>`;
+        return;
+      }
+      body.innerHTML = "";
+      listaFiltrada.forEach((m, i) => {
+        const dt    = new Date(m.fecha_hora);
+        const fecha = dt.toLocaleDateString("es-PY", { day:"2-digit", month:"2-digit", year:"numeric" });
+        const hora  = dt.toLocaleTimeString("es-PY", { hour:"2-digit", minute:"2-digit", second:"2-digit" });
+        const dia   = DIAS[dt.getDay()];
+        const fechaKey = (m.fecha_hora || "").substring(0, 10);
+        const horasDia = horasPorDia[fechaKey] || 0;
+        const esEntrada = m.tipo === "entrada";
+        const badgeBg   = esEntrada ? "#dcfce7" : "#fee2e2";
+        const badgeColor= esEntrada ? "#15803d" : "#b91c1c";
+        const badgeIcon = esEntrada ? "▶" : "⏹";
+        const hColor = horasDia >= 8 ? "#15803d" : horasDia >= 6 ? "#065f46" : horasDia >= 4 ? "#b45309" : horasDia > 0 ? "#dc2626" : "#9ca3af";
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="color:#9ca3af;font-size:0.75rem;">${listaFiltrada.length - i}</td>
+          <td style="font-weight:600;">${fecha}</td>
+          <td style="color:#6b7280;font-size:0.82rem;">${dia}</td>
+          <td>${hora}</td>
+          <td><span style="display:inline-flex;align-items:center;gap:0.35rem;background:${badgeBg};color:${badgeColor};border-radius:99px;padding:0.2rem 0.7rem;font-size:0.75rem;font-weight:700;">${badgeIcon} ${esEntrada ? "Entrada" : "Salida"}</span></td>
+          <td style="font-weight:700;color:${hColor};">${horasDia > 0 ? formatHoras(horasDia) : "—"}</td>`;
+        body.appendChild(tr);
+      });
+    }
+
+    window.filterMarcaciones = function() {
+      document.getElementById("mrcPeriodo").value = "";
+      renderMarcaciones(getFilteredMarcaciones());
+    };
+    window.resetMarcaciones = function() {
+      document.getElementById("mrcFrom").value    = "";
+      document.getElementById("mrcTo").value      = "";
+      document.getElementById("mrcTipo").value    = "";
+      document.getElementById("mrcPeriodo").value = "mes";
+      aplicarPeriodoMarcaciones();
+    };
+    window.exportMarcacionesPDF = async function() {
+      const lista = getFilteredMarcaciones();
+      if (!lista.length) { alert("No hay datos para exportar."); return; }
+      await ensureJsPdfLoaded();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+
+      const horasPorDia = calcularHorasPorDia(getMarcacionesPeriodo());
+      const DIAS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+
+      drawPdfHeader(doc, "Reporte de Marcaciones", `Generado: ${new Date().toLocaleString("es-PY")}`);
+      let y = 34;
+
+      const diasConTrabajo = Object.entries(horasPorDia).filter(([, h]) => h > 0);
+      const totalHoras = diasConTrabajo.reduce((acc, [, h]) => acc + h, 0);
+      const promedio = diasConTrabajo.length ? totalHoras / diasConTrabajo.length : 0;
+
+      doc.setFontSize(9);
+      doc.text(`Periodo filtrado: ${document.getElementById("mrcFrom").value || "(sin inicio)"} a ${document.getElementById("mrcTo").value || "(sin fin)"}`, 14, y);
+      y += 5;
+      drawKpiCard(doc, 14, y, 43, 15, "Registros", lista.length, [37, 99, 235]);
+      drawKpiCard(doc, 60, y, 43, 15, "Dias trabajados", diasConTrabajo.length, [22, 163, 74]);
+      drawKpiCard(doc, 106, y, 43, 15, "Horas totales", formatHoras(totalHoras), [245, 158, 11]);
+      drawKpiCard(doc, 152, y, 43, 15, "Prom. diario", formatHoras(promedio), [239, 68, 68]);
+      y += 23;
+
+      // Mini grafico de horas por dia (ultimos 12 dias con actividad)
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.text("Horas por dia", 14, y);
+      y += 5;
+      const diasOrdenados = diasConTrabajo.sort(([a], [b]) => a.localeCompare(b)).slice(-12);
+      const maxH = Math.max(...diasOrdenados.map(([, h]) => h), 1);
+      diasOrdenados.forEach(([fecha, h]) => {
+        const d = new Date(`${fecha}T12:00:00`);
+        const label = `${DIAS[d.getDay()]} ${d.getDate()}/${d.getMonth()+1}`;
+        const barW = Math.round((h / maxH) * 120);
+        doc.setFillColor(h >= 8 ? 21 : h >= 6 ? 5 : h >= 4 ? 180 : 220, h >= 8 ? 128 : h >= 6 ? 95 : h >= 4 ? 83 : 38, h >= 8 ? 61 : h >= 6 ? 70 : h >= 4 ? 9 : 38);
+        doc.rect(36, y, barW, 4.4, "F");
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7);
+        doc.setTextColor(55, 65, 81);
+        doc.text(label, 14, y + 3.4);
+        doc.text(formatHoras(h), 162, y + 3.4);
+        y += 6;
+      });
+
+      y += 2;
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.text("Detalle de marcaciones", 14, y);
+      y += 5;
+
+      const drawMarcHeader = () => {
+        doc.setFillColor(239, 246, 255);
+        doc.rect(14, y, 182, 7, "F");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(7);
+        doc.text("#", 16, y + 4.5);
+        doc.text("FECHA", 24, y + 4.5);
+        doc.text("DIA", 52, y + 4.5);
+        doc.text("HORA", 67, y + 4.5);
+        doc.text("TIPO", 91, y + 4.5);
+        doc.text("HORAS DIA", 117, y + 4.5);
+        y += 7;
+      };
+
+      drawMarcHeader();
+      lista.forEach((m, i) => {
+        if (y > 280) {
+          doc.addPage();
+          y = 16;
+          drawMarcHeader();
+        }
+        const dt = new Date(m.fecha_hora);
+        const h  = horasPorDia[(m.fecha_hora||"").substring(0,10)] || 0;
+        const tipoLabel = m.tipo === "entrada" ? "Entrada" : "Salida";
+        if (i % 2 === 0) {
+          doc.setFillColor(249, 250, 251);
+          doc.rect(14, y, 182, 6.2, "F");
+        }
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7);
+        doc.text(String(lista.length - i), 16, y + 4.2);
+        doc.text(dt.toLocaleDateString("es-PY"), 24, y + 4.2);
+        doc.text(DIAS[dt.getDay()], 52, y + 4.2);
+        doc.text(dt.toLocaleTimeString("es-PY"), 67, y + 4.2);
+        doc.text(tipoLabel, 91, y + 4.2);
+        doc.text(h > 0 ? formatHoras(h) : "-", 117, y + 4.2);
+        y += 6.2;
+      });
+
+      doc.setFontSize(7);
+      doc.setTextColor(107, 114, 128);
+      doc.text("Documento generado automaticamente desde el Dashboard", 14, 292);
+      doc.text(`Paginas: ${doc.getNumberOfPages()}`, 196, 292, { align: "right" });
+      doc.save(`marcaciones_${new Date().toISOString().slice(0,10)}.pdf`);
     };
 
     // ── SUBIDA DE ARCHIVOS ──
-    document.getElementById("showUploadBtn").addEventListener("click", () => {
-      document.getElementById("uploadContent").style.display = "block";
+    document.getElementById("showUploadBtn").addEventListener("click", () => {      document.getElementById("uploadContent").style.display = "block";
+      document.getElementById("uploadTextPlaceholder").style.display = "none";
       document.getElementById("showUploadBtn").style.display = "none";
       document.getElementById("hideUploadBtn").style.display = "block";
     });
     document.getElementById("hideUploadBtn").addEventListener("click", () => {
       document.getElementById("uploadContent").style.display = "none";
+      document.getElementById("uploadTextPlaceholder").style.display = "block";
       document.getElementById("showUploadBtn").style.display = "block";
       document.getElementById("hideUploadBtn").style.display = "none";
-      document.getElementById("fileInput").value = "";
-      document.getElementById("filePlaceholder").innerHTML = `<div class="upload-zone-icon">☁️</div><div class="upload-zone-text">Arrastra tu archivo o haz clic para seleccionar</div><div class="upload-zone-hint">Imágenes, PDF, Word, Excel, PowerPoint</div>`;
+      document.getElementById("uploadForm").reset();
+      uploadTags = [];
+      renderUploadTags();
+      document.getElementById("uploadCommentCount").textContent = "0";
+      document.getElementById("filePlaceholder").innerHTML = `<div class="upload-zone-icon"></div><div class="upload-zone-text">Arrastra tu archivo o haz clic para seleccionar</div><div class="upload-zone-hint">Imágenes, PDF, Word, Excel, PowerPoint</div>`;
     });
 
     document.getElementById("fileInput").addEventListener("change", () => {
       const fi = document.getElementById("fileInput");
       const ph = document.getElementById("filePlaceholder");
       if (fi.files.length) {
-        ph.innerHTML = `<div class="upload-zone-icon">📄</div><div class="upload-zone-text">${fi.files[0].name}</div><div class="upload-zone-hint">Listo para subir</div>`;
+        ph.innerHTML = `<div class="upload-zone-icon"></div><div class="upload-zone-text">${fi.files[0].name}</div><div class="upload-zone-hint">Listo para subir</div>`;
       } else {
-        ph.innerHTML = `<div class="upload-zone-icon">☁️</div><div class="upload-zone-text">Arrastra tu archivo o haz clic para seleccionar</div><div class="upload-zone-hint">Imágenes, PDF, Word, Excel, PowerPoint</div>`;
+        ph.innerHTML = `<div class="upload-zone-icon"></div><div class="upload-zone-text">Arrastra tu archivo o haz clic para seleccionar</div><div class="upload-zone-hint">Imágenes, PDF, Word, Excel, PowerPoint</div>`;
       }
+    });
+
+    let uploadTags = [];
+
+    function normalizeTag(value) {
+      return String(value || "").trim().replace(/\s+/g, " ").toLowerCase();
+    }
+
+    function renderUploadTags() {
+      const wrap = document.getElementById("uploadTagsSelected");
+      wrap.innerHTML = "";
+      uploadTags.forEach((tag, i) => {
+        const t = document.createElement("div");
+        t.className = "zone-tag";
+        t.innerHTML = `<span>#${tag}</span><button type="button" onclick="removeUploadTag(${i})" title="Quitar">×</button>`;
+        wrap.appendChild(t);
+      });
+      document.getElementById("uploadTagsHidden").value = uploadTags.join(", ");
+    }
+
+    window.removeUploadTag = function(i) {
+      uploadTags.splice(i, 1);
+      renderUploadTags();
+    }
+
+    function addUploadTagFromInput() {
+      const input = document.getElementById("uploadTagInput");
+      const normalized = normalizeTag(input.value);
+      if (!normalized) return;
+      if (!uploadTags.includes(normalized)) {
+        uploadTags.push(normalized);
+        renderUploadTags();
+      }
+      input.value = "";
+    }
+
+    document.getElementById("addUploadTagBtn").addEventListener("click", addUploadTagFromInput);
+    document.getElementById("uploadTagInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addUploadTagFromInput();
+      }
+    });
+    document.querySelectorAll(".upload-tag-preset").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const normalized = normalizeTag(btn.dataset.tag);
+        if (normalized && !uploadTags.includes(normalized)) {
+          uploadTags.push(normalized);
+          renderUploadTags();
+        }
+      });
+    });
+
+    document.getElementById("uploadComment").addEventListener("input", (e) => {
+      const val = e.target.value || "";
+      document.getElementById("uploadCommentCount").textContent = String(val.length);
     });
 
     document.getElementById("uploadForm").addEventListener("submit", async (e) => {
@@ -2071,10 +2697,14 @@
       if (res.ok) {
         fetchFiles();
         document.getElementById("uploadContent").style.display = "none";
+        document.getElementById("uploadTextPlaceholder").style.display = "block";
         document.getElementById("showUploadBtn").style.display = "block";
         document.getElementById("hideUploadBtn").style.display = "none";
-        document.getElementById("fileInput").value = "";
-        document.getElementById("filePlaceholder").innerHTML = `<div class="upload-zone-icon">☁️</div><div class="upload-zone-text">Arrastra tu archivo o haz clic para seleccionar</div><div class="upload-zone-hint">Imágenes, PDF, Word, Excel, PowerPoint</div>`;
+        document.getElementById("uploadForm").reset();
+        uploadTags = [];
+        renderUploadTags();
+        document.getElementById("uploadCommentCount").textContent = "0";
+        document.getElementById("filePlaceholder").innerHTML = `<div class="upload-zone-icon"></div><div class="upload-zone-text">Arrastra tu archivo o haz clic para seleccionar</div><div class="upload-zone-hint">Imágenes, PDF, Word, Excel, PowerPoint</div>`;
       }
     });
 
@@ -2130,7 +2760,7 @@
           deletedFiles.forEach(f => {
             const item = document.createElement("div");
             item.className = "deleted-card";
-            item.innerHTML = `<div class="deleted-name">📄 ${f.file_name}</div><div class="deleted-date">🗑️ Eliminado: ${new Date(f.deleted_at).toLocaleString()}</div>`;
+            item.innerHTML = `<div class="deleted-name"> ${f.file_name}</div><div class="deleted-date"> Eliminado: ${new Date(f.deleted_at).toLocaleString()}</div>`;
             list.appendChild(item);
           });
         }
@@ -2217,11 +2847,11 @@
         imgElement.style.display = "none";
         let iconDiv = imgElement.parentNode.querySelector(".file-icon");
         if (!iconDiv) { iconDiv = document.createElement("div"); imgElement.parentNode.insertBefore(iconDiv, imgElement); }
-        if (ext === "pdf") { iconDiv.className="file-icon pdf-icon"; iconDiv.innerHTML="📄<br><small>PDF</small>"; iconDiv.onclick=()=>window.open("/uploads/"+filePath,"_blank"); }
-        else if (["doc","docx"].includes(ext)) { iconDiv.className="file-icon word-icon"; iconDiv.innerHTML="📝<br><small>Word</small>"; iconDiv.onclick=()=>downloadFile("/uploads/"+filePath,fileName); }
-        else if (["xls","xlsx"].includes(ext)) { iconDiv.className="file-icon excel-icon"; iconDiv.innerHTML="📊<br><small>Excel</small>"; iconDiv.onclick=()=>downloadFile("/uploads/"+filePath,fileName); }
-        else if (["ppt","pptx"].includes(ext)) { iconDiv.className="file-icon powerpoint-icon"; iconDiv.innerHTML="🎯<br><small>PPT</small>"; iconDiv.onclick=()=>downloadFile("/uploads/"+filePath,fileName); }
-        else { iconDiv.className="file-icon"; iconDiv.innerHTML="📎<br><small>Archivo</small>"; iconDiv.onclick=()=>downloadFile("/uploads/"+filePath,fileName); }
+        if (ext === "pdf") { iconDiv.className="file-icon pdf-icon"; iconDiv.innerHTML="<br><small>PDF</small>"; iconDiv.onclick=()=>window.open("/uploads/"+filePath,"_blank"); }
+        else if (["doc","docx"].includes(ext)) { iconDiv.className="file-icon word-icon"; iconDiv.innerHTML="<br><small>Word</small>"; iconDiv.onclick=()=>downloadFile("/uploads/"+filePath,fileName); }
+        else if (["xls","xlsx"].includes(ext)) { iconDiv.className="file-icon excel-icon"; iconDiv.innerHTML="<br><small>Excel</small>"; iconDiv.onclick=()=>downloadFile("/uploads/"+filePath,fileName); }
+        else if (["ppt","pptx"].includes(ext)) { iconDiv.className="file-icon powerpoint-icon"; iconDiv.innerHTML="<br><small>PPT</small>"; iconDiv.onclick=()=>downloadFile("/uploads/"+filePath,fileName); }
+        else { iconDiv.className="file-icon"; iconDiv.innerHTML="<br><small>Archivo</small>"; iconDiv.onclick=()=>downloadFile("/uploads/"+filePath,fileName); }
       }
     }
 
@@ -2246,16 +2876,14 @@
       const btn = document.getElementById("btnMarcar");
       if (data.estado === "activo") {
         btn.className = "btn-mark btn-mark-exit";
-        document.getElementById("btnTexto").textContent = "■ Marcar Salida";
-        document.getElementById("estadoIcon").textContent = "🟢";
+        document.getElementById("btnTexto").textContent = "Marcar Salida";
         document.getElementById("estadoTexto").textContent = "Activo";
         document.getElementById("estadoActual").className = "status-badge status-badge-active";
         if (data.ultimaEntrada) { document.getElementById("ultimaEntrada").style.display="block"; document.getElementById("horaEntrada").textContent=formatDateTime(data.ultimaEntrada); }
         document.getElementById("ultimaSalida").style.display = "none";
       } else {
         btn.className = "btn-mark btn-mark-entry";
-        document.getElementById("btnTexto").textContent = "▶ Marcar Entrada";
-        document.getElementById("estadoIcon").textContent = "🔴";
+        document.getElementById("btnTexto").textContent = "Marcar Entrada";
         document.getElementById("estadoTexto").textContent = "Inactivo";
         document.getElementById("estadoActual").className = "status-badge status-badge-inactive";
         if (data.ultimaSalida) { document.getElementById("ultimaSalida").style.display="block"; document.getElementById("horaSalida").textContent=formatDateTime(data.ultimaSalida); }
@@ -2271,10 +2899,10 @@
         const res = await fetch("/api/marcaciones/marcar", { method:"POST", headers:{ "Content-Type":"application/json", Authorization:"Bearer "+token } });
         const data = await res.json();
         if (res.ok) {
-          alert("✅ " + data.message);
+          alert(" " + data.message);
           await cargarEstadoMarcacion();
           if (document.getElementById("historialHoy").style.display === "block") cargarMarcacionesHoy();
-        } else { alert("❌ " + data.message); }
+        } else { alert(" " + data.message); }
       } catch(e) { console.error(e); alert("Error al procesar la marcación");
       } finally { btn.disabled = false; }
     });
@@ -2284,10 +2912,10 @@
       if (h.style.display === "none") {
         await cargarMarcacionesHoy();
         h.style.display = "block";
-        document.getElementById("btnHistorial").innerHTML = "📅 Ocultar Historial ▴";
+        document.getElementById("btnHistorial").textContent = "Ocultar Historial";
       } else {
         h.style.display = "none";
-        document.getElementById("btnHistorial").innerHTML = "📅 Historial de Hoy ▾";
+        document.getElementById("btnHistorial").textContent = "Historial de Hoy";
       }
     });
 
@@ -2304,7 +2932,7 @@
             marcaciones.forEach(m => {
               const d = document.createElement("div");
               d.className = `history-item ${m.tipo === "entrada" ? "history-entry" : "history-exit"}`;
-              d.innerHTML = `<span>${m.tipo==="entrada"?"🟢":"🔴"} ${m.tipo.toUpperCase()}</span><span>${formatTime(m.fecha_hora)}</span>`;
+              d.innerHTML = `<span>${m.tipo==="entrada"?"":""} ${m.tipo.toUpperCase()}</span><span>${formatTime(m.fecha_hora)}</span>`;
               lista.appendChild(d);
             });
           }
@@ -2321,3 +2949,4 @@
   </script>
 </body>
 </html>
+

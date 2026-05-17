@@ -9,7 +9,9 @@ import {
   getStats, 
   getDeletedFiles,
   getAnalytics,
-  getDetailedReport 
+  getDetailedReport,
+  getAdminMarcacionesReport,
+  getExecutiveReport
 } from '../controllers/admin.controller';
 
 const router = Router();
@@ -25,5 +27,7 @@ router.get('/stats', authMiddleware, adminMiddleware, getStats);
 // 📊 Nuevas rutas para Reportes y Analytics
 router.get('/analytics', authMiddleware, adminMiddleware, getAnalytics);
 router.get('/reports/detailed', authMiddleware, adminMiddleware, getDetailedReport);
+router.get('/marcaciones/report', authMiddleware, adminMiddleware, getAdminMarcacionesReport);
+router.get('/reports/executive', authMiddleware, adminMiddleware, getExecutiveReport);
 
 export default router;

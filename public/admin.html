@@ -6,10 +6,10 @@
   <title>Panel de Administración - Trabajadores</title>
   <link href="/output.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --admin-bg: #f1f5f9;
+      --admin-bg: #dcfce7;
       --admin-surface: #ffffff;
       --admin-border: #dbe4ee;
       --admin-text: #1e293b;
@@ -26,10 +26,7 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background:
-        radial-gradient(circle at 100% 0%, #d1fae5 0%, transparent 34%),
-        radial-gradient(circle at 0% 100%, #fee2e2 0%, transparent 28%),
-        var(--admin-bg);
+      background: linear-gradient(180deg, #dcfce7 0%, #bbf7d0 100%);
       min-height: 100vh;
       color: var(--admin-text);
     }
@@ -502,6 +499,246 @@
         padding: 12px 14px;
       }
     }
+
+    /* --- Dashboard line redesign (admin) --- */
+    body {
+      font-family: "Montserrat", sans-serif;
+      background: radial-gradient(circle at 10% 10%, #dcfce7 0%, #ffffff 42%), #f8fafc;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+    }
+
+    .admin-card {
+      max-width: 1600px;
+      margin: 0 auto;
+      border-radius: 0;
+      box-shadow: none;
+      border: none;
+      padding: 1.5rem 2rem 3rem;
+      background: transparent;
+    }
+
+    .admin-top-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: linear-gradient(90deg, #065f46 0%, #0f172a 100%);
+      border-radius: 16px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.2rem;
+      border: 2px solid #dc2626;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .admin-top-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .admin-top-subtitle {
+      font-size: 0.82rem;
+      opacity: 0.92;
+      margin-top: 0.2rem;
+    }
+
+    .admin-nav-chip {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .admin-nav-chip:hover {
+      background: rgba(255, 255, 255, 0.24);
+      transform: translateY(-1px);
+    }
+
+    .admin-section {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 1.15rem 1.2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 6px 20px rgba(0, 0, 0, 0.05);
+      margin-top: 1rem;
+    }
+
+    .panel-title {
+      background: #ecfdf5;
+      color: #166534;
+      border-color: #86efac;
+      font-size: 0.74rem;
+      padding: 0.24rem 0.66rem;
+    }
+
+    .stat-card {
+      border-radius: 18px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+      padding: 1.3rem 1.4rem;
+      text-align: left;
+    }
+
+    .stat-card h3 {
+      font-size: 0.9rem;
+      margin-bottom: 0.45rem;
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .stat-card .text-4xl {
+      font-size: 2rem;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      font-weight: 800;
+    }
+
+    .user-info-card,
+    .file-info-card,
+    .file-item-admin {
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      box-shadow: none;
+      transition: all 0.18s ease;
+    }
+
+    .user-info-card:hover,
+    .file-info-card:hover,
+    .file-item-admin:hover {
+      border-color: #86efac;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+      transform: translateY(-1px);
+    }
+
+    .filter-bar,
+    .report-table-tools {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 0.85rem;
+    }
+
+    .filter-input,
+    .filter-select,
+    .report-input,
+    .report-select,
+    input[type="date"],
+    select {
+      border: 1.5px solid #d1d5db;
+      border-radius: 10px;
+      background: #ffffff;
+      font-family: "Montserrat", sans-serif;
+    }
+
+    .filter-input:focus,
+    .filter-select:focus,
+    .report-input:focus,
+    .report-select:focus,
+    input[type="date"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #047857;
+      box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.12);
+    }
+
+    .report-accordion-item {
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+    }
+
+    .report-accordion-btn {
+      background: linear-gradient(90deg, #f8fafc, #ecfdf5);
+      padding: 0.9rem 1rem;
+      font-size: 0.92rem;
+    }
+
+    .report-accordion-btn:hover {
+      background: linear-gradient(90deg, #f1f5f9, #dcfce7);
+    }
+
+    .report-kpi-card {
+      border-radius: 14px;
+      border: 1.5px solid #e2e8f0;
+      box-shadow: none;
+    }
+
+    .report-kpi-value {
+      font-size: 1.55rem;
+    }
+
+    .admin-card button,
+    .admin-card .filter-btn {
+      border-radius: 10px;
+      font-weight: 700;
+      transition: all 0.18s ease;
+    }
+
+    .admin-card button:hover,
+    .admin-card .filter-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    #showBtn,
+    #refreshBtn,
+    #showFilesBtn,
+    #refreshFilesBtn,
+    #showDeletedBtn,
+    #refreshDeletedBtn,
+    #showReportsBtn,
+    #refreshReportsBtn,
+    #refreshStats,
+    #generateReport {
+      background: linear-gradient(135deg, #15803d, #065f46) !important;
+      color: #ffffff !important;
+      border: none !important;
+    }
+
+    #hideBtn,
+    #hideFilesBtn,
+    #hideDeletedBtn,
+    #hideReportsBtn,
+    #logout {
+      background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+      color: #ffffff !important;
+      border: none !important;
+    }
+
+    #backToDashboard,
+    #exportExcel,
+    #exportPDF,
+    #clearReportFilters,
+    #toggleDebug {
+      border-radius: 10px !important;
+    }
+
+    #usersList,
+    #allFilesList,
+    #deletedFilesList,
+    #reportsData {
+      border-top: 1px solid #e2e8f0;
+      margin-top: 0.8rem;
+      padding-top: 0.9rem;
+    }
+
+    .whatsapp-btn {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      border-radius: 999px;
+      box-shadow: 0 6px 24px rgba(239, 68, 68, 0.4);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1080px) {
+      .admin-card {
+        padding: 1rem 1rem 2.5rem;
+      }
+    }
   </style>
 </head>
 <body class="gradient-bg p-6 min-h-screen">
@@ -866,6 +1103,107 @@
         </div>
         </div>
 
+        <div class="report-accordion-item">
+          <button type="button" class="report-accordion-btn" aria-expanded="false" onclick="toggleReportSection('reportMarcacionesAdminSection', this)">
+            <span>🕐 Marcaciones y Horas por Usuario</span>
+            <span class="report-chevron" data-chevron>▸</span>
+          </button>
+          <div id="reportMarcacionesAdminSection" class="report-accordion-content">
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 border-2 border-emerald-200">
+              <h3 class="text-xl font-bold text-gray-700 mb-4 flex items-center gap-2">
+                <span>🔎</span> Filtros de marcaciones
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4">
+                <div>
+                  <label class="block text-sm font-bold text-gray-600 mb-1">Período:</label>
+                  <select id="mrcAdminPeriodo" class="w-full px-3 py-2 border rounded-lg" onchange="setAdminMarcacionesPeriod()">
+                    <option value="">Personalizado</option>
+                    <option value="hoy">Hoy</option>
+                    <option value="semana">Esta semana</option>
+                    <option value="mes" selected>Este mes</option>
+                    <option value="anio">Este año</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-bold text-gray-600 mb-1">Desde:</label>
+                  <input type="date" id="mrcAdminFrom" class="w-full px-3 py-2 border rounded-lg">
+                </div>
+                <div>
+                  <label class="block text-sm font-bold text-gray-600 mb-1">Hasta:</label>
+                  <input type="date" id="mrcAdminTo" class="w-full px-3 py-2 border rounded-lg">
+                </div>
+                <div>
+                  <label class="block text-sm font-bold text-gray-600 mb-1">Usuario:</label>
+                  <select id="mrcAdminUser" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="all">Todos los usuarios</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-bold text-gray-600 mb-1">Tipo:</label>
+                  <select id="mrcAdminTipo" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="all">Todos</option>
+                    <option value="entrada">Entrada</option>
+                    <option value="salida">Salida</option>
+                  </select>
+                </div>
+                <div class="flex items-end gap-2">
+                  <button class="w-full px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200" onclick="loadAdminMarcacionesReport()">Filtrar</button>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300 transition" onclick="resetAdminMarcacionesFilters()">Limpiar</button>
+              </div>
+            </div>
+
+            <div id="mrcAdminResumenBox" class="mb-6">
+              <div class="report-kpi-grid md:grid-cols-4">
+                <div class="report-kpi-card">
+                  <div class="report-kpi-label">Usuarios con registros</div>
+                  <div id="mrcAdminKpiUsuarios" class="report-kpi-value">0</div>
+                  <div class="report-kpi-hint">en el período seleccionado</div>
+                </div>
+                <div class="report-kpi-card">
+                  <div class="report-kpi-label">Total registros (filtro)</div>
+                  <div id="mrcAdminKpiRegistros" class="report-kpi-value">0</div>
+                  <div class="report-kpi-hint">entradas + salidas</div>
+                </div>
+                <div class="report-kpi-card">
+                  <div class="report-kpi-label">Horas totales (selección)</div>
+                  <div id="mrcAdminKpiHoras" class="report-kpi-value">0h</div>
+                  <div class="report-kpi-hint">solo usuario seleccionado</div>
+                </div>
+                <div class="report-kpi-card">
+                  <div class="report-kpi-label">Promedio diario</div>
+                  <div id="mrcAdminKpiPromedio" class="report-kpi-value">0h</div>
+                  <div class="report-kpi-hint">solo usuario seleccionado</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto mb-6">
+              <table class="w-full bg-white border border-gray-300 rounded-lg min-w-[700px]">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="px-4 py-2 border">Usuario</th>
+                    <th class="px-4 py-2 border">Área</th>
+                    <th class="px-4 py-2 border">Días trabajados</th>
+                    <th class="px-4 py-2 border">Horas totales</th>
+                    <th class="px-4 py-2 border">Promedio diario</th>
+                    <th class="px-4 py-2 border">Registros</th>
+                  </tr>
+                </thead>
+                <tbody id="mrcAdminResumenBody">
+                  <tr><td colspan="6" class="px-4 py-8 text-center text-gray-500">Cargando resumen...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div id="mrcAdminDetailWrap" class="bg-white rounded-2xl p-5 border border-emerald-200">
+              <div class="text-sm text-gray-500">Selecciona un usuario para ver el detalle completo de marcaciones y horas.</div>
+            </div>
+          </div>
+        </div>
+
         <!-- Reporte Detallado -->
         <div id="detailedReportSection" class="report-accordion-item hidden">
           <button type="button" class="report-accordion-btn" aria-expanded="false" onclick="toggleReportSection('detailedReportContent', this)">
@@ -905,7 +1243,130 @@
           </div>
         </div>
       </div>
-      
+
+        <!-- 📄 Reporte Ejecutivo PDF -->
+        <div class="report-accordion-item">
+          <button type="button" class="report-accordion-btn" aria-expanded="false" onclick="toggleReportSection('execReportSection', this)">
+            <span>📄 Reporte Ejecutivo PDF</span>
+            <span class="report-chevron" data-chevron>▸</span>
+          </button>
+          <div id="execReportSection" class="report-accordion-content">
+
+            <!-- Filtros -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 border-2 border-indigo-200">
+              <h3 class="text-xl font-bold text-gray-700 mb-4 flex items-center gap-2"><span>⚙️</span> Configurar Período</h3>
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                <div>
+                  <label class="block text-sm font-bold text-gray-600 mb-1">Período:</label>
+                  <select id="execPeriod" class="w-full px-3 py-2 border rounded-lg" onchange="setExecPeriod()">
+                    <option value="week">Esta semana</option>
+                    <option value="month" selected>Este mes</option>
+                    <option value="year">Este año</option>
+                    <option value="custom">Personalizado</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-bold text-gray-600 mb-1">Desde:</label>
+                  <input type="date" id="execFrom" class="w-full px-3 py-2 border rounded-lg">
+                </div>
+                <div>
+                  <label class="block text-sm font-bold text-gray-600 mb-1">Hasta:</label>
+                  <input type="date" id="execTo" class="w-full px-3 py-2 border rounded-lg">
+                </div>
+                <div>
+                  <button onclick="loadExecReport()" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-bold rounded-lg hover:from-indigo-700 hover:to-indigo-800 transition-all">Cargar datos</button>
+                </div>
+                <div>
+                  <button onclick="generateExecPDF()" id="execPdfBtn" disabled class="w-full px-4 py-2 bg-gradient-to-r from-rose-500 to-rose-600 text-white font-bold rounded-lg hover:from-rose-600 hover:to-rose-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed">⬇ Descargar PDF</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vista previa del reporte -->
+            <div id="execPreview" class="hidden">
+
+              <!-- KPIs principales -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-gradient-to-br from-indigo-500 to-indigo-700 text-white rounded-2xl p-5 shadow-lg">
+                  <div class="text-xs font-bold uppercase tracking-wide opacity-80 mb-1">Usuarios activos</div>
+                  <div id="execKpiUsuarios" class="text-3xl font-black">—</div>
+                  <div id="execKpiUsuariosCambio" class="text-xs mt-1 opacity-80"></div>
+                </div>
+                <div class="bg-gradient-to-br from-emerald-500 to-emerald-700 text-white rounded-2xl p-5 shadow-lg">
+                  <div class="text-xs font-bold uppercase tracking-wide opacity-80 mb-1">Horas trabajadas</div>
+                  <div id="execKpiHoras" class="text-3xl font-black">—</div>
+                  <div id="execKpiHorasCambio" class="text-xs mt-1 opacity-80"></div>
+                </div>
+                <div class="bg-gradient-to-br from-sky-500 to-sky-700 text-white rounded-2xl p-5 shadow-lg">
+                  <div class="text-xs font-bold uppercase tracking-wide opacity-80 mb-1">Archivos subidos</div>
+                  <div id="execKpiArchivos" class="text-3xl font-black">—</div>
+                  <div id="execKpiArchivosCambio" class="text-xs mt-1 opacity-80"></div>
+                </div>
+                <div class="bg-gradient-to-br from-amber-500 to-amber-700 text-white rounded-2xl p-5 shadow-lg">
+                  <div class="text-xs font-bold uppercase tracking-wide opacity-80 mb-1">Actividades culminadas</div>
+                  <div id="execKpiTrabajos" class="text-3xl font-black">—</div>
+                  <div id="execKpiTrabajosCambio" class="text-xs mt-1 opacity-80"></div>
+                </div>
+              </div>
+
+              <!-- Segunda fila de KPIs -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-2xl p-4 border-2 border-gray-200 shadow-sm">
+                  <div class="text-xs font-bold text-gray-500 uppercase mb-1">Total usuarios registrados</div>
+                  <div id="execKpiTotalUsers" class="text-2xl font-black text-gray-700">—</div>
+                </div>
+                <div class="bg-white rounded-2xl p-4 border-2 border-gray-200 shadow-sm">
+                  <div class="text-xs font-bold text-gray-500 uppercase mb-1">Archivos eliminados</div>
+                  <div id="execKpiEliminados" class="text-2xl font-black text-gray-700">—</div>
+                </div>
+                <div class="bg-white rounded-2xl p-4 border-2 border-gray-200 shadow-sm">
+                  <div class="text-xs font-bold text-gray-500 uppercase mb-1">Actividades pendientes</div>
+                  <div id="execKpiPendientes" class="text-2xl font-black text-gray-700">—</div>
+                </div>
+                <div class="bg-white rounded-2xl p-4 border-2 border-gray-200 shadow-sm">
+                  <div class="text-xs font-bold text-gray-500 uppercase mb-1">Total actividades</div>
+                  <div id="execKpiTotalTrabajos" class="text-2xl font-black text-gray-700">—</div>
+                </div>
+              </div>
+
+              <!-- Top usuarios -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-white rounded-2xl p-5 border-2 border-indigo-100 shadow-sm">
+                  <h4 class="font-bold text-gray-700 mb-3 flex items-center gap-2"><span>🏆</span> Top Usuarios por Horas</h4>
+                  <table class="w-full text-sm">
+                    <thead><tr class="text-left text-gray-500 border-b"><th class="pb-2">Nombre</th><th class="pb-2">Área</th><th class="pb-2 text-right">Horas</th></tr></thead>
+                    <tbody id="execTopUsuariosBody"><tr><td colspan="3" class="py-4 text-center text-gray-400">Cargando...</td></tr></tbody>
+                  </table>
+                </div>
+                <div class="bg-white rounded-2xl p-5 border-2 border-emerald-100 shadow-sm">
+                  <h4 class="font-bold text-gray-700 mb-3 flex items-center gap-2"><span>🏢</span> Resumen por Área</h4>
+                  <table class="w-full text-sm">
+                    <thead><tr class="text-left text-gray-500 border-b"><th class="pb-2">Área</th><th class="pb-2 text-right">Usuarios</th><th class="pb-2 text-right">Horas</th></tr></thead>
+                    <tbody id="execAreaBody"><tr><td colspan="3" class="py-4 text-center text-gray-400">Cargando...</td></tr></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Archivos por área -->
+              <div class="bg-white rounded-2xl p-5 border-2 border-sky-100 shadow-sm mb-4">
+                <h4 class="font-bold text-gray-700 mb-3 flex items-center gap-2"><span>📁</span> Archivos Subidos por Área</h4>
+                <table class="w-full text-sm">
+                  <thead><tr class="text-left text-gray-500 border-b"><th class="pb-2">Área</th><th class="pb-2 text-right">Archivos subidos</th></tr></thead>
+                  <tbody id="execFilesByAreaBody"><tr><td colspan="2" class="py-4 text-center text-gray-400">Cargando...</td></tr></tbody>
+                </table>
+              </div>
+
+            </div><!-- /execPreview -->
+
+            <div id="execEmptyMsg" class="text-center py-10 text-gray-400">
+              <div class="text-5xl mb-3">📄</div>
+              <p class="font-medium">Selecciona un período y haz clic en <strong>Cargar datos</strong></p>
+            </div>
+
+          </div>
+        </div>
+        <!-- /Reporte Ejecutivo PDF -->
+
       <div id="reportsPlaceholder" class="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
         <div class="text-gray-400 text-6xl mb-4">📊</div>
         <p class="text-gray-500 text-lg font-medium">Haz clic en "Mostrar Reportes" para ver los reportes</p>
@@ -1627,6 +2088,7 @@
     let reportRowsOriginal = [];
     let reportRowsFiltered = [];
     let lastDetailedSummary = null;
+    let adminMarcacionesUsers = [];
 
     function toggleReportSection(sectionId, trigger) {
       const section = document.getElementById(sectionId);
@@ -1659,14 +2121,19 @@
       try {
         setDefaultReportDateRange();
 
-        const [analyticsData, fileTypeData] = await Promise.all([
+        const [analyticsData, _areaLoaded, _userLoaded, fileTypeData, adminUsersLoaded] = await Promise.all([
           loadAnalyticsData(),
           loadAreaFilter(),
           loadUserFilter(),
-          loadFileTypeDistribution()
+          loadFileTypeDistribution(),
+          loadAdminMarcacionesUserFilter()
         ]);
 
         updateReportKpis(analyticsData, fileTypeData);
+        if (adminUsersLoaded) {
+          setAdminMarcacionesPeriod();
+          await loadAdminMarcacionesReport();
+        }
       } catch (err) {
         console.error('Error cargando reportes:', err);
         alert('Error cargando datos de reportes');
@@ -1757,6 +2224,225 @@
         console.error('Error cargando usuarios para filtro:', err);
       }
     }
+
+    async function loadAdminMarcacionesUserFilter() {
+      try {
+        const users = await apiFetchJSON('/api/admin/users');
+        adminMarcacionesUsers = users || [];
+        const select = document.getElementById('mrcAdminUser');
+        if (!select) return false;
+
+        select.innerHTML = '<option value="all">Todos los usuarios</option>';
+        adminMarcacionesUsers.forEach((user) => {
+          const option = document.createElement('option');
+          option.value = String(user.id);
+          const fullName = `${user.nombre || ''} ${user.apellido || ''}`.trim() || user.username || `Usuario ${user.id}`;
+          option.textContent = `${fullName}${user.area_trabajo ? ` · ${user.area_trabajo}` : ''}`;
+          select.appendChild(option);
+        });
+        return true;
+      } catch (err) {
+        console.error('Error cargando usuarios para marcaciones admin:', err);
+        return false;
+      }
+    }
+
+    function formatHorasAdmin(h) {
+      if (!h || h <= 0) return '0h';
+      const hh = Math.floor(h);
+      const mm = Math.round((h - hh) * 60);
+      return mm > 0 ? `${hh}h ${mm}m` : `${hh}h`;
+    }
+
+    window.setAdminMarcacionesPeriod = function() {
+      const periodEl = document.getElementById('mrcAdminPeriodo');
+      const fromEl = document.getElementById('mrcAdminFrom');
+      const toEl = document.getElementById('mrcAdminTo');
+      if (!periodEl || !fromEl || !toEl) return;
+
+      const period = periodEl.value;
+      const now = new Date();
+      let from = '';
+      let to = '';
+
+      if (period === 'hoy') {
+        from = now.toISOString().substring(0, 10);
+        to = from;
+      } else if (period === 'semana') {
+        const day = now.getDay() || 7;
+        const monday = new Date(now);
+        monday.setDate(now.getDate() - day + 1);
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        from = monday.toISOString().substring(0, 10);
+        to = sunday.toISOString().substring(0, 10);
+      } else if (period === 'mes') {
+        from = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`;
+        to = now.toISOString().substring(0, 10);
+      } else if (period === 'anio') {
+        from = `${now.getFullYear()}-01-01`;
+        to = now.toISOString().substring(0, 10);
+      }
+
+      if (period) {
+        fromEl.value = from;
+        toEl.value = to;
+      }
+    };
+
+    function renderAdminMarcacionesResumen(rows) {
+      const body = document.getElementById('mrcAdminResumenBody');
+      if (!body) return;
+      if (!rows || !rows.length) {
+        body.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500">No hay datos para este filtro.</td></tr>';
+        return;
+      }
+
+      body.innerHTML = '';
+      rows.forEach((r) => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-50';
+        tr.innerHTML = `
+          <td class="px-4 py-2 border">${r.nombreCompleto || r.username || 'Usuario'}</td>
+          <td class="px-4 py-2 border">${r.area || 'Sin área'}</td>
+          <td class="px-4 py-2 border">${r.diasTrabajados || 0}</td>
+          <td class="px-4 py-2 border font-bold text-emerald-700">${formatHorasAdmin(Number(r.horasTotales || 0))}</td>
+          <td class="px-4 py-2 border">${formatHorasAdmin(Number(r.promedioDiario || 0))}</td>
+          <td class="px-4 py-2 border">${r.totalRegistros || 0}</td>`;
+        body.appendChild(tr);
+      });
+    }
+
+    function renderAdminMarcacionesDetalle(detalle) {
+      const wrap = document.getElementById('mrcAdminDetailWrap');
+      if (!wrap) return;
+      if (!detalle) {
+        wrap.innerHTML = '<div class="text-sm text-gray-500">Selecciona un usuario para ver el detalle completo de marcaciones y horas.</div>';
+        return;
+      }
+
+      const rows = Array.isArray(detalle.marcaciones) ? detalle.marcaciones : [];
+      const horasPorDia = detalle.horasPorDia || {};
+      const diasOrdenados = Object.entries(horasPorDia)
+        .filter(([, h]) => Number(h) > 0)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .slice(-14);
+      const maxH = Math.max(...diasOrdenados.map(([, h]) => Number(h)), 1);
+
+      const bars = diasOrdenados.length
+        ? diasOrdenados.map(([fecha, h]) => {
+            const d = new Date(`${fecha}T12:00:00`);
+            const label = `${d.getDate()}/${d.getMonth() + 1}`;
+            const val = Number(h || 0);
+            const pct = Math.round((val / maxH) * 100);
+            const color = val >= 8 ? '#15803d' : val >= 6 ? '#065f46' : val >= 4 ? '#f59e0b' : '#ef4444';
+            return `<div style="display:flex;align-items:center;gap:0.5rem;">
+              <div style="width:60px;font-size:0.75rem;color:#475569;text-align:right;">${label}</div>
+              <div style="flex:1;height:16px;background:#f1f5f9;border-radius:999px;overflow:hidden;"><div style="width:${pct}%;height:100%;background:${color};"></div></div>
+              <div style="width:70px;font-size:0.75rem;font-weight:700;color:${color};">${formatHorasAdmin(val)}</div>
+            </div>`;
+          }).join('')
+        : '<div class="text-sm text-gray-500">Sin horas para este período.</div>';
+
+      const tableRows = rows.length
+        ? rows.map((m, idx) => {
+            const dt = new Date(m.fecha_hora);
+            const fechaKey = String(m.fecha_hora || '').substring(0, 10);
+            const horasDia = Number(horasPorDia[fechaKey] || 0);
+            const isEntrada = m.tipo === 'entrada';
+            const badgeCls = isEntrada ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+            return `<tr class="hover:bg-gray-50">
+              <td class="px-3 py-2 border text-sm">${rows.length - idx}</td>
+              <td class="px-3 py-2 border text-sm">${dt.toLocaleDateString('es-ES')}</td>
+              <td class="px-3 py-2 border text-sm">${dt.toLocaleTimeString('es-ES')}</td>
+              <td class="px-3 py-2 border text-sm"><span class="px-2 py-1 rounded-full text-xs font-bold ${badgeCls}">${isEntrada ? 'Entrada' : 'Salida'}</span></td>
+              <td class="px-3 py-2 border text-sm font-bold text-emerald-700">${horasDia > 0 ? formatHorasAdmin(horasDia) : '—'}</td>
+            </tr>`;
+          }).join('')
+        : '<tr><td colspan="5" class="px-3 py-6 text-center text-gray-500">No hay marcaciones para el filtro seleccionado.</td></tr>';
+
+      wrap.innerHTML = `
+        <div class="mb-4">
+          <div class="text-lg font-extrabold text-gray-800">${detalle.nombreCompleto || detalle.username || 'Usuario'}</div>
+          <div class="text-sm text-gray-500">${detalle.area || 'Sin área'}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3"><div class="text-xs font-bold text-gray-500">Horas trabajadas</div><div class="text-xl font-extrabold text-emerald-700">${formatHorasAdmin(Number(detalle.kpis?.horasTotales || 0))}</div></div>
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3"><div class="text-xs font-bold text-gray-500">Días trabajados</div><div class="text-xl font-extrabold text-gray-800">${Number(detalle.kpis?.diasTrabajados || 0)}</div></div>
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3"><div class="text-xs font-bold text-gray-500">Promedio diario</div><div class="text-xl font-extrabold text-gray-800">${formatHorasAdmin(Number(detalle.kpis?.promedioDiario || 0))}</div></div>
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3"><div class="text-xs font-bold text-gray-500">Registros</div><div class="text-xl font-extrabold text-gray-800">${Number(detalle.kpis?.totalRegistros || 0)}</div></div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-lg p-3 mb-4">
+          <div class="text-sm font-bold text-gray-700 mb-2">Últimos 14 días con actividad</div>
+          <div class="space-y-2">${bars}</div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full bg-white border border-gray-300 rounded-lg min-w-[620px]">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="px-3 py-2 border">#</th>
+                <th class="px-3 py-2 border">Fecha</th>
+                <th class="px-3 py-2 border">Hora</th>
+                <th class="px-3 py-2 border">Tipo</th>
+                <th class="px-3 py-2 border">Horas del día</th>
+              </tr>
+            </thead>
+            <tbody>${tableRows}</tbody>
+          </table>
+        </div>`;
+    }
+
+    window.resetAdminMarcacionesFilters = function() {
+      const user = document.getElementById('mrcAdminUser');
+      const tipo = document.getElementById('mrcAdminTipo');
+      const periodo = document.getElementById('mrcAdminPeriodo');
+      const from = document.getElementById('mrcAdminFrom');
+      const to = document.getElementById('mrcAdminTo');
+
+      if (user) user.value = 'all';
+      if (tipo) tipo.value = 'all';
+      if (periodo) periodo.value = 'mes';
+      if (from) from.value = '';
+      if (to) to.value = '';
+      setAdminMarcacionesPeriod();
+      loadAdminMarcacionesReport();
+    };
+
+    window.loadAdminMarcacionesReport = async function() {
+      try {
+        const userId = document.getElementById('mrcAdminUser')?.value || 'all';
+        const from = document.getElementById('mrcAdminFrom')?.value || '';
+        const to = document.getElementById('mrcAdminTo')?.value || '';
+        const tipo = document.getElementById('mrcAdminTipo')?.value || 'all';
+
+        const params = new URLSearchParams({ userId, tipo, limit: '15000' });
+        if (from) params.set('from', from);
+        if (to) params.set('to', to);
+
+        const data = await apiFetchJSON(`/api/admin/marcaciones/report?${params.toString()}`);
+        renderAdminMarcacionesResumen(data.resumenPorUsuario || []);
+        renderAdminMarcacionesDetalle(data.detalleUsuario || null);
+
+        setTextSafe('mrcAdminKpiUsuarios', String(data.totals?.usuarios || 0));
+        setTextSafe('mrcAdminKpiRegistros', String(data.totals?.registrosFiltrados || 0));
+        if (data.detalleUsuario?.kpis) {
+          setTextSafe('mrcAdminKpiHoras', formatHorasAdmin(Number(data.detalleUsuario.kpis.horasTotales || 0)));
+          setTextSafe('mrcAdminKpiPromedio', formatHorasAdmin(Number(data.detalleUsuario.kpis.promedioDiario || 0)));
+        } else {
+          setTextSafe('mrcAdminKpiHoras', '0h');
+          setTextSafe('mrcAdminKpiPromedio', '0h');
+        }
+      } catch (err) {
+        console.error('Error cargando marcaciones admin:', err);
+        const body = document.getElementById('mrcAdminResumenBody');
+        if (body) {
+          body.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-red-600">Error cargando marcaciones: ${err.message}</td></tr>`;
+        }
+      }
+    };
 
     async function loadFileTypeDistribution() {
       try {
@@ -2313,6 +2999,347 @@
       reportRowsFiltered = [...reportRowsOriginal];
       renderDetailedReportTable(reportRowsFiltered);
     });
+
+    // ============================================================
+    // 📄 REPORTE EJECUTIVO PDF
+    // ============================================================
+    let execReportData = null;
+
+    function setExecPeriod() {
+      const period = document.getElementById('execPeriod').value;
+      const now = new Date();
+      let from = '', to = now.toISOString().substring(0, 10);
+      if (period === 'week') {
+        const d = new Date(now);
+        d.setDate(now.getDate() - now.getDay() + 1);
+        from = d.toISOString().substring(0, 10);
+      } else if (period === 'month') {
+        from = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-01`;
+      } else if (period === 'year') {
+        from = `${now.getFullYear()}-01-01`;
+      }
+      if (period !== 'custom') {
+        document.getElementById('execFrom').value = from;
+        document.getElementById('execTo').value = to;
+      }
+    }
+    setExecPeriod();
+
+    window.loadExecReport = async function() {
+      const period = document.getElementById('execPeriod').value;
+      const from = document.getElementById('execFrom').value;
+      const to = document.getElementById('execTo').value;
+      if (!from || !to) { alert('Selecciona el rango de fechas.'); return; }
+
+      document.getElementById('execEmptyMsg').innerHTML = '<div class="text-center py-8 text-indigo-400 font-medium">Cargando datos...</div>';
+      document.getElementById('execPreview').classList.add('hidden');
+      document.getElementById('execPdfBtn').disabled = true;
+      execReportData = null;
+
+      try {
+        const params = new URLSearchParams({ period, from, to });
+        const res = await fetch(`/api/admin/reports/executive?${params}`, { headers: { Authorization: `Bearer ${token}` } });
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json();
+        execReportData = data;
+        renderExecPreview(data);
+        document.getElementById('execPdfBtn').disabled = false;
+        document.getElementById('execEmptyMsg').style.display = 'none';
+        document.getElementById('execPreview').classList.remove('hidden');
+      } catch(e) {
+        document.getElementById('execEmptyMsg').innerHTML = `<div class="text-center py-8 text-red-400 font-medium">Error al cargar datos: ${e.message}</div>`;
+      }
+    };
+
+    function fmtH(h) {
+      const hrs = Math.floor(h), min = Math.round((h - hrs) * 60);
+      return `${hrs}h ${min > 0 ? min + 'm' : ''}`.trim();
+    }
+
+    function cambioLabel(pct) {
+      if (pct === 0) return '';
+      const arrow = pct > 0 ? '▲' : '▼';
+      const color = pct > 0 ? 'text-green-200' : 'text-red-200';
+      return `<span class="${color}">${arrow} ${Math.abs(pct)}% vs período anterior</span>`;
+    }
+
+    function renderExecPreview(data) {
+      const k = data.kpis;
+
+      document.getElementById('execKpiUsuarios').textContent = k.usuariosActivos.valor;
+      document.getElementById('execKpiUsuariosCambio').innerHTML = cambioLabel(k.usuariosActivos.cambio);
+
+      document.getElementById('execKpiHoras').textContent = fmtH(k.horasTrabajadas.valor);
+      document.getElementById('execKpiHorasCambio').innerHTML = cambioLabel(k.horasTrabajadas.cambio);
+
+      document.getElementById('execKpiArchivos').textContent = k.archivosSubidos.valor;
+      document.getElementById('execKpiArchivosCambio').innerHTML = cambioLabel(k.archivosSubidos.cambio);
+
+      document.getElementById('execKpiTrabajos').textContent = k.trabajosCulminados.valor;
+      document.getElementById('execKpiTrabajosCambio').innerHTML = cambioLabel(k.trabajosCulminados.cambio);
+
+      document.getElementById('execKpiTotalUsers').textContent = k.totalUsuarios.valor;
+      document.getElementById('execKpiEliminados').textContent = k.archivosEliminados.valor;
+      document.getElementById('execKpiPendientes').textContent = k.trabajosPendientes.valor;
+      document.getElementById('execKpiTotalTrabajos').textContent = k.trabajosTotal.valor;
+
+      // Top usuarios
+      const topBody = document.getElementById('execTopUsuariosBody');
+      if (data.topUsuarios.length === 0) {
+        topBody.innerHTML = '<tr><td colspan="3" class="py-4 text-center text-gray-400">Sin datos</td></tr>';
+      } else {
+        topBody.innerHTML = data.topUsuarios.map((u, i) =>
+          `<tr class="border-b last:border-0">
+            <td class="py-1.5">${i+1}. ${u.nombre || 'Sin nombre'}</td>
+            <td class="py-1.5 text-gray-500 text-xs">${u.area}</td>
+            <td class="py-1.5 text-right font-bold text-indigo-700">${fmtH(u.horas)}</td>
+          </tr>`
+        ).join('');
+      }
+
+      // Resumen por área
+      const areaBody = document.getElementById('execAreaBody');
+      if (data.resumenPorArea.length === 0) {
+        areaBody.innerHTML = '<tr><td colspan="3" class="py-4 text-center text-gray-400">Sin datos</td></tr>';
+      } else {
+        areaBody.innerHTML = data.resumenPorArea.map(a =>
+          `<tr class="border-b last:border-0">
+            <td class="py-1.5">${a.area}</td>
+            <td class="py-1.5 text-right">${a.usuarios}</td>
+            <td class="py-1.5 text-right font-bold text-emerald-700">${fmtH(a.horas)}</td>
+          </tr>`
+        ).join('');
+      }
+
+      // Archivos por área
+      const faBody = document.getElementById('execFilesByAreaBody');
+      if (!data.filesByArea || data.filesByArea.length === 0) {
+        faBody.innerHTML = '<tr><td colspan="2" class="py-4 text-center text-gray-400">Sin datos</td></tr>';
+      } else {
+        faBody.innerHTML = data.filesByArea.map(a =>
+          `<tr class="border-b last:border-0">
+            <td class="py-1.5">${a.area}</td>
+            <td class="py-1.5 text-right font-bold text-sky-700">${a.total}</td>
+          </tr>`
+        ).join('');
+      }
+    }
+
+    window.generateExecPDF = async function() {
+      if (!execReportData) { alert('Carga los datos primero.'); return; }
+
+      // Cargar jsPDF dinámicamente desde CDN si no está cargado
+      if (typeof window.jspdf === 'undefined') {
+        await new Promise((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+          s.onload = resolve; s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      }
+      if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
+        alert('No se pudo cargar la librería PDF. Verifica tu conexión a internet.'); return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const data = execReportData;
+      const k = data.kpis;
+      const meta = data.meta;
+      const pageW = 210;
+      const marginL = 15, marginR = 15;
+      const contentW = pageW - marginL - marginR;
+      let y = 15;
+
+      function addPage() { doc.addPage(); y = 20; }
+      function checkPageEnd(needed = 10) { if (y + needed > 280) addPage(); }
+
+      // ── Encabezado ──────────────────────────────────────────
+      doc.setFillColor(67, 56, 202); // indigo-700
+      doc.rect(0, 0, pageW, 28, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(16);
+      doc.setFont(undefined, 'bold');
+      doc.text('MUNICIPALIDAD DE BENJAMÍN ACEVAL', pageW / 2, 11, { align: 'center' });
+      doc.setFontSize(11);
+      doc.setFont(undefined, 'normal');
+      doc.text('Reporte Ejecutivo de Gestión', pageW / 2, 19, { align: 'center' });
+      y = 34;
+
+      // Período
+      doc.setTextColor(80, 80, 80);
+      doc.setFontSize(9);
+      const periodoStr = `Período: ${meta.dateFrom} al ${meta.dateTo}`;
+      const genStr = `Generado: ${new Date(meta.generadoEn).toLocaleString('es-PY')}`;
+      doc.text(periodoStr, marginL, y);
+      doc.text(genStr, pageW - marginR, y, { align: 'right' });
+      y += 4;
+      doc.setDrawColor(200, 200, 200);
+      doc.line(marginL, y, pageW - marginR, y);
+      y += 6;
+
+      // ── KPIs principales ────────────────────────────────────
+      doc.setFont(undefined, 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(30, 30, 30);
+      doc.text('INDICADORES PRINCIPALES', marginL, y);
+      y += 5;
+
+      const kpiItems = [
+        { label: 'Usuarios activos', valor: String(k.usuariosActivos.valor), cambio: k.usuariosActivos.cambio },
+        { label: 'Horas trabajadas', valor: fmtH(k.horasTrabajadas.valor), cambio: k.horasTrabajadas.cambio },
+        { label: 'Archivos subidos', valor: String(k.archivosSubidos.valor), cambio: k.archivosSubidos.cambio },
+        { label: 'Actividades culminadas', valor: String(k.trabajosCulminados.valor), cambio: k.trabajosCulminados.cambio },
+        { label: 'Total usuarios registrados', valor: String(k.totalUsuarios.valor), cambio: 0 },
+        { label: 'Archivos eliminados', valor: String(k.archivosEliminados.valor), cambio: 0 },
+        { label: 'Actividades pendientes', valor: String(k.trabajosPendientes.valor), cambio: 0 },
+        { label: 'Total actividades', valor: String(k.trabajosTotal.valor), cambio: 0 },
+      ];
+
+      const cols = 4;
+      const cellW = contentW / cols;
+      const cellH = 18;
+      for (let i = 0; i < kpiItems.length; i++) {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const cx = marginL + col * cellW;
+        const cy = y + row * (cellH + 3);
+        checkPageEnd(cellH + 5);
+
+        // Card background
+        const colors = [[238,242,255],[236,253,245],[224,242,254],[255,251,235]];
+        const [r, g, b] = colors[col] || [245, 245, 245];
+        doc.setFillColor(r, g, b);
+        doc.roundedRect(cx, cy, cellW - 2, cellH, 2, 2, 'F');
+        doc.setDrawColor(200, 210, 255);
+        doc.roundedRect(cx, cy, cellW - 2, cellH, 2, 2, 'S');
+
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(7);
+        doc.setTextColor(100, 100, 100);
+        doc.text(kpiItems[i].label.toUpperCase(), cx + 2, cy + 4.5);
+
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(30, 30, 80);
+        doc.text(kpiItems[i].valor, cx + 2, cy + 11);
+
+        if (kpiItems[i].cambio !== 0) {
+          doc.setFontSize(7);
+          doc.setFont(undefined, 'normal');
+          const up = kpiItems[i].cambio > 0;
+          doc.setTextColor(up ? 22 : 185, up ? 163 : 28, up ? 74 : 28);
+          doc.text(`${up ? '▲' : '▼'} ${Math.abs(kpiItems[i].cambio)}%`, cx + 2, cy + 16);
+        }
+      }
+
+      const kpiRows = Math.ceil(kpiItems.length / cols);
+      y += kpiRows * (cellH + 3) + 6;
+
+      // ── Top Usuarios ────────────────────────────────────────
+      checkPageEnd(40);
+      doc.setFont(undefined, 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(30, 30, 30);
+      doc.text('TOP USUARIOS POR HORAS TRABAJADAS', marginL, y);
+      y += 5;
+
+      if (data.topUsuarios.length === 0) {
+        doc.setFont(undefined, 'normal'); doc.setFontSize(9); doc.setTextColor(150,150,150);
+        doc.text('Sin registros en el período.', marginL, y); y += 8;
+      } else {
+        // Cabecera tabla
+        doc.setFillColor(238, 242, 255);
+        doc.rect(marginL, y, contentW, 7, 'F');
+        doc.setFont(undefined, 'bold'); doc.setFontSize(8); doc.setTextColor(50, 50, 150);
+        doc.text('#', marginL + 2, y + 5);
+        doc.text('NOMBRE', marginL + 10, y + 5);
+        doc.text('ÁREA', marginL + 90, y + 5);
+        doc.text('HORAS', pageW - marginR - 15, y + 5);
+        y += 7;
+        data.topUsuarios.forEach((u, i) => {
+          checkPageEnd(7);
+          if (i % 2 === 0) { doc.setFillColor(250, 250, 255); doc.rect(marginL, y, contentW, 6.5, 'F'); }
+          doc.setFont(undefined, 'normal'); doc.setFontSize(8); doc.setTextColor(40, 40, 40);
+          doc.text(String(i + 1), marginL + 2, y + 4.5);
+          doc.text((u.nombre || 'Sin nombre').substring(0, 35), marginL + 10, y + 4.5);
+          doc.text((u.area || 'Sin área').substring(0, 30), marginL + 90, y + 4.5);
+          doc.setFont(undefined, 'bold'); doc.setTextColor(67, 56, 202);
+          doc.text(fmtH(u.horas), pageW - marginR - 15, y + 4.5);
+          y += 6.5;
+        });
+        y += 4;
+      }
+
+      // ── Resumen por Área ────────────────────────────────────
+      checkPageEnd(40);
+      doc.setFont(undefined, 'bold'); doc.setFontSize(11); doc.setTextColor(30, 30, 30);
+      doc.text('RESUMEN POR ÁREA DE TRABAJO', marginL, y);
+      y += 5;
+
+      if (data.resumenPorArea.length === 0) {
+        doc.setFont(undefined, 'normal'); doc.setFontSize(9); doc.setTextColor(150,150,150);
+        doc.text('Sin datos en el período.', marginL, y); y += 8;
+      } else {
+        doc.setFillColor(236, 253, 245);
+        doc.rect(marginL, y, contentW, 7, 'F');
+        doc.setFont(undefined, 'bold'); doc.setFontSize(8); doc.setTextColor(6, 120, 70);
+        doc.text('ÁREA', marginL + 2, y + 5);
+        doc.text('USUARIOS', marginL + 90, y + 5);
+        doc.text('HORAS TOTALES', pageW - marginR - 30, y + 5);
+        y += 7;
+        data.resumenPorArea.forEach((a, i) => {
+          checkPageEnd(7);
+          if (i % 2 === 0) { doc.setFillColor(249, 255, 252); doc.rect(marginL, y, contentW, 6.5, 'F'); }
+          doc.setFont(undefined, 'normal'); doc.setFontSize(8); doc.setTextColor(40, 40, 40);
+          doc.text((a.area || 'Sin área').substring(0, 45), marginL + 2, y + 4.5);
+          doc.text(String(a.usuarios), marginL + 92, y + 4.5);
+          doc.setFont(undefined, 'bold'); doc.setTextColor(6, 120, 70);
+          doc.text(fmtH(a.horas), pageW - marginR - 30, y + 4.5);
+          y += 6.5;
+        });
+        y += 4;
+      }
+
+      // ── Archivos por Área ────────────────────────────────────
+      if (data.filesByArea && data.filesByArea.length > 0) {
+        checkPageEnd(30);
+        doc.setFont(undefined, 'bold'); doc.setFontSize(11); doc.setTextColor(30, 30, 30);
+        doc.text('ARCHIVOS SUBIDOS POR ÁREA', marginL, y);
+        y += 5;
+        doc.setFillColor(224, 242, 254);
+        doc.rect(marginL, y, contentW, 7, 'F');
+        doc.setFont(undefined, 'bold'); doc.setFontSize(8); doc.setTextColor(7, 89, 133);
+        doc.text('ÁREA', marginL + 2, y + 5);
+        doc.text('ARCHIVOS', pageW - marginR - 20, y + 5);
+        y += 7;
+        data.filesByArea.forEach((a, i) => {
+          checkPageEnd(7);
+          if (i % 2 === 0) { doc.setFillColor(248, 252, 255); doc.rect(marginL, y, contentW, 6.5, 'F'); }
+          doc.setFont(undefined, 'normal'); doc.setFontSize(8); doc.setTextColor(40, 40, 40);
+          doc.text((a.area || 'Sin área').substring(0, 50), marginL + 2, y + 4.5);
+          doc.setFont(undefined, 'bold'); doc.setTextColor(7, 89, 133);
+          doc.text(String(a.total), pageW - marginR - 20, y + 4.5);
+          y += 6.5;
+        });
+        y += 4;
+      }
+
+      // ── Pie de página ────────────────────────────────────────
+      const totalPages = doc.getNumberOfPages();
+      for (let p = 1; p <= totalPages; p++) {
+        doc.setPage(p);
+        doc.setFillColor(240, 240, 248);
+        doc.rect(0, 286, pageW, 11, 'F');
+        doc.setFont(undefined, 'normal'); doc.setFontSize(7); doc.setTextColor(120, 120, 140);
+        doc.text('Municipalidad de Benjamín Aceval — Documento confidencial de uso interno', marginL, 292);
+        doc.text(`Página ${p} de ${totalPages}`, pageW - marginR, 292, { align: 'right' });
+      }
+
+      // Descargar
+      const fileName = `Reporte_Ejecutivo_${meta.dateFrom}_${meta.dateTo}.pdf`;
+      doc.save(fileName);
+    };
   </script>
 
   <!-- Botón de WhatsApp flotante -->
